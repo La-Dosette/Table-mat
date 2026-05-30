@@ -641,3 +641,137 @@ a {
   color: var(--text-faint);
   padding: 26px;
 }
+
+/* ---------- Bascule de vue ---------- */
+.view-toggle {
+  display: inline-flex;
+  gap: 4px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px;
+  margin: 18px 0 4px;
+}
+.view-toggle button {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.view-toggle button.active {
+  background: var(--accent-strong);
+  color: #04121f;
+  font-weight: 600;
+}
+
+.count-chips {
+  border-left: 1px solid var(--border-soft);
+  padding-left: 12px;
+}
+
+/* ---------- Galerie de recettes ---------- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 14px;
+}
+
+/* ---------- Badge nombre de matériaux ---------- */
+.n-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 999px;
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+
+/* ---------- Chaîne de matériaux (slots) ---------- */
+.slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0;
+}
+.slot-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 4px 9px;
+}
+.slot-label {
+  color: var(--text-dim);
+}
+.slot-temp {
+  color: var(--text-faint);
+  font-size: 11px;
+  border-left: 1px solid var(--border);
+  padding-left: 5px;
+}
+
+/* ---------- Interfaces (liaisons) ---------- */
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 6px;
+}
+.ifaces {
+  margin: 12px 0;
+}
+.iface {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+.iface.hot {
+  background: rgba(56, 189, 248, 0.12);
+  outline: 1px solid rgba(56, 189, 248, 0.4);
+}
+.iface-pair {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text);
+}
+.iface-link {
+  color: var(--text-faint);
+  margin: 0 2px;
+}
+
+.drawer-intro {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin: 0 0 4px;
+  line-height: 1.5;
+}
+
+/* ---------- Tag « par interface » dans le protocole ---------- */
+.pi-tag {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 5px;
+  padding: 2px 7px;
+}

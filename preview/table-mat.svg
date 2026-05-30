@@ -17,14 +17,14 @@
 <rect x="62" y="58" width="12" height="12" rx="2" fill="#ef4444"/>
 <text x="92" y="56" fill="#e6edf6" font-size="24" font-weight="800">Table-Mat</text>
 <text x="92" y="76" fill="#9fb0c8" font-size="13">La matrice communautaire de l’impression multi-matériaux</text>
-<rect x="1049.7" y="46" width="102.3" height="30" rx="15" fill="#0f1a2e" stroke="#1a2842"/>
-<text x="1100.8500000000001" y="65" fill="#cdd9ea" font-size="13" text-anchor="middle">8 matériaux</text>
-<rect x="954" y="46" width="87.7" height="30" rx="15" fill="#0f1a2e" stroke="#1a2842"/>
-<text x="997.85" y="65" fill="#cdd9ea" font-size="13" text-anchor="middle">201 votes</text>
-<rect x="858.3" y="46" width="87.7" height="30" rx="15" fill="#0f1a2e" stroke="#1a2842"/>
-<text x="902.15" y="65" fill="#cdd9ea" font-size="13" text-anchor="middle">14 essais</text>
-<text x="40" y="130" fill="#e6edf6" font-size="16" font-weight="700">Matrice de compatibilité — Matériau A × Matériau B</text>
-<text x="40" y="150" fill="#64748b" font-size="12">Score de viabilité communautaire · survol = aperçu · clic = réglages détaillés</text>
+<rect x="1066.1" y="46" width="85.9" height="30" rx="15" fill="#0f1a2e" stroke="#1a2842"/>
+<text x="1109.05" y="65" fill="#cdd9ea" font-size="13" text-anchor="middle">265 votes</text>
+<rect x="957.9999999999999" y="46" width="100.1" height="30" rx="15" fill="#0f1a2e" stroke="#1a2842"/>
+<text x="1008.0499999999998" y="65" fill="#cdd9ea" font-size="13" text-anchor="middle">5 à 3+ mat.</text>
+<rect x="849.8999999999999" y="46" width="100.1" height="30" rx="15" fill="#0f1a2e" stroke="#1a2842"/>
+<text x="899.9499999999998" y="65" fill="#cdd9ea" font-size="13" text-anchor="middle">19 recettes</text>
+<text x="40" y="130" fill="#e6edf6" font-size="16" font-weight="700">Matrice de compatibilité — score de liaison par paire</text>
+<text x="40" y="150" fill="#64748b" font-size="12">Une recette à N matériaux se décompose en interfaces · survol = aperçu · clic = recettes</text>
 <circle cx="171" cy="194" r="4.5" fill="#22c55e"/>
 <text x="181" y="198" fill="#9fb0c8" font-size="13" font-weight="600" text-anchor="middle">PLA</text>
 <circle cx="254" cy="194" r="4.5" fill="#38bdf8"/>
@@ -41,51 +41,51 @@
 <text x="679" y="198" fill="#9fb0c8" font-size="13" font-weight="600" text-anchor="middle">PC</text>
 <circle cx="752" cy="194" r="4.5" fill="#34d399"/>
 <text x="762" y="198" fill="#9fb0c8" font-size="13" font-weight="600" text-anchor="middle">PVA</text>
-<text x="138" y="198" fill="#64748b" font-size="11" text-anchor="end">A ＼ B</text>
+<text x="138" y="198" fill="#64748b" font-size="11" text-anchor="end">A ↔ B</text>
 <circle cx="120" cy="247" r="4.5" fill="#22c55e"/>
 <text x="110" y="251" fill="#9fb0c8" font-size="13" font-weight="600" text-anchor="end">PLA</text>
 <rect x="150" y="210" width="74" height="74" rx="8" fill="hsl(123.75, 62%, 42%)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
 <text x="187" y="248" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">99</text>
-<text x="187" y="264" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">2 essais</text>
+<text x="187" y="264" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">3 rec.</text>
 <rect x="233" y="210" width="74" height="74" rx="8" fill="hsl(90, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="270" y="248" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">72</text>
-<text x="270" y="264" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="270" y="264" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 rec.</text>
 <rect x="316" y="210" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="353" y="251" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="399" y="210" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="436" y="251" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="482" y="210" width="74" height="74" rx="8" fill="hsl(72.5, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="519" y="248" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">58</text>
-<text x="519" y="264" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="519" y="264" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">2 rec.</text>
 <rect x="565" y="210" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="602" y="251" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="648" y="210" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="685" y="251" fill="#64748b" font-size="13" text-anchor="middle">—</text>
-<rect x="731" y="210" width="74" height="74" rx="8" fill="hsl(116.25, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-<text x="768" y="248" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">93</text>
-<text x="768" y="264" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<rect x="731" y="210" width="74" height="74" rx="8" fill="hsl(110, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<text x="768" y="248" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">88</text>
+<text x="768" y="264" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">3 rec.</text>
 <circle cx="120" cy="330" r="4.5" fill="#38bdf8"/>
 <text x="110" y="334" fill="#9fb0c8" font-size="13" font-weight="600" text-anchor="end">PETG</text>
 <rect x="150" y="293" width="74" height="74" rx="8" fill="hsl(90, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="187" y="331" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">72</text>
-<text x="187" y="347" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="187" y="347" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 rec.</text>
 <rect x="233" y="293" width="74" height="74" rx="8" fill="hsl(105, 62%, 42%)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
 <text x="270" y="331" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">84</text>
-<text x="270" y="347" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="270" y="347" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">2 rec.</text>
 <rect x="316" y="293" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="353" y="334" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="399" y="293" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="436" y="334" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="482" y="293" width="74" height="74" rx="8" fill="hsl(83.75, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="519" y="331" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">67</text>
-<text x="519" y="347" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="519" y="347" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 rec.</text>
 <rect x="565" y="293" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="602" y="334" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="648" y="293" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="685" y="334" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="731" y="293" width="74" height="74" rx="8" fill="hsl(63.75, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="768" y="331" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">51</text>
-<text x="768" y="347" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="768" y="347" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 rec.</text>
 <circle cx="120" cy="413" r="4.5" fill="#f97316"/>
 <text x="110" y="417" fill="#9fb0c8" font-size="13" font-weight="600" text-anchor="end">ABS</text>
 <rect x="150" y="376" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
@@ -94,17 +94,17 @@
 <text x="270" y="417" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="316" y="376" width="74" height="74" rx="8" fill="hsl(112.5, 62%, 42%)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
 <text x="353" y="414" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">90</text>
-<text x="353" y="430" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
-<rect x="399" y="376" width="74" height="74" rx="8" fill="hsl(106.25, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-<text x="436" y="414" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">85</text>
-<text x="436" y="430" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="353" y="430" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">2 rec.</text>
+<rect x="399" y="376" width="74" height="74" rx="8" fill="hsl(100, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<text x="436" y="414" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">80</text>
+<text x="436" y="430" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">3 rec.</text>
 <rect x="482" y="376" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="519" y="417" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="565" y="376" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="602" y="417" fill="#64748b" font-size="13" text-anchor="middle">—</text>
-<rect x="648" y="376" width="74" height="74" rx="8" fill="hsl(86.25, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-<text x="685" y="414" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">69</text>
-<text x="685" y="430" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<rect x="648" y="376" width="74" height="74" rx="8" fill="hsl(87.5, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<text x="685" y="414" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">70</text>
+<text x="685" y="430" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">2 rec.</text>
 <rect x="731" y="376" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="768" y="417" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <circle cx="120" cy="496" r="4.5" fill="#fb7185"/>
@@ -113,33 +113,34 @@
 <text x="187" y="500" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="233" y="459" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="270" y="500" fill="#64748b" font-size="13" text-anchor="middle">—</text>
-<rect x="316" y="459" width="74" height="74" rx="8" fill="hsl(106.25, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-<text x="353" y="497" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">85</text>
-<text x="353" y="513" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<rect x="316" y="459" width="74" height="74" rx="8" fill="hsl(100, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<text x="353" y="497" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">80</text>
+<text x="353" y="513" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">3 rec.</text>
 <rect x="399" y="459" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
 <text x="436" y="500" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="482" y="459" width="74" height="74" rx="8" fill="hsl(47.5, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="519" y="497" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">38</text>
-<text x="519" y="513" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="519" y="513" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 rec.</text>
 <rect x="565" y="459" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="602" y="500" fill="#64748b" font-size="13" text-anchor="middle">—</text>
-<rect x="648" y="459" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-<text x="685" y="500" fill="#64748b" font-size="13" text-anchor="middle">—</text>
+<rect x="648" y="459" width="74" height="74" rx="8" fill="hsl(80, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<text x="685" y="497" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">64</text>
+<text x="685" y="513" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 rec.</text>
 <rect x="731" y="459" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="768" y="500" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <circle cx="120" cy="579" r="4.5" fill="#a78bfa"/>
 <text x="110" y="583" fill="#9fb0c8" font-size="13" font-weight="600" text-anchor="end">TPU</text>
 <rect x="150" y="542" width="74" height="74" rx="8" fill="hsl(72.5, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="187" y="580" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">58</text>
-<text x="187" y="596" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="187" y="596" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">2 rec.</text>
 <rect x="233" y="542" width="74" height="74" rx="8" fill="hsl(83.75, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="270" y="580" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">67</text>
-<text x="270" y="596" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="270" y="596" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 rec.</text>
 <rect x="316" y="542" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="353" y="583" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="399" y="542" width="74" height="74" rx="8" fill="hsl(47.5, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="436" y="580" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">38</text>
-<text x="436" y="596" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="436" y="596" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 rec.</text>
 <rect x="482" y="542" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
 <text x="519" y="583" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="565" y="542" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
@@ -162,7 +163,7 @@
 <text x="519" y="666" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="565" y="625" width="74" height="74" rx="8" fill="hsl(105, 62%, 42%)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
 <text x="602" y="663" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">84</text>
-<text x="602" y="679" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="602" y="679" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 rec.</text>
 <rect x="648" y="625" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="685" y="666" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="731" y="625" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
@@ -173,28 +174,29 @@
 <text x="187" y="749" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="233" y="708" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="270" y="749" fill="#64748b" font-size="13" text-anchor="middle">—</text>
-<rect x="316" y="708" width="74" height="74" rx="8" fill="hsl(86.25, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-<text x="353" y="746" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">69</text>
-<text x="353" y="762" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
-<rect x="399" y="708" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-<text x="436" y="749" fill="#64748b" font-size="13" text-anchor="middle">—</text>
+<rect x="316" y="708" width="74" height="74" rx="8" fill="hsl(87.5, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<text x="353" y="746" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">70</text>
+<text x="353" y="762" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">2 rec.</text>
+<rect x="399" y="708" width="74" height="74" rx="8" fill="hsl(80, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<text x="436" y="746" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">64</text>
+<text x="436" y="762" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 rec.</text>
 <rect x="482" y="708" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="519" y="749" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="565" y="708" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="602" y="749" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="648" y="708" width="74" height="74" rx="8" fill="hsl(100, 62%, 42%)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
 <text x="685" y="746" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">80</text>
-<text x="685" y="762" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="685" y="762" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 rec.</text>
 <rect x="731" y="708" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="768" y="749" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <circle cx="120" cy="828" r="4.5" fill="#34d399"/>
 <text x="110" y="832" fill="#9fb0c8" font-size="13" font-weight="600" text-anchor="end">PVA</text>
-<rect x="150" y="791" width="74" height="74" rx="8" fill="hsl(116.25, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-<text x="187" y="829" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">93</text>
-<text x="187" y="845" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<rect x="150" y="791" width="74" height="74" rx="8" fill="hsl(110, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<text x="187" y="829" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">88</text>
+<text x="187" y="845" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">3 rec.</text>
 <rect x="233" y="791" width="74" height="74" rx="8" fill="hsl(63.75, 62%, 42%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="270" y="829" fill="#06121a" font-size="19" font-weight="800" text-anchor="middle">51</text>
-<text x="270" y="845" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 essai</text>
+<text x="270" y="845" fill="#06121a" font-size="10" font-weight="600" text-anchor="middle" opacity="0.85">1 rec.</text>
 <rect x="316" y="791" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 <text x="353" y="832" fill="#64748b" font-size="13" text-anchor="middle">—</text>
 <rect x="399" y="791" width="74" height="74" rx="8" fill="hsl(220, 14%, 22%)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
@@ -213,50 +215,51 @@
 <text x="408" y="899" fill="#9fb0c8" font-size="12">100</text>
 <rect x="450" y="889" width="14" height="11" rx="3" fill="#14223c" stroke="rgba(255,255,255,0.45)" stroke-width="2"/>
 <text x="470" y="899" fill="#64748b" font-size="12">diagonale = même matériau (multicolore)</text>
-<rect x="845" y="180" width="315" height="360" rx="12" fill="#0f1a2e" stroke="#1f3052"/>
-<circle cx="877" cy="214" r="22" fill="hsl(125, 62%, 42%)"/>
-<text x="877" y="220" fill="#fff" font-size="17" font-weight="800" text-anchor="middle">100</text>
-<text x="909" y="208" fill="#e6edf6" font-size="15" font-weight="700">PLA ＋ PLA — meilleur essai</text>
-<text x="909" y="226" fill="#9fb0c8" font-size="12">@maelle3d · Bambu Lab X1 Carbon + AMS</text>
-<text x="865" y="258" fill="#64748b" font-size="11" font-weight="600">CRITÈRES (0–5)</text>
-<text x="865" y="281" fill="#9fb0c8" font-size="12">Liaison à l’interface</text>
-<rect x="1030" y="272" width="80" height="8" rx="4" fill="#14223c"/>
-<rect x="1030" y="272" width="80" height="8" rx="4" fill="hsl(125, 62%, 42%)"/>
-<text x="1136" y="281" fill="#e6edf6" font-size="12" font-weight="600" text-anchor="end">5/5</text>
-<text x="865" y="303" fill="#9fb0c8" font-size="12">Qualité d’impression</text>
-<rect x="1030" y="294" width="80" height="8" rx="4" fill="#14223c"/>
-<rect x="1030" y="294" width="80" height="8" rx="4" fill="hsl(125, 62%, 42%)"/>
-<text x="1136" y="303" fill="#e6edf6" font-size="12" font-weight="600" text-anchor="end">5/5</text>
-<text x="865" y="325" fill="#9fb0c8" font-size="12">Fiabilité / facilité</text>
-<rect x="1030" y="316" width="80" height="8" rx="4" fill="#14223c"/>
-<rect x="1030" y="316" width="80" height="8" rx="4" fill="hsl(125, 62%, 42%)"/>
-<text x="1136" y="325" fill="#e6edf6" font-size="12" font-weight="600" text-anchor="end">5/5</text>
-<text x="865" y="347" fill="#9fb0c8" font-size="12">Tenue (warping / délamination)</text>
-<rect x="1030" y="338" width="80" height="8" rx="4" fill="#14223c"/>
-<rect x="1030" y="338" width="80" height="8" rx="4" fill="hsl(125, 62%, 42%)"/>
-<text x="1136" y="347" fill="#e6edf6" font-size="12" font-weight="600" text-anchor="end">5/5</text>
-<text x="865" y="369" fill="#9fb0c8" font-size="12">Propreté de l’interface</text>
-<rect x="1030" y="360" width="80" height="8" rx="4" fill="#14223c"/>
-<rect x="1030" y="360" width="64" height="8" rx="4" fill="hsl(100, 62%, 42%)"/>
-<text x="1136" y="369" fill="#e6edf6" font-size="12" font-weight="600" text-anchor="end">4/5</text>
-<text x="865" y="391" fill="#9fb0c8" font-size="12">Séparabilité maîtrisée</text>
-<rect x="1030" y="382" width="80" height="8" rx="4" fill="#14223c"/>
-<rect x="1030" y="382" width="16" height="8" rx="4" fill="hsl(25, 62%, 42%)"/>
-<text x="1136" y="391" fill="#e6edf6" font-size="12" font-weight="600" text-anchor="end">1/5</text>
-<rect x="865" y="410" width="86.33333333333333" height="28" rx="6" fill="#14223c"/>
-<text x="873" y="428" fill="#cdd9ea" font-size="11" font-weight="600">Buse 215/215°C</text>
-<rect x="956.6666666666666" y="410" width="86.33333333333333" height="28" rx="6" fill="#14223c"/>
-<text x="964.6666666666666" y="428" fill="#cdd9ea" font-size="11" font-weight="600">Plateau 60°C</text>
-<rect x="1048.3333333333333" y="410" width="86.33333333333333" height="28" rx="6" fill="#14223c"/>
-<text x="1056.3333333333333" y="428" fill="#cdd9ea" font-size="11" font-weight="600">Couche 0.2mm</text>
-<rect x="865" y="446" width="86.33333333333333" height="28" rx="6" fill="#14223c"/>
-<text x="873" y="464" fill="#cdd9ea" font-size="11" font-weight="600">Vitesse 120mm/s</text>
-<rect x="956.6666666666666" y="446" width="86.33333333333333" height="28" rx="6" fill="#14223c"/>
-<text x="964.6666666666666" y="464" fill="#cdd9ea" font-size="11" font-weight="600">Purge 90mm³</text>
-<rect x="1048.3333333333333" y="446" width="86.33333333333333" height="28" rx="6" fill="#14223c"/>
-<text x="1056.3333333333333" y="464" fill="#cdd9ea" font-size="11" font-weight="600">Buse Ø0.4mm</text>
-<rect x="865" y="494" width="120" height="30" rx="15" fill="rgba(34,197,94,0.16)" stroke="#22c55e"/>
-<text x="925" y="514" fill="#22c55e" font-size="12" font-weight="600" text-anchor="middle">👍 Ça marche · 24</text>
-<rect x="995" y="494" width="140" height="30" rx="15" fill="#14223c" stroke="#1f3052"/>
-<text x="1065" y="514" fill="#9fb0c8" font-size="12" text-anchor="middle">👎 Pas concluant · 1</text>
+<rect x="845" y="180" width="315" height="372" rx="12" fill="#0f1a2e" stroke="#1f3052"/>
+<circle cx="877" cy="214" r="22" fill="hsl(121.25, 62%, 42%)"/>
+<text x="877" y="220" fill="#fff" font-size="17" font-weight="800" text-anchor="middle">97</text>
+<text x="909" y="208" fill="#e6edf6" font-size="14" font-weight="700">Buste multicolore + support soluble</text>
+<text x="909" y="225" fill="#9fb0c8" font-size="11.5">@mini_sculpt · Prusa MK4 + MMU3</text>
+<rect x="1064" y="194" width="76" height="22" rx="11" fill="rgba(56,189,248,0.12)" stroke="rgba(56,189,248,0.4)"/>
+<text x="1102" y="209" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">4 matériaux</text>
+<rect x="865" y="252" width="82" height="20" rx="6" fill="#14223c"/>
+<circle cx="874" cy="262" r="3.5" fill="#22c55e"/>
+<text x="881" y="266" fill="#cdd9ea" font-size="11">PLA · Peau</text>
+<rect x="953" y="252" width="101.2" height="20" rx="6" fill="#14223c"/>
+<circle cx="962" cy="262" r="3.5" fill="#22c55e"/>
+<text x="969" y="266" fill="#cdd9ea" font-size="11">PLA · Cheveux</text>
+<rect x="1060.2" y="252" width="82" height="20" rx="6" fill="#14223c"/>
+<circle cx="1069.2" cy="262" r="3.5" fill="#22c55e"/>
+<text x="1076.2" y="266" fill="#cdd9ea" font-size="11">PLA · Yeux</text>
+<rect x="865" y="278" width="101.2" height="20" rx="6" fill="#14223c"/>
+<circle cx="874" cy="288" r="3.5" fill="#34d399"/>
+<text x="881" y="292" fill="#cdd9ea" font-size="11">PVA · Support</text>
+<text x="865" y="312" fill="#64748b" font-size="11" font-weight="600">LIAISONS</text>
+<circle cx="869" cy="331" r="3.5" fill="#22c55e"/>
+<text x="877" y="335" fill="#e6edf6" font-size="12">PLA ↔ PLA</text>
+<rect x="1030" y="326" width="80" height="8" rx="4" fill="#14223c"/>
+<rect x="1030" y="326" width="80" height="8" rx="4" fill="hsl(125, 62%, 42%)"/>
+<text x="1136" y="335" fill="#e6edf6" font-size="12" font-weight="600" text-anchor="end">5/5</text>
+<circle cx="869" cy="353" r="3.5" fill="#22c55e"/>
+<text x="877" y="357" fill="#e6edf6" font-size="12">PLA ↔ PVA</text>
+<rect x="1030" y="348" width="80" height="8" rx="4" fill="#14223c"/>
+<rect x="1030" y="348" width="64" height="8" rx="4" fill="hsl(100, 62%, 42%)"/>
+<text x="1136" y="357" fill="#e6edf6" font-size="12" font-weight="600" text-anchor="end">4/5</text>
+<text x="865" y="378" fill="#64748b" font-size="11" font-weight="600">CRITÈRES GLOBAUX</text>
+<text x="865" y="401" fill="#9fb0c8" font-size="12">Qualité d’impression</text>
+<rect x="1030" y="392" width="80" height="8" rx="4" fill="#14223c"/>
+<rect x="1030" y="392" width="80" height="8" rx="4" fill="hsl(125, 62%, 42%)"/>
+<text x="1136" y="401" fill="#e6edf6" font-size="12" font-weight="600" text-anchor="end">5/5</text>
+<text x="865" y="423" fill="#9fb0c8" font-size="12">Fiabilité / facilité</text>
+<rect x="1030" y="414" width="80" height="8" rx="4" fill="#14223c"/>
+<rect x="1030" y="414" width="48" height="8" rx="4" fill="hsl(75, 62%, 42%)"/>
+<text x="1136" y="423" fill="#e6edf6" font-size="12" font-weight="600" text-anchor="end">3/5</text>
+<text x="865" y="445" fill="#9fb0c8" font-size="12">Tenue (warping / délamination)</text>
+<rect x="1030" y="436" width="80" height="8" rx="4" fill="#14223c"/>
+<rect x="1030" y="436" width="80" height="8" rx="4" fill="hsl(125, 62%, 42%)"/>
+<text x="1136" y="445" fill="#e6edf6" font-size="12" font-weight="600" text-anchor="end">5/5</text>
+<rect x="865" y="466" width="120" height="28" rx="14" fill="rgba(34,197,94,0.16)" stroke="#22c55e"/>
+<text x="925" y="484" fill="#22c55e" font-size="12" font-weight="600" text-anchor="middle">👍 Ça marche · 21</text>
+<rect x="995" y="466" width="140" height="28" rx="14" fill="#14223c" stroke="#1f3052"/>
+<text x="1065" y="484" fill="#9fb0c8" font-size="12" text-anchor="middle">👎 Pas concluant · 1</text>
 </svg>

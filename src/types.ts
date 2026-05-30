@@ -1,5 +1,7 @@
 // Modèle de données de Table-Mat.
-// Tout est typé pour faciliter le futur branchement à un vrai backend.
+// Une "Recette" est un essai d'impression complet impliquant 2 à N matériaux.
+// Chaque contact entre deux matériaux est une "Interface" (liaison), qui
+// alimente une case de la matrice de compatibilité.
 
 export type MaterialId = string;
 
@@ -32,12 +34,12 @@ export interface Machine {
   id: string;
   name: string;
   system: MachineSystem;
+  /** Nombre maximum de matériaux gérés en un seul print. */
+  maxMaterials: number;
 }
 
-/** Critères du protocole de notation, chacun noté de 0 à 5. */
-export interface CriteriaRatings {
-  /** Adhérence/solidité de la liaison entre les deux matériaux. */
-  interfaceAdhesion: number;
+/** Critères globaux d'une recette (l'adhérence est gérée par interface). */
+export interface GlobalRatings {
   /** Qualité d'impression : état de surface, précision dimensionnelle. */
   printQuality: number;
   /** Fiabilité : taux de réussite, peu de retouches/réimpressions. */
@@ -50,9 +52,31 @@ export interface CriteriaRatings {
   separability: number;
 }
 
+/** Notes complètes utilisées pour calculer un score (6 critères, 0–5). */
+export interface CriteriaRatings extends GlobalRatings {
+  /** Adhérence/solidité de la liaison entre deux matériaux. */
+  interfaceAdhesion: number;
+}
+
+/** Un matériau utilisé dans une recette, avec sa marque et sa température buse. */
+export interface MaterialSlot {
+  material: MaterialId;
+  brand: string;
+  /** Température buse pour CE matériau (°C). */
+  nozzleTemp: number;
+  /** Étiquette libre, ex. "Rouge", "Coque", "Support". */
+  label?: string;
+}
+
+/** Contact entre deux matériaux au sein d'une recette + sa note d'adhérence. */
+export interface MaterialInterface {
+  a: MaterialId;
+  b: MaterialId;
+  /** Adhérence de CE contact précis (0–5). */
+  adhesion: number;
+}
+
 export interface PrintParams {
-  nozzleTempA: number; // °C
-  nozzleTempB: number; // °C
   bedTemp: number; // °C
   chamberTemp?: number; // °C (caisson)
   layerHeight: number; // mm
@@ -62,16 +86,19 @@ export interface PrintParams {
   interfaceLayers?: number; // nb de couches d'interface
 }
 
-export interface Attempt {
+export interface Recipe {
   id: string;
-  materialA: MaterialId;
-  materialB: MaterialId;
-  brandA: string;
-  brandB: string;
+  /** Nom court de la recette, ex. "Buste multicolore + support". */
+  title: string;
+  /** Matériaux utilisés (2 à N). */
+  slots: MaterialSlot[];
+  /** Contacts réels entre matériaux + leur adhérence. */
+  interfaces: MaterialInterface[];
   machineId: string;
   author: string;
   date: string; // ISO 8601
-  ratings: CriteriaRatings;
+  /** Notes globales de la recette (hors adhérence). */
+  global: GlobalRatings;
   params: PrintParams;
   notes: string;
   /** Votes communautaires « ça marche aussi chez moi ». */

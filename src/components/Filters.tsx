@@ -1,8 +1,11 @@
 import type { MachineSystem } from '../types';
 
+export type MaterialCount = 'all' | '2' | '3' | '4+';
+
 export interface FilterState {
   query: string;
   system: MachineSystem | 'all';
+  count: MaterialCount;
   hideEmpty: boolean;
 }
 
@@ -16,19 +19,28 @@ const SYSTEMS: { id: MachineSystem | 'all'; label: string }[] = [
   { id: 'Dual', label: 'Double extrudeur' },
 ];
 
+const COUNTS: { id: MaterialCount; label: string }[] = [
+  { id: 'all', label: 'Tous' },
+  { id: '2', label: '2 mat.' },
+  { id: '3', label: '3 mat.' },
+  { id: '4+', label: '4+ mat.' },
+];
+
 interface Props {
   value: FilterState;
   onChange: (next: FilterState) => void;
+  /** Affiche l'option « masquer les combinaisons vides » (vue matrice). */
+  showHideEmpty: boolean;
 }
 
-export function Filters({ value, onChange }: Props) {
+export function Filters({ value, onChange, showHideEmpty }: Props) {
   return (
     <div className="filters">
       <label className="search">
         🔍
         <input
           type="text"
-          placeholder="Rechercher un filament, une marque, un auteur, une note…"
+          placeholder="Rechercher une recette, un filament, une marque, un auteur…"
           value={value.query}
           onChange={(e) => onChange({ ...value, query: e.target.value })}
         />
@@ -46,14 +58,28 @@ export function Filters({ value, onChange }: Props) {
         ))}
       </div>
 
-      <label className="toggle">
-        <input
-          type="checkbox"
-          checked={value.hideEmpty}
-          onChange={(e) => onChange({ ...value, hideEmpty: e.target.checked })}
-        />
-        Masquer les combinaisons vides
-      </label>
+      <div className="chips count-chips">
+        {COUNTS.map((c) => (
+          <button
+            key={c.id}
+            className={`chip ${value.count === c.id ? 'active' : ''}`}
+            onClick={() => onChange({ ...value, count: c.id })}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+
+      {showHideEmpty && (
+        <label className="toggle">
+          <input
+            type="checkbox"
+            checked={value.hideEmpty}
+            onChange={(e) => onChange({ ...value, hideEmpty: e.target.checked })}
+          />
+          Masquer les combinaisons vides
+        </label>
+      )}
     </div>
   );
 }

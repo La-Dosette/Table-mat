@@ -1,11 +1,15 @@
 import { useMemo, useState } from 'react';
-import type { Attempt, UserVote } from './types';
-import { ATTEMPTS } from './data/attempts';
+import type { Recipe, UserVote } from './types';
+import { RECIPES } from './data/recipes';
 import { MATERIALS, getMachine, getMaterial } from './data/materials';
+import { interfaceScore, recipeScore, type InterfacePoint } from './lib/scoring';
 import { Filters, type FilterState } from './components/Filters';
 import { CompatibilityMatrix } from './components/CompatibilityMatrix';
 import { CellDetailDrawer } from './components/CellDetailDrawer';
+import { RecipeGallery } from './components/RecipeGallery';
 import { ProtocolPanel } from './components/ProtocolPanel';
+
+type View = 'matrix' | 'recettes';
 
 /** Clé non ordonnée d'une paire de matériaux : pair(a,b) === pair(b,a). */
 function pairKey(a: string, b: string): string {
@@ -13,92 +17,99 @@ function pairKey(a: string, b: string): string {
 }
 
 export default function App() {
-  const [attempts, setAttempts] = useState<Attempt[]>(ATTEMPTS);
+  const [recipes, setRecipes] = useState<Recipe[]>(RECIPES);
   const [userVotes, setUserVotes] = useState<Record<string, UserVote>>({});
+  const [view, setView] = useState<View>('matrix');
   const [filters, setFilters] = useState<FilterState>({
-    query: '',
-    system: 'all',
-    hideEmpty: false,
+    query: '', system: 'all', count: 'all', hideEmpty: false,
   });
   const [selected, setSelected] = useState<{ a: string; b: string } | null>(null);
 
-  // --- Filtrage des essais selon la barre de filtres ---
+  // --- Filtrage des recettes ---
   const filtered = useMemo(() => {
     const q = filters.query.trim().toLowerCase();
-    return attempts.filter((a) => {
+    return recipes.filter((r) => {
       if (filters.system !== 'all') {
-        const machine = getMachine(a.machineId);
+        const machine = getMachine(r.machineId);
         if (!machine || machine.system !== filters.system) return false;
       }
+      if (filters.count !== 'all') {
+        const n = r.slots.length;
+        if (filters.count === '2' && n !== 2) return false;
+        if (filters.count === '3' && n !== 3) return false;
+        if (filters.count === '4+' && n < 4) return false;
+      }
       if (q) {
-        const matA = getMaterial(a.materialA);
-        const matB = getMaterial(a.materialB);
         const haystack = [
-          a.brandA,
-          a.brandB,
-          a.author,
-          a.notes,
-          matA?.name,
-          matA?.fullName,
-          matB?.name,
-          matB?.fullName,
-          getMachine(a.machineId)?.name,
+          r.title,
+          r.author,
+          r.notes,
+          getMachine(r.machineId)?.name,
+          ...r.slots.flatMap((s) => [s.brand, s.label, getMaterial(s.material)?.name, getMaterial(s.material)?.fullName]),
         ]
+          .filter(Boolean)
           .join(' ')
           .toLowerCase();
         if (!haystack.includes(q)) return false;
       }
       return true;
     });
-  }, [attempts, filters.system, filters.query]);
+  }, [recipes, filters.system, filters.count, filters.query]);
 
-  // --- Index paire -> essais ---
+  // --- Index paire -> points d'interface (décomposition des recettes) ---
   const byPair = useMemo(() => {
-    const map = new Map<string, Attempt[]>();
-    for (const a of filtered) {
-      const key = pairKey(a.materialA, a.materialB);
-      const list = map.get(key);
-      if (list) list.push(a);
-      else map.set(key, [a]);
+    const map = new Map<string, InterfacePoint[]>();
+    for (const r of filtered) {
+      for (const iface of r.interfaces) {
+        const key = pairKey(iface.a, iface.b);
+        const point: InterfacePoint = { recipe: r, iface, score: interfaceScore(r, iface) };
+        const list = map.get(key);
+        if (list) list.push(point);
+        else map.set(key, [point]);
+      }
     }
     return map;
   }, [filtered]);
 
-  const attemptsFor = (a: string, b: string) => byPair.get(pairKey(a, b)) ?? [];
+  const pointsFor = (a: string, b: string) => byPair.get(pairKey(a, b)) ?? [];
 
   // --- Matériaux visibles (option « masquer les combinaisons vides ») ---
   const visibleMaterials = useMemo(() => {
     if (!filters.hideEmpty) return MATERIALS;
     const used = new Set<string>();
-    for (const a of filtered) {
-      used.add(a.materialA);
-      used.add(a.materialB);
-    }
+    for (const r of filtered) for (const s of r.slots) used.add(s.material);
     return MATERIALS.filter((m) => used.has(m.id));
   }, [filters.hideEmpty, filtered]);
+
+  // --- Recettes triées pour la galerie ---
+  const galleryRecipes = useMemo(
+    () => [...filtered].sort((a, b) => recipeScore(b) - recipeScore(a)),
+    [filtered],
+  );
 
   // --- Vote communautaire (état local) ---
   function vote(id: string, dir: 'up' | 'down') {
     const prev = userVotes[id] ?? null;
     const next: UserVote = prev === dir ? null : dir;
-    setAttempts((list) =>
-      list.map((a) => {
-        if (a.id !== id) return a;
-        let { votesUp, votesDown } = a;
+    setRecipes((list) =>
+      list.map((r) => {
+        if (r.id !== id) return r;
+        let { votesUp, votesDown } = r;
         if (prev === 'up') votesUp--;
         if (prev === 'down') votesDown--;
         if (next === 'up') votesUp++;
         if (next === 'down') votesDown++;
-        return { ...a, votesUp, votesDown };
+        return { ...r, votesUp, votesDown };
       }),
     );
     setUserVotes((v) => ({ ...v, [id]: next }));
   }
 
-  const totalVotes = attempts.reduce((s, a) => s + a.votesUp + a.votesDown, 0);
+  const totalVotes = recipes.reduce((s, r) => s + r.votesUp + r.votesDown, 0);
+  const multiCount = recipes.filter((r) => r.slots.length >= 3).length;
   const selectedMatA = selected ? getMaterial(selected.a) : null;
   const selectedMatB = selected ? getMaterial(selected.b) : null;
-  const selectedAttempts = selected ? attemptsFor(selected.a, selected.b) : [];
+  const selectedPoints = selected ? pointsFor(selected.a, selected.b) : [];
 
   return (
     <div className="app">
@@ -111,42 +122,49 @@ export default function App() {
           </div>
         </div>
         <div className="spacer" />
-        <span className="pill-stat">
-          <b>{attempts.length}</b> essais
-        </span>
-        <span className="pill-stat">
-          <b>{totalVotes}</b> votes
-        </span>
-        <span className="pill-stat">
-          <b>{MATERIALS.length}</b> matériaux
-        </span>
+        <span className="pill-stat"><b>{recipes.length}</b> recettes</span>
+        <span className="pill-stat"><b>{multiCount}</b> à 3+ matériaux</span>
+        <span className="pill-stat"><b>{totalVotes}</b> votes</span>
       </header>
 
       <div className="intro">
         <p>
-          Bienvenue&nbsp;! Chaque case croise deux matériaux et affiche le{' '}
-          <b>score de viabilité</b> calculé à partir des essais partagés par la
-          communauté. <b>Survolez</b> une case pour un aperçu, <b>cliquez</b> pour
-          voir tous les réglages (machine, températures, purge…), et <b>votez</b>{' '}
-          pour faire vivre les notes selon vos propres résultats.
+          Chaque <b>recette</b> peut mêler de 2 à 16 matériaux. La matrice montre
+          le <b>score de chaque liaison</b> (contact entre deux matériaux) ;{' '}
+          <b>survolez</b> une case pour un aperçu, <b>cliquez</b> pour voir les
+          recettes et leurs réglages. La vue <b>Recettes</b> liste les
+          configurations complètes. <b>Votez</b> pour faire vivre les notes&nbsp;!
         </p>
       </div>
 
-      <Filters value={filters} onChange={setFilters} />
+      <div className="view-toggle">
+        <button className={view === 'matrix' ? 'active' : ''} onClick={() => setView('matrix')}>
+          🧩 Matrice
+        </button>
+        <button className={view === 'recettes' ? 'active' : ''} onClick={() => setView('recettes')}>
+          📋 Recettes
+        </button>
+      </div>
 
-      {visibleMaterials.length === 0 ? (
-        <div className="matrix-wrap">
-          <div className="empty-state">
-            Aucun essai ne correspond à ces filtres. Essayez d’élargir la recherche.
+      <Filters value={filters} onChange={setFilters} showHideEmpty={view === 'matrix'} />
+
+      {view === 'matrix' ? (
+        visibleMaterials.length === 0 ? (
+          <div className="matrix-wrap">
+            <div className="empty-state">
+              Aucune recette ne correspond à ces filtres. Essayez d’élargir la recherche.
+            </div>
           </div>
-        </div>
+        ) : (
+          <CompatibilityMatrix
+            materials={visibleMaterials}
+            pointsFor={pointsFor}
+            selected={selected}
+            onSelect={(a, b) => setSelected({ a, b })}
+          />
+        )
       ) : (
-        <CompatibilityMatrix
-          materials={visibleMaterials}
-          attemptsFor={attemptsFor}
-          selected={selected}
-          onSelect={(a, b) => setSelected({ a, b })}
-        />
+        <RecipeGallery recipes={galleryRecipes} userVotes={userVotes} onVote={vote} />
       )}
 
       <ProtocolPanel />
@@ -154,14 +172,14 @@ export default function App() {
       <footer className="footer">
         Table-Mat · prototype communautaire open-source — données d’exemple.
         <br />
-        Prochaine étape&nbsp;: comptes utilisateurs, soumission d’essais et backend partagé.
+        Prochaine étape&nbsp;: comptes utilisateurs, soumission de recettes et backend partagé.
       </footer>
 
       {selected && selectedMatA && selectedMatB && (
         <CellDetailDrawer
           matA={selectedMatA}
           matB={selectedMatB}
-          attempts={selectedAttempts}
+          points={selectedPoints}
           userVotes={userVotes}
           onVote={vote}
           onClose={() => setSelected(null)}

@@ -13,6 +13,16 @@ chaque case est colorée du rouge (déconseillé) au vert (excellent). On survol
 pour un aperçu, on clique pour voir tous les réglages détaillés, on vote pour
 corriger la note.
 
+### Recettes & multi-matériaux (3, 4… jusqu'à 16)
+
+Un print peut mêler bien plus de deux matériaux (AMS chaînable, MMU3, Voron ERCF…).
+L'unité partagée est donc une **recette** : un essai à **2 à N matériaux**, avec
+sa machine et ses réglages. Chaque contact entre deux matériaux est une
+**interface** (liaison) avec sa propre note d'adhérence. Une recette à 4
+matériaux se **décompose en interfaces** qui alimentent automatiquement
+plusieurs cases de la matrice. Une vue **Recettes** liste les configurations
+complètes (chaîne de matériaux, liaisons, réglages, votes).
+
 > État actuel : **prototype front-end** avec des données d'exemple. Toute la
 > logique de scoring et de vote est déjà fonctionnelle en local, prête à être
 > branchée à un vrai backend.
@@ -36,7 +46,7 @@ viabilité** (0–100) est la moyenne pondérée suivante :
 
 | Critère | Poids | Ce qu'il mesure |
 |---|---|---|
-| Liaison à l'interface | 30 % | Solidité de l'adhérence entre les deux matériaux (critère n°1) |
+| Liaison à l'interface | 30 % | Solidité de l'adhérence entre deux matériaux — **noté par interface** |
 | Qualité d'impression | 20 % | État de surface, précision dimensionnelle |
 | Fiabilité / facilité | 18 % | Taux de réussite, peu de retouches |
 | Tenue (warping / délamination) | 12 % | Résistance au gondolement et au décollement |
@@ -57,25 +67,29 @@ seul endroit à modifier pour faire évoluer le protocole.
 
 ```
 src/
-  types.ts                # modèle de données (matériaux, machines, essais)
-  lib/scoring.ts          # LE protocole : critères, pondérations, agrégation
+  types.ts                # modèle de données (matériaux, machines, recettes, interfaces)
+  lib/scoring.ts          # LE protocole : critères, pondérations, décomposition en interfaces
   data/
-    materials.ts          # catalogue matériaux & machines
-    attempts.ts           # essais d'exemple (à remplacer par l'API)
+    materials.ts          # catalogue matériaux & machines (avec maxMaterials)
+    recipes.ts            # recettes d'exemple, 2 à 4 matériaux (à remplacer par l'API)
   components/
-    CompatibilityMatrix.tsx  # la matrice + tooltip de survol
-    CellDetailDrawer.tsx     # panneau latéral des essais d'une combinaison
-    AttemptCard.tsx          # fiche d'un essai (réglages, critères, votes)
-    Filters.tsx              # recherche + filtres par système
+    CompatibilityMatrix.tsx  # la matrice (score de liaison par paire) + tooltip
+    CellDetailDrawer.tsx     # panneau latéral des recettes touchant une paire
+    RecipeCard.tsx           # fiche d'une recette (slots, interfaces, réglages, votes)
+    RecipeGallery.tsx        # vue galerie des recettes complètes
+    Filters.tsx              # recherche + filtres système / nombre de matériaux
     ProtocolPanel.tsx        # explication du protocole
-  App.tsx                 # assemblage, état, filtres, votes
+  App.tsx                 # assemblage, état, vues, filtres, votes
+scripts/
+  render-preview.tsx      # génère un aperçu SVG depuis les vraies données
 ```
 
 ## Feuille de route
 
 - [x] Matrice de compatibilité interactive (survol + détail au clic)
 - [x] Protocole de scoring pondéré + ajustement communautaire par votes
-- [x] Filtres (recherche, système multi-matériaux)
+- [x] Recettes multi-matériaux (3, 4… N) décomposées en interfaces + vue galerie
+- [x] Filtres (recherche, système, nombre de matériaux)
 - [ ] Backend partagé + base de données (ex. Supabase/Postgres)
 - [ ] Comptes utilisateurs et soumission d'essais via formulaire
 - [ ] Photos des pièces et galerie par combinaison

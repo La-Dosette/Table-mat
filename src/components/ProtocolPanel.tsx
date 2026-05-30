@@ -5,11 +5,12 @@ export function ProtocolPanel() {
     <section className="protocol" id="protocole">
       <h2>Le protocole Table-Mat</h2>
       <p>
-        Chaque essai est noté par son auteur sur 6 critères (de 0 à 5). Le{' '}
-        <b>score de viabilité</b> est une moyenne pondérée ramenée sur 100, puis{' '}
-        <b>ajusté par la communauté</b> : qui reproduit un réglage peut voter
-        « ça marche » ou « pas concluant ». Plus une combinaison est testée, plus
-        son score gagne en fiabilité.
+        Une <b>recette</b> est un essai d’impression à 2 à N matériaux. L’
+        <b>adhérence est notée par interface</b> (chaque contact entre deux
+        matériaux), les 5 autres critères sont globaux. Le <b>score de viabilité</b>{' '}
+        (0–100) est une moyenne pondérée, <b>ajustée par les votes</b> de la
+        communauté. Une recette à 4 matériaux se décompose en interfaces qui
+        alimentent plusieurs cases de la matrice.
       </p>
       <div className="crit-grid">
         {CRITERIA.map((c) => (
@@ -19,6 +20,7 @@ export function ProtocolPanel() {
               <span className="w">{Math.round(c.weight * 100)}%</span>
             </div>
             <p>{c.help}</p>
+            {c.perInterface && <span className="pi-tag">par interface</span>}
           </div>
         ))}
       </div>

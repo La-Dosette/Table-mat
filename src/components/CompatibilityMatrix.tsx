@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import type { Attempt, Material } from '../types';
-import { aggregateCell, scoreColor, scoreLabel } from '../lib/scoring';
+import type { Material } from '../types';
+import { aggregateCell, scoreColor, scoreLabel, type InterfacePoint } from '../lib/scoring';
 
 interface Props {
   materials: Material[];
-  /** Renvoie les essais d'une paire (non ordonnée) de matériaux. */
-  attemptsFor: (a: string, b: string) => Attempt[];
+  /** Renvoie les points d'interface pour une paire (non ordonnée). */
+  pointsFor: (a: string, b: string) => InterfacePoint[];
   selected: { a: string; b: string } | null;
   onSelect: (a: string, b: string) => void;
 }
@@ -15,10 +15,10 @@ interface HoverState {
   b: Material;
   x: number;
   y: number;
-  attempts: Attempt[];
+  points: InterfacePoint[];
 }
 
-export function CompatibilityMatrix({ materials, attemptsFor, selected, onSelect }: Props) {
+export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }: Props) {
   const [hover, setHover] = useState<HoverState | null>(null);
 
   return (
@@ -48,14 +48,14 @@ export function CompatibilityMatrix({ materials, attemptsFor, selected, onSelect
                   </span>
                 </th>
                 {materials.map((colMat) => {
-                  const attempts = attemptsFor(rowMat.id, colMat.id);
-                  const agg = aggregateCell(attempts);
+                  const points = pointsFor(rowMat.id, colMat.id);
+                  const agg = aggregateCell(points);
                   const isDiag = rowMat.id === colMat.id;
                   const isSelected =
                     !!selected &&
                     ((selected.a === rowMat.id && selected.b === colMat.id) ||
                       (selected.a === colMat.id && selected.b === rowMat.id));
-                  const empty = attempts.length === 0;
+                  const empty = points.length === 0;
                   return (
                     <td key={colMat.id}>
                       <div
@@ -68,13 +68,7 @@ export function CompatibilityMatrix({ materials, attemptsFor, selected, onSelect
                         style={{ background: scoreColor(agg.score) }}
                         onMouseEnter={(e) =>
                           !empty &&
-                          setHover({
-                            a: rowMat,
-                            b: colMat,
-                            x: e.clientX,
-                            y: e.clientY,
-                            attempts,
-                          })
+                          setHover({ a: rowMat, b: colMat, x: e.clientX, y: e.clientY, points })
                         }
                         onMouseMove={(e) =>
                           setHover((h) => (h ? { ...h, x: e.clientX, y: e.clientY } : h))
@@ -88,7 +82,7 @@ export function CompatibilityMatrix({ materials, attemptsFor, selected, onSelect
                           <>
                             <span className="score">{agg.score}</span>
                             <span className="count">
-                              {attempts.length} essai{attempts.length > 1 ? 's' : ''}
+                              {agg.recipeCount} recette{agg.recipeCount > 1 ? 's' : ''}
                             </span>
                           </>
                         )}
@@ -118,9 +112,7 @@ export function CompatibilityMatrix({ materials, attemptsFor, selected, onSelect
 }
 
 function MatrixTooltip({ hover }: { hover: HoverState }) {
-  const agg = aggregateCell(hover.attempts);
-  const top = [...hover.attempts].sort((a, b) => b.votesUp - a.votesUp)[0];
-  // Décale la tooltip pour ne pas masquer le curseur, en restant dans l'écran.
+  const agg = aggregateCell(hover.points);
   const left = Math.min(hover.x + 16, window.innerWidth - 266);
   const tTop = Math.min(hover.y + 16, window.innerHeight - 190);
   return (
@@ -128,33 +120,25 @@ function MatrixTooltip({ hover }: { hover: HoverState }) {
       <h4>
         <span className="mat-dot" style={{ background: hover.a.accent }} />
         {hover.a.name}
-        <span style={{ color: 'var(--text-faint)' }}>＋</span>
+        <span style={{ color: 'var(--text-faint)' }}>↔</span>
         <span className="mat-dot" style={{ background: hover.b.accent }} />
         {hover.b.name}
       </h4>
       <div className="tt-row">
-        <span>Score communautaire</span>
+        <span>Score de liaison</span>
         <span className="tt-score" style={{ color: scoreColor(agg.score) }}>
           {agg.score} · {scoreLabel(agg.score)}
         </span>
       </div>
       <div className="tt-row">
-        <span>Essais partagés</span>
-        <span>{hover.attempts.length}</span>
+        <span>Recettes concernées</span>
+        <span>{agg.recipeCount}</span>
       </div>
       <div className="tt-row">
-        <span>Corroborations</span>
-        <span>{agg.confidence}</span>
+        <span>Interfaces testées</span>
+        <span>{hover.points.length}</span>
       </div>
-      {top && (
-        <div className="tt-row">
-          <span>Meilleur réglage</span>
-          <span>
-            {top.params.nozzleTempA}/{top.params.nozzleTempB}°C
-          </span>
-        </div>
-      )}
-      <div className="tt-hint">Cliquez pour voir tous les essais et leurs paramètres →</div>
+      <div className="tt-hint">Cliquez pour voir les recettes et leurs réglages →</div>
     </div>
   );
 }
