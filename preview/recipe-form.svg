@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="720" viewBox="0 0 560 720" font-family="Inter, Segoe UI, sans-serif">
+<rect width="560" height="720" fill="#0f1a2e"/>
+<rect x="0" y="0" width="560" height="64" fill="#0f1a2e"/><line x1="0" y1="64" x2="560" y2="64" stroke="#1a2842"/>
+<text x="24" y="34" fill="#e6edf6" font-size="18" font-weight="800">➕ Nouvelle recette</text>
+<text x="24" y="52" fill="#9fb0c8" font-size="12">Partage un essai multi-matériaux avec la communauté.</text>
+<rect x="504" y="18" width="32" height="32" rx="8" fill="#14223c" stroke="#1f3052"/><text x="520" y="39" fill="#9fb0c8" font-size="14" text-anchor="middle">✕</text>
+<text x="24" y="86" fill="#9fb0c8" font-size="12">Titre de la recette *</text>
+<rect x="24" y="94" width="512" height="34" rx="7" fill="#14223c" stroke="#1f3052"/>
+<text x="34" y="116" fill="#e6edf6" font-size="13">Figurine multicolore + support PVA</text>
+<text x="24" y="138" fill="#9fb0c8" font-size="12">Pseudo</text>
+<text x="288" y="138" fill="#9fb0c8" font-size="12">Machine</text>
+<rect x="24" y="146" width="252" height="34" rx="7" fill="#14223c" stroke="#1f3052"/><text x="34" y="168" fill="#e6edf6" font-size="13">mini_sculpt</text>
+<rect x="284" y="146" width="252" height="34" rx="7" fill="#14223c" stroke="#1f3052"/><text x="294" y="168" fill="#e6edf6" font-size="13">Prusa MK4 + MMU3 ▾</text>
+<text x="24" y="202" fill="#64748b" font-size="11" font-weight="700" letter-spacing="1">MATÉRIAUX (4)</text>
+<rect x="24" y="216" width="512" height="32" rx="7" fill="#14223c" stroke="#1f3052"/>
+<circle cx="38" cy="232" r="4" fill="#22c55e"/>
+<text x="50" y="237" fill="#e6edf6" font-size="12" font-weight="700">PLA</text>
+<text x="92" y="237" fill="#cdd9ea" font-size="12">Polymaker · Peau</text>
+<text x="470" y="237" fill="#9fb0c8" font-size="12">210°C</text>
+<text x="522" y="237" fill="#64748b" font-size="13">✕</text>
+<rect x="24" y="254" width="512" height="32" rx="7" fill="#14223c" stroke="#1f3052"/>
+<circle cx="38" cy="270" r="4" fill="#22c55e"/>
+<text x="50" y="275" fill="#e6edf6" font-size="12" font-weight="700">PLA</text>
+<text x="92" y="275" fill="#cdd9ea" font-size="12">Polymaker · Cheveux</text>
+<text x="470" y="275" fill="#9fb0c8" font-size="12">210°C</text>
+<text x="522" y="275" fill="#64748b" font-size="13">✕</text>
+<rect x="24" y="292" width="512" height="32" rx="7" fill="#14223c" stroke="#1f3052"/>
+<circle cx="38" cy="308" r="4" fill="#22c55e"/>
+<text x="50" y="313" fill="#e6edf6" font-size="12" font-weight="700">PLA</text>
+<text x="92" y="313" fill="#cdd9ea" font-size="12">Polymaker · Yeux</text>
+<text x="470" y="313" fill="#9fb0c8" font-size="12">210°C</text>
+<text x="522" y="313" fill="#64748b" font-size="13">✕</text>
+<rect x="24" y="330" width="512" height="32" rx="7" fill="#14223c" stroke="#1f3052"/>
+<circle cx="38" cy="346" r="4" fill="#34d399"/>
+<text x="50" y="351" fill="#e6edf6" font-size="12" font-weight="700">PVA</text>
+<text x="92" y="351" fill="#cdd9ea" font-size="12">Verbatim · Support</text>
+<text x="470" y="351" fill="#9fb0c8" font-size="12">200°C</text>
+<text x="522" y="351" fill="#64748b" font-size="13">✕</text>
+<rect x="24" y="368" width="512" height="32" rx="7" fill="none" stroke="#1f3052" stroke-dasharray="4 3"/><text x="280" y="389" fill="#9fb0c8" font-size="12" text-anchor="middle">+ Ajouter un matériau</text>
+<text x="24" y="422" fill="#64748b" font-size="11" font-weight="700" letter-spacing="1">LIAISONS — NOTE L’ADHÉRENCE DE CHAQUE CONTACT</text>
+<rect x="24" y="436" width="512" height="34" rx="7" fill="#14223c"/>
+<circle cx="38" cy="453" r="4" fill="#22c55e"/><text x="48" y="458" fill="#e6edf6" font-size="12.5">PLA</text>
+<text x="78" y="458" fill="#64748b" font-size="12">↔</text>
+<circle cx="92" cy="453" r="4" fill="#22c55e"/><text x="102" y="458" fill="#e6edf6" font-size="12.5">PLA</text>
+<line x1="200" y1="453" x2="430" y2="453" stroke="#1f3052" stroke-width="4" stroke-linecap="round"/>
+<line x1="200" y1="453" x2="430" y2="453" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+<circle cx="430" cy="453" r="7" fill="#38bdf8"/>
+<text x="522" y="458" fill="hsl(125,62%,52%)" font-size="13" font-weight="700" text-anchor="end">5/5</text>
+<rect x="24" y="476" width="512" height="34" rx="7" fill="#14223c"/>
+<circle cx="38" cy="493" r="4" fill="#22c55e"/><text x="48" y="498" fill="#e6edf6" font-size="12.5">PLA</text>
+<text x="78" y="498" fill="#64748b" font-size="12">↔</text>
+<circle cx="92" cy="493" r="4" fill="#34d399"/><text x="102" y="498" fill="#e6edf6" font-size="12.5">PVA</text>
+<line x1="200" y1="493" x2="430" y2="493" stroke="#1f3052" stroke-width="4" stroke-linecap="round"/>
+<line x1="200" y1="493" x2="384" y2="493" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+<circle cx="384" cy="493" r="7" fill="#38bdf8"/>
+<text x="522" y="498" fill="hsl(100,62%,52%)" font-size="13" font-weight="700" text-anchor="end">4/5</text>
+<text x="24" y="524" fill="#64748b" font-size="11" font-weight="700" letter-spacing="1">CRITÈRES GLOBAUX</text>
+<text x="24" y="552" fill="#9fb0c8" font-size="12.5">Qualité d’impression</text>
+<line x1="230" y1="548" x2="430" y2="548" stroke="#1f3052" stroke-width="4" stroke-linecap="round"/>
+<line x1="230" y1="548" x2="430" y2="548" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+<circle cx="430" cy="548" r="7" fill="#38bdf8"/>
+<text x="522" y="553" fill="hsl(125,62%,52%)" font-size="13" font-weight="700" text-anchor="end">5/5</text>
+<text x="24" y="580" fill="#9fb0c8" font-size="12.5">Fiabilité / facilité</text>
+<line x1="230" y1="576" x2="430" y2="576" stroke="#1f3052" stroke-width="4" stroke-linecap="round"/>
+<line x1="230" y1="576" x2="350" y2="576" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+<circle cx="350" cy="576" r="7" fill="#38bdf8"/>
+<text x="522" y="581" fill="hsl(75,62%,52%)" font-size="13" font-weight="700" text-anchor="end">3/5</text>
+<text x="24" y="608" fill="#9fb0c8" font-size="12.5">Séparabilité maîtrisée</text>
+<line x1="230" y1="604" x2="430" y2="604" stroke="#1f3052" stroke-width="4" stroke-linecap="round"/>
+<line x1="230" y1="604" x2="430" y2="604" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+<circle cx="430" cy="604" r="7" fill="#38bdf8"/>
+<text x="522" y="609" fill="hsl(125,62%,52%)" font-size="13" font-weight="700" text-anchor="end">5/5</text>
+<rect x="240" y="636" width="120" height="38" rx="19" fill="#14223c" stroke="#1f3052"/><text x="300" y="660" fill="#9fb0c8" font-size="13" text-anchor="middle">Annuler</text>
+<rect x="372" y="636" width="164" height="38" rx="19" fill="#0ea5e9"/><text x="454" y="660" fill="#04121f" font-size="13" font-weight="700" text-anchor="middle">Publier la recette</text>
+</svg>

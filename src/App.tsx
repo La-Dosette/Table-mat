@@ -7,6 +7,7 @@ import { Filters, type FilterState } from './components/Filters';
 import { CompatibilityMatrix } from './components/CompatibilityMatrix';
 import { CellDetailDrawer } from './components/CellDetailDrawer';
 import { RecipeGallery } from './components/RecipeGallery';
+import { RecipeForm } from './components/RecipeForm';
 import { ProtocolPanel } from './components/ProtocolPanel';
 
 type View = 'matrix' | 'recettes';
@@ -20,6 +21,7 @@ export default function App() {
   const [recipes, setRecipes] = useState<Recipe[]>(RECIPES);
   const [userVotes, setUserVotes] = useState<Record<string, UserVote>>({});
   const [view, setView] = useState<View>('matrix');
+  const [showForm, setShowForm] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
     query: '', system: 'all', count: 'all', hideEmpty: false,
   });
@@ -105,6 +107,13 @@ export default function App() {
     setUserVotes((v) => ({ ...v, [id]: next }));
   }
 
+  // --- Ajout d'une recette (prototype : état local) ---
+  function addRecipe(recipe: Recipe) {
+    setRecipes((list) => [recipe, ...list]);
+    setShowForm(false);
+    setView('recettes');
+  }
+
   const totalVotes = recipes.reduce((s, r) => s + r.votesUp + r.votesDown, 0);
   const multiCount = recipes.filter((r) => r.slots.length >= 3).length;
   const selectedMatA = selected ? getMaterial(selected.a) : null;
@@ -137,12 +146,17 @@ export default function App() {
         </p>
       </div>
 
-      <div className="view-toggle">
-        <button className={view === 'matrix' ? 'active' : ''} onClick={() => setView('matrix')}>
-          🧩 Matrice
-        </button>
-        <button className={view === 'recettes' ? 'active' : ''} onClick={() => setView('recettes')}>
-          📋 Recettes
+      <div className="toolbar">
+        <div className="view-toggle">
+          <button className={view === 'matrix' ? 'active' : ''} onClick={() => setView('matrix')}>
+            🧩 Matrice
+          </button>
+          <button className={view === 'recettes' ? 'active' : ''} onClick={() => setView('recettes')}>
+            📋 Recettes
+          </button>
+        </div>
+        <button className="btn-primary add-recipe" onClick={() => setShowForm(true)}>
+          ➕ Ajouter une recette
         </button>
       </div>
 
@@ -185,6 +199,8 @@ export default function App() {
           onClose={() => setSelected(null)}
         />
       )}
+
+      {showForm && <RecipeForm onSubmit={addRecipe} onClose={() => setShowForm(false)} />}
     </div>
   );
 }

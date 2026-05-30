@@ -77,6 +77,7 @@ src/
     CellDetailDrawer.tsx     # panneau latéral des recettes touchant une paire
     RecipeCard.tsx           # fiche d'une recette (slots, interfaces, réglages, votes)
     RecipeGallery.tsx        # vue galerie des recettes complètes
+    RecipeForm.tsx           # formulaire d'ajout d'une recette (modale)
     Filters.tsx              # recherche + filtres système / nombre de matériaux
     ProtocolPanel.tsx        # explication du protocole
   App.tsx                 # assemblage, état, vues, filtres, votes
@@ -90,8 +91,9 @@ scripts/
 - [x] Protocole de scoring pondéré + ajustement communautaire par votes
 - [x] Recettes multi-matériaux (3, 4… N) décomposées en interfaces + vue galerie
 - [x] Filtres (recherche, système, nombre de matériaux)
+- [x] Formulaire de soumission de recette (matériaux dynamiques, liaisons auto, critères, réglages)
 - [ ] Backend partagé + base de données (ex. Supabase/Postgres)
-- [ ] Comptes utilisateurs et soumission d'essais via formulaire
+- [ ] Comptes utilisateurs (persistance des recettes soumises et des votes)
 - [ ] Photos des pièces et galerie par combinaison
 - [ ] Modération et anti-spam des votes
 - [ ] Export / partage d'un réglage (preset slicer)
