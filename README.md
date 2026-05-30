@@ -39,6 +39,21 @@ npm run preview  # prévisualiser le build
 Stack : **React + TypeScript + Vite**. Aucun backend requis pour le prototype —
 hébergeable tel quel sur GitHub Pages / Netlify / Vercel.
 
+## Mise en ligne (GitHub Pages)
+
+Un workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) build
+et publie le site automatiquement à chaque push. Pour l'activer (une seule fois) :
+
+1. Dépôt GitHub → **Settings → Pages**.
+2. **Build and deployment → Source** : choisir **GitHub Actions**.
+3. C'est tout : le site se publie à chaque push sur l'URL indiquée par l'action
+   (typiquement `https://<utilisateur>.github.io/table-mat/`).
+
+> GitHub Pages gratuit nécessite un dépôt **public** (ou un plan payant pour le
+> privé). Pour utiliser Supabase sur le site déployé, ajoutez les secrets
+> `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY` dans **Settings → Secrets and
+> variables → Actions**.
+
 ## Backend partagé (optionnel, via Supabase)
 
 Sans configuration, l'app tourne en **local** : les recettes et votes vivent en
@@ -125,6 +140,7 @@ scripts/
 - [x] Filtres (recherche, système, nombre de matériaux)
 - [x] Formulaire de soumission de recette (matériaux dynamiques, liaisons auto, critères, réglages)
 - [x] Backend partagé optionnel via Supabase (schéma SQL, client REST, bascule auto)
+- [x] Déploiement automatique en ligne via GitHub Pages
 - [ ] Comptes utilisateurs (auth Supabase + votes liés à un compte)
 - [ ] Photos des pièces et galerie par combinaison
 - [ ] Modération et anti-spam des votes

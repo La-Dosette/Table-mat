@@ -1,0 +1,60 @@
+name: Déploiement GitHub Pages
+
+# Build et publie le site à chaque push sur la branche de travail (ou main).
+on:
+  push:
+    branches:
+      - main
+      - claude/multimat-printing-community-nVYGk
+  workflow_dispatch: # permet aussi un déclenchement manuel
+
+# Permissions nécessaires au déploiement Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un seul déploiement à la fois ; on annule les builds en cours obsolètes.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Build de production
+        run: npm run build
+        env:
+          # Si ces secrets sont définis (Settings → Secrets → Actions),
+          # le site déployé utilisera Supabase ; sinon il reste en mode local.
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Préparation de l'artefact Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Déploiement sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
