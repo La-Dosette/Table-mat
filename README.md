@@ -39,6 +39,36 @@ npm run preview  # prévisualiser le build
 Stack : **React + TypeScript + Vite**. Aucun backend requis pour le prototype —
 hébergeable tel quel sur GitHub Pages / Netlify / Vercel.
 
+## Backend partagé (optionnel, via Supabase)
+
+Sans configuration, l'app tourne en **local** : les recettes et votes vivent en
+mémoire et disparaissent au rechargement (pratique pour tester). Pour rendre les
+données **persistantes et partagées entre tous**, branchez **Supabase** (offre
+gratuite, PostgreSQL + API REST) :
+
+1. Créez un projet sur [supabase.com](https://supabase.com).
+2. Dans **SQL Editor**, exécutez le contenu de [`supabase/schema.sql`](supabase/schema.sql)
+   (crée la table `recipes`, les règles d'accès et la fonction de vote atomique).
+3. Copiez `.env.example` en `.env` et renseignez vos clés
+   (**Project Settings → API**) :
+   ```env
+   VITE_SUPABASE_URL=https://votre-projet.supabase.co
+   VITE_SUPABASE_ANON_KEY=votre_cle_anon_publique
+   ```
+4. (Optionnel) Pré-remplissez la base avec les recettes d'exemple :
+   ```bash
+   SUPABASE_URL=... SUPABASE_ANON_KEY=... npm run seed
+   ```
+5. Relancez `npm run dev`. Le pied de page affiche désormais **« Supabase (partagé) »**.
+
+La sélection est **automatique** : dès que les deux variables sont présentes,
+l'app utilise Supabase ; sinon elle reste en local. Toute la logique est isolée
+dans [`src/lib/dataSource.ts`](src/lib/dataSource.ts) (deux implémentations
+interchangeables `LocalDataSource` / `SupabaseDataSource`).
+
+> Par défaut, lecture et soumission sont publiques (pas de compte requis). Pour
+> exiger un compte, voir le commentaire dans `supabase/schema.sql`.
+
 ## Le protocole de notation
 
 Chaque essai est noté par son auteur sur 6 critères (0 à 5). Le **score de
@@ -68,7 +98,9 @@ seul endroit à modifier pour faire évoluer le protocole.
 ```
 src/
   types.ts                # modèle de données (matériaux, machines, recettes, interfaces)
-  lib/scoring.ts          # LE protocole : critères, pondérations, décomposition en interfaces
+  lib/
+    scoring.ts            # LE protocole : critères, pondérations, décomposition en interfaces
+    dataSource.ts         # accès aux données : local (mémoire) ou Supabase (partagé)
   data/
     materials.ts          # catalogue matériaux & machines (avec maxMaterials)
     recipes.ts            # recettes d'exemple, 2 à 4 matériaux (à remplacer par l'API)
@@ -92,8 +124,8 @@ scripts/
 - [x] Recettes multi-matériaux (3, 4… N) décomposées en interfaces + vue galerie
 - [x] Filtres (recherche, système, nombre de matériaux)
 - [x] Formulaire de soumission de recette (matériaux dynamiques, liaisons auto, critères, réglages)
-- [ ] Backend partagé + base de données (ex. Supabase/Postgres)
-- [ ] Comptes utilisateurs (persistance des recettes soumises et des votes)
+- [x] Backend partagé optionnel via Supabase (schéma SQL, client REST, bascule auto)
+- [ ] Comptes utilisateurs (auth Supabase + votes liés à un compte)
 - [ ] Photos des pièces et galerie par combinaison
 - [ ] Modération et anti-spam des votes
 - [ ] Export / partage d'un réglage (preset slicer)

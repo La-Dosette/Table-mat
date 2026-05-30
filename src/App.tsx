@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Recipe, UserVote } from './types';
-import { RECIPES } from './data/recipes';
 import { MATERIALS, getMachine, getMaterial } from './data/materials';
+import { dataSource } from './lib/dataSource';
 import { interfaceScore, recipeScore, type InterfacePoint } from './lib/scoring';
 import { Filters, type FilterState } from './components/Filters';
 import { CompatibilityMatrix } from './components/CompatibilityMatrix';
@@ -18,10 +18,25 @@ function pairKey(a: string, b: string): string {
 }
 
 export default function App() {
-  const [recipes, setRecipes] = useState<Recipe[]>(RECIPES);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [userVotes, setUserVotes] = useState<Record<string, UserVote>>({});
   const [view, setView] = useState<View>('matrix');
   const [showForm, setShowForm] = useState(false);
+
+  // Chargement initial des recettes depuis la source de données.
+  useEffect(() => {
+    let active = true;
+    dataSource
+      .listRecipes()
+      .then((list) => active && setRecipes(list))
+      .catch((e) => active && setLoadError(String(e?.message ?? e)))
+      .finally(() => active && setLoading(false));
+    return () => {
+      active = false;
+    };
+  }, []);
   const [filters, setFilters] = useState<FilterState>({
     query: '', system: 'all', count: 'all', hideEmpty: false,
   });
@@ -89,29 +104,39 @@ export default function App() {
     [filtered],
   );
 
-  // --- Vote communautaire (état local) ---
+  // --- Vote communautaire (optimiste + persistance via la source) ---
   function vote(id: string, dir: 'up' | 'down') {
     const prev = userVotes[id] ?? null;
     const next: UserVote = prev === dir ? null : dir;
+    let upDelta = 0;
+    let downDelta = 0;
+    if (prev === 'up') upDelta--;
+    if (prev === 'down') downDelta--;
+    if (next === 'up') upDelta++;
+    if (next === 'down') downDelta++;
+
     setRecipes((list) =>
-      list.map((r) => {
-        if (r.id !== id) return r;
-        let { votesUp, votesDown } = r;
-        if (prev === 'up') votesUp--;
-        if (prev === 'down') votesDown--;
-        if (next === 'up') votesUp++;
-        if (next === 'down') votesDown++;
-        return { ...r, votesUp, votesDown };
-      }),
+      list.map((r) =>
+        r.id === id
+          ? { ...r, votesUp: r.votesUp + upDelta, votesDown: r.votesDown + downDelta }
+          : r,
+      ),
     );
     setUserVotes((v) => ({ ...v, [id]: next }));
+    dataSource.applyVote(id, upDelta, downDelta).catch((e) => console.error('vote', e));
   }
 
-  // --- Ajout d'une recette (prototype : état local) ---
+  // --- Ajout d'une recette (persisté via la source de données) ---
   function addRecipe(recipe: Recipe) {
-    setRecipes((list) => [recipe, ...list]);
     setShowForm(false);
     setView('recettes');
+    setRecipes((list) => [recipe, ...list]); // optimiste
+    dataSource
+      .addRecipe(recipe)
+      .then((saved) =>
+        setRecipes((list) => [saved, ...list.filter((r) => r.id !== recipe.id)]),
+      )
+      .catch((e) => console.error('addRecipe', e));
   }
 
   const totalVotes = recipes.reduce((s, r) => s + r.votesUp + r.votesDown, 0);
@@ -162,7 +187,17 @@ export default function App() {
 
       <Filters value={filters} onChange={setFilters} showHideEmpty={view === 'matrix'} />
 
-      {view === 'matrix' ? (
+      {loading ? (
+        <div className="matrix-wrap">
+          <div className="empty-state">Chargement des recettes…</div>
+        </div>
+      ) : loadError ? (
+        <div className="matrix-wrap">
+          <div className="empty-state">
+            Impossible de charger les recettes&nbsp;: {loadError}
+          </div>
+        </div>
+      ) : view === 'matrix' ? (
         visibleMaterials.length === 0 ? (
           <div className="matrix-wrap">
             <div className="empty-state">
@@ -184,9 +219,12 @@ export default function App() {
       <ProtocolPanel />
 
       <footer className="footer">
-        Table-Mat · prototype communautaire open-source — données d’exemple.
+        Table-Mat · prototype communautaire open-source.
         <br />
-        Prochaine étape&nbsp;: comptes utilisateurs, soumission de recettes et backend partagé.
+        Source de données&nbsp;:{' '}
+        <span className={dataSource.isRemote ? 'src-remote' : 'src-local'}>
+          {dataSource.label}
+        </span>
       </footer>
 
       {selected && selectedMatA && selectedMatB && (

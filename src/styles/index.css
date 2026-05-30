@@ -642,6 +642,15 @@ a {
   padding: 26px;
 }
 
+.src-remote {
+  color: var(--good);
+  font-weight: 600;
+}
+.src-local {
+  color: var(--warn);
+  font-weight: 600;
+}
+
 /* ---------- Bascule de vue ---------- */
 .view-toggle {
   display: inline-flex;
