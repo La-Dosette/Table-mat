@@ -118,7 +118,7 @@ export function RecipeForm({ onSubmit, onClose, initial }: Props) {
     if (!title.trim()) return setError('Donne un titre à ta recette.');
     const cleanSlots = slots.filter((s) => s.material);
     if (cleanSlots.length < 2) return setError('Il faut au moins 2 matériaux.');
-    if (activePairs.length === 0) return setError('Il faut au moins une liaison en contact.');
+    if (activePairs.length === 0) return setError('Il faut au moins une interface en contact.');
 
     const finalSlots: MaterialSlot[] = cleanSlots.map((s) => ({
       material: s.material,
@@ -213,12 +213,12 @@ export function RecipeForm({ onSubmit, onClose, initial }: Props) {
           })}
           <button className="add-btn" onClick={addSlot}>+ Ajouter un matériau</button>
 
-          {/* Liaisons (interfaces) */}
+          {/* Interfaces (contacts entre matériaux) */}
           <div className="section-title" style={{ marginTop: 18 }}>
-            Liaisons — note l’adhérence de chaque contact
+            Interfaces — note l’adhérence de chaque contact
           </div>
           {activePairs.length === 0 && (
-            <p className="hint">Choisis au moins deux matériaux pour générer les liaisons.</p>
+            <p className="hint">Choisis au moins deux matériaux pour générer les interfaces.</p>
           )}
           {candidatePairs.map(([a, b]) => {
             const key = pairKey(a, b);

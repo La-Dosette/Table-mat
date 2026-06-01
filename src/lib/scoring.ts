@@ -28,10 +28,10 @@ export interface Criterion {
 export const CRITERIA: Criterion[] = [
   {
     key: 'interfaceAdhesion',
-    label: 'Liaison à l’interface',
-    short: 'Liaison',
+    label: 'Adhérence interfaciale',
+    short: 'Adhérence',
     weight: 0.3,
-    help: 'Solidité de l’adhérence entre deux matériaux. Mesurée pour chaque contact.',
+    help: 'Solidité du collage entre deux matériaux à leur contact. Notée pour chaque interface.',
     perInterface: true,
   },
   {
@@ -39,23 +39,23 @@ export const CRITERIA: Criterion[] = [
     label: 'Qualité d’impression',
     short: 'Qualité',
     weight: 0.2,
-    help: 'État de surface, précision dimensionnelle, propreté générale de la pièce.',
+    help: 'État de surface, précision dimensionnelle et propreté générale de la pièce.',
     perInterface: false,
   },
   {
     key: 'reliability',
-    label: 'Fiabilité / facilité',
+    label: 'Fiabilité du procédé',
     short: 'Fiabilité',
     weight: 0.18,
-    help: 'Taux de réussite : l’impression passe-t-elle sans réimpression ni retouches lourdes ?',
+    help: 'Taux de réussite : l’impression aboutit-elle sans reprise ni échec ?',
     perInterface: false,
   },
   {
     key: 'warpResistance',
-    label: 'Tenue (warping / délamination)',
+    label: 'Tenue (gauchissement / délaminage)',
     short: 'Tenue',
     weight: 0.12,
-    help: 'Résistance au gondolement et au décollement des couches/interfaces.',
+    help: 'Résistance au gauchissement (warping) et au délaminage (décollement des couches).',
     perInterface: false,
   },
   {
@@ -63,7 +63,7 @@ export const CRITERIA: Criterion[] = [
     label: 'Propreté de l’interface',
     short: 'Propreté',
     weight: 0.12,
-    help: 'Absence de bavure et de contamination de matière au niveau du changement.',
+    help: 'Absence de bavure et de contamination de matière au changement de matériau.',
     perInterface: false,
   },
   {
@@ -71,7 +71,7 @@ export const CRITERIA: Criterion[] = [
     label: 'Séparabilité maîtrisée',
     short: 'Sépara.',
     weight: 0.08,
-    help: 'Capacité à séparer proprement quand c’est voulu (supports solubles / détachables).',
+    help: 'Capacité à séparer proprement quand c’est voulu (supports solubles ou détachables).',
     perInterface: false,
   },
 ];
@@ -80,7 +80,7 @@ export function clamp(x: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, x));
 }
 
-/** Score de viabilité de base (0–100) à partir des 6 critères. */
+/** Indice de compatibilité de base (0–100) à partir des 6 critères. */
 export function baseScore(r: CriteriaRatings): number {
   const weighted = CRITERIA.reduce(
     (acc, c) => acc + c.weight * (r[c.key] / 5),

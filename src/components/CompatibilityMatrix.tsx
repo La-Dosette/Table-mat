@@ -73,7 +73,7 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect, 
                   const empty = points.length === 0;
                   const label = empty
                     ? `${rowMat.name} ↔ ${colMat.name} : aucun essai`
-                    : `${rowMat.name} ↔ ${colMat.name} : score ${agg.score}, ${agg.recipeCount} recette${
+                    : `${rowMat.name} ↔ ${colMat.name} : indice ${agg.score}, ${agg.recipeCount} recette${
                         agg.recipeCount > 1 ? 's' : ''
                       }`;
                   return (
@@ -160,7 +160,7 @@ function MatrixTooltip({ hover }: { hover: HoverState }) {
         {hover.b.name}
       </h4>
       <div className="tt-row">
-        <span>Score de liaison</span>
+        <span>Indice de compatibilité</span>
         <span className="tt-score" style={{ color: scoreColor(agg.score) }}>
           {agg.score} · {scoreLabel(agg.score)}
         </span>
@@ -170,7 +170,7 @@ function MatrixTooltip({ hover }: { hover: HoverState }) {
         <span>{agg.recipeCount}</span>
       </div>
       <div className="tt-row">
-        <span>Interfaces testées</span>
+        <span>Interfaces notées</span>
         <span>{hover.points.length}</span>
       </div>
       <div className="tt-hint">Cliquez pour voir les recettes et leurs réglages →</div>

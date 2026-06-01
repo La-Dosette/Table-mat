@@ -126,9 +126,9 @@ export function RecipeCard({
         })}
       </div>
 
-      {/* Interfaces (liaisons) */}
+      {/* Interfaces (contacts entre matériaux) */}
       <div className="ifaces">
-        <div className="section-title">Liaisons</div>
+        <div className="section-title">Interfaces</div>
         {recipe.interfaces.map((iface, i) => {
           const ma = getMaterial(iface.a);
           const mb = getMaterial(iface.b);

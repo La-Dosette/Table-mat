@@ -28,7 +28,7 @@ export function CellDetailDrawer({
   return (
     <>
       <div className="drawer-backdrop" onClick={onClose} />
-      <aside className="drawer" role="dialog" aria-label={`Liaison ${matA.name} et ${matB.name}`}>
+      <aside className="drawer" role="dialog" aria-label={`Interface ${matA.name} ↔ ${matB.name}`}>
         <div className="drawer-head">
           <div className="score-ring" style={{ background: scoreColor(agg.score), width: 56, height: 56 }}>
             {agg.score}
@@ -50,8 +50,8 @@ export function CellDetailDrawer({
         </div>
         <div className="drawer-body">
           <p className="drawer-intro">
-            Recettes dans lesquelles cette liaison apparaît. La liaison concernée
-            est <b>surlignée</b> dans chaque recette.
+            Recettes où cette interface apparaît. L’interface concernée est{' '}
+            <b>surlignée</b> dans chaque recette.
           </p>
           {sorted.map((p) => (
             <RecipeCard
