@@ -1,5 +1,6 @@
 import type { Material, UserVote } from '../types';
 import { aggregateCell, scoreColor, scoreLabel, type InterfacePoint } from '../lib/scoring';
+import { useEscapeKey } from '../lib/useEscapeKey';
 import { RecipeCard } from './RecipeCard';
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export function CellDetailDrawer({ matA, matB, points, userVotes, onVote, onClose }: Props) {
+  useEscapeKey(onClose);
   const agg = aggregateCell(points);
   // Une recette peut apparaître une fois par interface ; on déduplique sur la
   // recette tout en gardant le score de liaison de CETTE paire pour le tri.

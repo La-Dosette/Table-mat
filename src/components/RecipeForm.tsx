@@ -7,6 +7,7 @@ import type {
 } from '../types';
 import { MATERIALS, MACHINES, getMaterial } from '../data/materials';
 import { CRITERIA, scoreColor } from '../lib/scoring';
+import { useEscapeKey } from '../lib/useEscapeKey';
 
 interface Props {
   onSubmit: (recipe: Recipe) => void;
@@ -31,6 +32,7 @@ function pairKey(a: string, b: string) {
 }
 
 export function RecipeForm({ onSubmit, onClose }: Props) {
+  useEscapeKey(onClose);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [machineId, setMachineId] = useState(MACHINES[0].id);
@@ -197,6 +199,7 @@ export function RecipeForm({ onSubmit, onClose }: Props) {
                   <>
                     <input
                       type="range" min={0} max={5} step={1} value={val}
+                      aria-label={`Adhérence ${ma?.name} ↔ ${mb?.name}`}
                       onChange={(e) => setAdhesion((p) => ({ ...p, [key]: Number(e.target.value) }))}
                     />
                     <span className="val" style={{ color: scoreColor((val / 5) * 100) }}>{val}/5</span>
@@ -228,6 +231,7 @@ export function RecipeForm({ onSubmit, onClose }: Props) {
                 <span className="crit-label">{c.label}</span>
                 <input
                   type="range" min={0} max={5} step={1} value={val}
+                  aria-label={c.label}
                   onChange={(e) => setGlobal((g) => ({ ...g, [c.key]: Number(e.target.value) }))}
                 />
                 <span className="val" style={{ color: scoreColor((val / 5) * 100) }}>{val}/5</span>

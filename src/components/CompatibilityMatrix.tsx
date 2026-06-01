@@ -56,9 +56,15 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
                     ((selected.a === rowMat.id && selected.b === colMat.id) ||
                       (selected.a === colMat.id && selected.b === rowMat.id));
                   const empty = points.length === 0;
+                  const label = empty
+                    ? `${rowMat.name} ↔ ${colMat.name} : aucun essai`
+                    : `${rowMat.name} ↔ ${colMat.name} : score ${agg.score}, ${agg.recipeCount} recette${
+                        agg.recipeCount > 1 ? 's' : ''
+                      }`;
                   return (
                     <td key={colMat.id}>
-                      <div
+                      <button
+                        type="button"
                         className={[
                           'cell',
                           empty ? 'empty' : '',
@@ -66,6 +72,9 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
                           isSelected ? 'selected' : '',
                         ].join(' ')}
                         style={{ background: scoreColor(agg.score) }}
+                        disabled={empty}
+                        aria-label={label}
+                        aria-pressed={isSelected}
                         onMouseEnter={(e) =>
                           !empty &&
                           setHover({ a: rowMat, b: colMat, x: e.clientX, y: e.clientY, points })
@@ -86,7 +95,7 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
                             </span>
                           </>
                         )}
-                      </div>
+                      </button>
                     </td>
                   );
                 })}

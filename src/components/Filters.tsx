@@ -1,13 +1,22 @@
 import type { MachineSystem } from '../types';
 
 export type MaterialCount = 'all' | '2' | '3' | '4+';
+export type SortKey = 'score' | 'recent' | 'votes' | 'materials';
 
 export interface FilterState {
   query: string;
   system: MachineSystem | 'all';
   count: MaterialCount;
   hideEmpty: boolean;
+  sort: SortKey;
 }
+
+const SORTS: { id: SortKey; label: string }[] = [
+  { id: 'score', label: 'Meilleur score' },
+  { id: 'recent', label: 'Plus récentes' },
+  { id: 'votes', label: 'Plus plébiscitées' },
+  { id: 'materials', label: 'Plus de matériaux' },
+];
 
 const SYSTEMS: { id: MachineSystem | 'all'; label: string }[] = [
   { id: 'all', label: 'Tous systèmes' },
@@ -31,9 +40,11 @@ interface Props {
   onChange: (next: FilterState) => void;
   /** Affiche l'option « masquer les combinaisons vides » (vue matrice). */
   showHideEmpty: boolean;
+  /** Affiche le sélecteur de tri (vue recettes). */
+  showSort: boolean;
 }
 
-export function Filters({ value, onChange, showHideEmpty }: Props) {
+export function Filters({ value, onChange, showHideEmpty, showSort }: Props) {
   return (
     <div className="filters">
       <label className="search">
@@ -78,6 +89,21 @@ export function Filters({ value, onChange, showHideEmpty }: Props) {
             onChange={(e) => onChange({ ...value, hideEmpty: e.target.checked })}
           />
           Masquer les combinaisons vides
+        </label>
+      )}
+
+      {showSort && (
+        <label className="sort-select">
+          <span>Trier&nbsp;:</span>
+          <select
+            value={value.sort}
+            onChange={(e) => onChange({ ...value, sort: e.target.value as SortKey })}
+            aria-label="Trier les recettes"
+          >
+            {SORTS.map((s) => (
+              <option key={s.id} value={s.id}>{s.label}</option>
+            ))}
+          </select>
         </label>
       )}
     </div>

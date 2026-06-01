@@ -38,7 +38,7 @@ export default function App() {
     };
   }, []);
   const [filters, setFilters] = useState<FilterState>({
-    query: '', system: 'all', count: 'all', hideEmpty: false,
+    query: '', system: 'all', count: 'all', hideEmpty: false, sort: 'score',
   });
   const [selected, setSelected] = useState<{ a: string; b: string } | null>(null);
 
@@ -98,11 +98,27 @@ export default function App() {
     return MATERIALS.filter((m) => used.has(m.id));
   }, [filters.hideEmpty, filtered]);
 
-  // --- Recettes triées pour la galerie ---
-  const galleryRecipes = useMemo(
-    () => [...filtered].sort((a, b) => recipeScore(b) - recipeScore(a)),
-    [filtered],
-  );
+  // --- Recettes triées pour la galerie (selon le critère choisi) ---
+  const galleryRecipes = useMemo(() => {
+    const list = [...filtered];
+    switch (filters.sort) {
+      case 'recent':
+        return list.sort((a, b) => b.date.localeCompare(a.date));
+      case 'votes':
+        return list.sort(
+          (a, b) =>
+            b.votesUp - b.votesDown - (a.votesUp - a.votesDown) ||
+            recipeScore(b) - recipeScore(a),
+        );
+      case 'materials':
+        return list.sort(
+          (a, b) => b.slots.length - a.slots.length || recipeScore(b) - recipeScore(a),
+        );
+      case 'score':
+      default:
+        return list.sort((a, b) => recipeScore(b) - recipeScore(a));
+    }
+  }, [filtered, filters.sort]);
 
   // --- Vote communautaire (optimiste + persistance via la source) ---
   function vote(id: string, dir: 'up' | 'down') {
@@ -185,7 +201,12 @@ export default function App() {
         </button>
       </div>
 
-      <Filters value={filters} onChange={setFilters} showHideEmpty={view === 'matrix'} />
+      <Filters
+        value={filters}
+        onChange={setFilters}
+        showHideEmpty={view === 'matrix'}
+        showSort={view === 'recettes'}
+      />
 
       {loading ? (
         <div className="matrix-wrap">
