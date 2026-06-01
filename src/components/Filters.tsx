@@ -24,8 +24,9 @@ const SYSTEMS: { id: MachineSystem | 'all'; label: string }[] = [
   { id: 'MMU', label: 'MMU' },
   { id: 'Toolchanger', label: 'Toolchanger' },
   { id: 'IDEX', label: 'IDEX' },
-  { id: 'ERCF', label: 'ERCF' },
+  { id: 'ERCF', label: 'ERCF / AFC' },
   { id: 'Dual', label: 'Double extrudeur' },
+  { id: 'Palette', label: 'Palette / splice' },
 ];
 
 const COUNTS: { id: MaterialCount; label: string }[] = [

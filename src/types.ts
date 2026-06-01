@@ -9,6 +9,8 @@ export type MaterialFamily =
   | 'standard'
   | 'technique'
   | 'flexible'
+  | 'composite'
+  | 'haute-température'
   | 'support';
 
 export interface Material {
@@ -27,8 +29,9 @@ export type MachineSystem =
   | 'MMU' // Prusa Multi Material Unit
   | 'Toolchanger' // têtes interchangeables (Prusa XL, E3D)
   | 'IDEX' // double extrudeur indépendant
-  | 'ERCF' // Enraged Rabbit Carrot Feeder (Voron)
-  | 'Dual'; // double extrudeur classique
+  | 'ERCF' // changeurs de filament type ERCF / BoxTurtle (Voron)
+  | 'Dual' // double extrudeur classique
+  | 'Palette'; // splicers Mosaic Palette / Element
 
 export interface Machine {
   id: string;

@@ -1,24 +1,107 @@
 import type { Material, Machine } from '../types';
 
+// ---------------------------------------------------------------------------
+// Catalogue des matériaux imprimables (FDM), du standard au haute performance.
+// Les pastilles couleur ne servent qu'à identifier visuellement la matière.
+// ---------------------------------------------------------------------------
+
 export const MATERIALS: Material[] = [
+  // --- Standards ---
   { id: 'pla', name: 'PLA', fullName: 'Acide polylactique', family: 'standard', accent: '#22c55e' },
+  { id: 'plaplus', name: 'PLA+', fullName: 'PLA renforcé', family: 'standard', accent: '#16a34a' },
   { id: 'petg', name: 'PETG', fullName: 'Polyéthylène téréphtalate glycolisé', family: 'standard', accent: '#38bdf8' },
+  { id: 'pet', name: 'PET', fullName: 'Polyéthylène téréphtalate', family: 'standard', accent: '#0ea5e9' },
+  { id: 'pctg', name: 'PCTG', fullName: 'Copolyester PCTG', family: 'standard', accent: '#22d3ee' },
+
+  // --- Flexibles ---
+  { id: 'tpu', name: 'TPU', fullName: 'Polyuréthane thermoplastique', family: 'flexible', accent: '#a78bfa' },
+  { id: 'tpe', name: 'TPE', fullName: 'Élastomère thermoplastique', family: 'flexible', accent: '#c084fc' },
+  { id: 'tpc', name: 'TPC', fullName: 'Copolyester thermoplastique flexible', family: 'flexible', accent: '#8b5cf6' },
+
+  // --- Techniques / ingénierie ---
   { id: 'abs', name: 'ABS', fullName: 'Acrylonitrile butadiène styrène', family: 'technique', accent: '#f97316' },
   { id: 'asa', name: 'ASA', fullName: 'Acrylonitrile styrène acrylate', family: 'technique', accent: '#fb7185' },
-  { id: 'tpu', name: 'TPU', fullName: 'Polyuréthane thermoplastique', family: 'flexible', accent: '#a78bfa' },
   { id: 'pa', name: 'PA', fullName: 'Polyamide (Nylon)', family: 'technique', accent: '#eab308' },
+  { id: 'pa6', name: 'PA6', fullName: 'Polyamide 6', family: 'technique', accent: '#ca8a04' },
+  { id: 'pa12', name: 'PA12', fullName: 'Polyamide 12', family: 'technique', accent: '#a16207' },
   { id: 'pc', name: 'PC', fullName: 'Polycarbonate', family: 'technique', accent: '#60a5fa' },
+  { id: 'pcabs', name: 'PC-ABS', fullName: 'Alliage polycarbonate / ABS', family: 'technique', accent: '#3b82f6' },
+  { id: 'pom', name: 'POM', fullName: 'Polyoxyméthylène (acétal / Delrin)', family: 'technique', accent: '#f59e0b' },
+  { id: 'pp', name: 'PP', fullName: 'Polypropylène', family: 'technique', accent: '#4ade80' },
+  { id: 'pmma', name: 'PMMA', fullName: 'Polyméthacrylate de méthyle (acrylique)', family: 'technique', accent: '#e879f9' },
+  { id: 'pvdf', name: 'PVDF', fullName: 'Polyfluorure de vinylidène', family: 'technique', accent: '#2dd4bf' },
+
+  // --- Composites (chargés fibres / matière) ---
+  { id: 'placf', name: 'PLA-CF', fullName: 'PLA chargé fibre de carbone', family: 'composite', accent: '#475569' },
+  { id: 'petgcf', name: 'PETG-CF', fullName: 'PETG chargé fibre de carbone', family: 'composite', accent: '#334155' },
+  { id: 'pacf', name: 'PA-CF', fullName: 'Nylon chargé fibre de carbone', family: 'composite', accent: '#1e293b' },
+  { id: 'pagf', name: 'PA-GF', fullName: 'Nylon chargé fibre de verre', family: 'composite', accent: '#64748b' },
+  { id: 'pccf', name: 'PC-CF', fullName: 'Polycarbonate chargé fibre de carbone', family: 'composite', accent: '#0f172a' },
+  { id: 'peekcf', name: 'PEEK-CF', fullName: 'PEEK chargé fibre de carbone', family: 'composite', accent: '#57534e' },
+  { id: 'wood', name: 'Bois', fullName: 'PLA chargé fibres de bois', family: 'composite', accent: '#b45309' },
+  { id: 'metal', name: 'Métal', fullName: 'Filament chargé poudre métallique', family: 'composite', accent: '#9ca3af' },
+
+  // --- Haute température / hautes performances ---
+  { id: 'peek', name: 'PEEK', fullName: 'Polyétheréthercétone', family: 'haute-température', accent: '#dc2626' },
+  { id: 'pekk', name: 'PEKK', fullName: 'Polyéthercétonecétone', family: 'haute-température', accent: '#b91c1c' },
+  { id: 'pei', name: 'PEI', fullName: 'Polyétherimide (ULTEM)', family: 'haute-température', accent: '#ea580c' },
+  { id: 'ppsu', name: 'PPSU', fullName: 'Polyphénylsulfone', family: 'haute-température', accent: '#d97706' },
+  { id: 'psu', name: 'PSU', fullName: 'Polysulfone', family: 'haute-température', accent: '#facc15' },
+  { id: 'pps', name: 'PPS', fullName: 'Sulfure de polyphénylène', family: 'haute-température', accent: '#78350f' },
+
+  // --- Supports ---
   { id: 'pva', name: 'PVA', fullName: 'Alcool polyvinylique (support soluble)', family: 'support', accent: '#34d399' },
+  { id: 'bvoh', name: 'BVOH', fullName: 'Butènediol-alcool vinylique (support soluble)', family: 'support', accent: '#5eead4' },
+  { id: 'hips', name: 'HIPS', fullName: 'Polystyrène choc (support, soluble au limonène)', family: 'support', accent: '#94a3b8' },
+  { id: 'breakaway', name: 'Breakaway', fullName: 'Support détachable mécaniquement', family: 'support', accent: '#cbd5e1' },
 ];
 
+// ---------------------------------------------------------------------------
+// Machines & systèmes multi-matériaux.
+// ---------------------------------------------------------------------------
+
 export const MACHINES: Machine[] = [
+  // --- Bambu Lab (AMS) ---
   { id: 'x1c', name: 'Bambu Lab X1 Carbon + AMS', system: 'AMS', maxMaterials: 16 },
+  { id: 'x1e', name: 'Bambu Lab X1E + AMS', system: 'AMS', maxMaterials: 16 },
   { id: 'p1s', name: 'Bambu Lab P1S + AMS', system: 'AMS', maxMaterials: 4 },
+  { id: 'p1p', name: 'Bambu Lab P1P + AMS', system: 'AMS', maxMaterials: 4 },
+  { id: 'a1', name: 'Bambu Lab A1 + AMS lite', system: 'AMS', maxMaterials: 4 },
+  { id: 'a1mini', name: 'Bambu Lab A1 mini + AMS lite', system: 'AMS', maxMaterials: 4 },
+  { id: 'h2d', name: 'Bambu Lab H2D (double buse + AMS)', system: 'AMS', maxMaterials: 16 },
+
+  // --- Prusa (MMU) ---
   { id: 'mk4', name: 'Prusa MK4 + MMU3', system: 'MMU', maxMaterials: 5 },
+  { id: 'mk4s', name: 'Prusa MK4S + MMU3', system: 'MMU', maxMaterials: 5 },
+  { id: 'mk3s', name: 'Prusa MK3S+ + MMU2S', system: 'MMU', maxMaterials: 5 },
+  { id: 'coreone', name: 'Prusa Core One + MMU3', system: 'MMU', maxMaterials: 5 },
+
+  // --- Toolchangers ---
   { id: 'xl', name: 'Prusa XL (toolchanger 5T)', system: 'Toolchanger', maxMaterials: 5 },
+  { id: 'xl2', name: 'Prusa XL (2 têtes)', system: 'Toolchanger', maxMaterials: 2 },
+  { id: 'e3dtc', name: 'E3D Toolchanger', system: 'Toolchanger', maxMaterials: 4 },
+
+  // --- Voron / changeurs de filament (ERCF, BoxTurtle) ---
   { id: 'voron', name: 'Voron 2.4 + ERCF', system: 'ERCF', maxMaterials: 12 },
+  { id: 'trident', name: 'Voron Trident + ERCF', system: 'ERCF', maxMaterials: 12 },
+  { id: 'boxturtle', name: 'Voron + BoxTurtle (AFC)', system: 'ERCF', maxMaterials: 8 },
+
+  // --- IDEX (double extrudeur indépendant) ---
   { id: 'sovol', name: 'Sovol SV04 (IDEX)', system: 'IDEX', maxMaterials: 2 },
+  { id: 'snapmakerj1', name: 'Snapmaker J1 (IDEX)', system: 'IDEX', maxMaterials: 2 },
+  { id: 'bcn3d', name: 'BCN3D Epsilon (IDEX)', system: 'IDEX', maxMaterials: 2 },
+  { id: 'flashforge2', name: 'FlashForge Creator Pro 2 (IDEX)', system: 'IDEX', maxMaterials: 2 },
+  { id: 'raise3de2', name: 'Raise3D E2 (IDEX)', system: 'IDEX', maxMaterials: 2 },
+
+  // --- Double extrudeur classique ---
   { id: 'ums5', name: 'Ultimaker S5', system: 'Dual', maxMaterials: 2 },
+  { id: 'ums7', name: 'Ultimaker S7', system: 'Dual', maxMaterials: 2 },
+  { id: 'raise3dpro3', name: 'Raise3D Pro3', system: 'Dual', maxMaterials: 2 },
+
+  // --- Splicers (Mosaic Palette / Element) ---
+  { id: 'palette3', name: 'Mosaic Palette 3', system: 'Palette', maxMaterials: 8 },
+  { id: 'palette3pro', name: 'Mosaic Palette 3 Pro', system: 'Palette', maxMaterials: 8 },
+  { id: 'element', name: 'Mosaic Element HT', system: 'Palette', maxMaterials: 8 },
 ];
 
 const materialById = new Map(MATERIALS.map((m) => [m.id, m]));

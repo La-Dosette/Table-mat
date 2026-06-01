@@ -336,7 +336,7 @@ b {
   -webkit-appearance: none;
   /* Entrée en diagonale : le délai suit la coordonnée (row+col). */
   animation: cell-in 0.42s var(--ease) both;
-  animation-delay: calc(var(--cell-i, 0) * 26ms);
+  animation-delay: min(calc(var(--cell-i, 0) * 16ms), 520ms);
 }
 @keyframes cell-in {
   from {
