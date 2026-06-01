@@ -184,10 +184,10 @@ export default function App() {
     <div className="app">
       <header className="topbar">
         <div className="brand">
-          <img className="brand-logo" src="./favicon.svg" alt="" />
+          <span className="brand-mark" aria-hidden="true">TM</span>
           <div>
             <h1>Table-Mat</h1>
-            <p className="tag">La matrice communautaire de l’impression multi-matériaux</p>
+            <p className="tag">Matrice communautaire — impression multi-matériaux · réf. TM-09</p>
           </div>
         </div>
         <div className="spacer" />
