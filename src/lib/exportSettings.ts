@@ -64,7 +64,7 @@ export function buildSettingsText(
   const p = recipe.params;
   const L: string[] = [];
 
-  L.push('TABLE-MAT · FICHE DE RÉGLAGES');
+  L.push('TM · FICHE DE RÉGLAGES');
   L.push(`Recette : ${recipe.title}${inventoryNo ? `   (${inventoryCode(inventoryNo)})` : ''}`);
   L.push(`Machine : ${machine?.name ?? recipe.machineId}`);
   L.push(`Slicer  : ${slicer.label}`);
@@ -107,7 +107,7 @@ export function buildSettingsText(
   }
 
   L.push('');
-  L.push('— Généré depuis Table-Mat · https://la-dosette.github.io/Table-mat/');
+  L.push('— TM · réf. interne');
   return L.join('\n');
 }
 
@@ -147,7 +147,7 @@ export function buildChecklistText(
 /** Sérialise une recette en JSON portable (sans id/votes, ré-importable). */
 export function recipeToJson(recipe: Recipe): string {
   const { id: _id, votesUp: _u, votesDown: _d, ...rest } = recipe;
-  return JSON.stringify({ _format: 'table-mat/recipe@1', ...rest }, null, 2);
+  return JSON.stringify({ _format: 'tm/recipe@1', ...rest }, null, 2);
 }
 
 /** Reconstruit une recette depuis un JSON exporté (nouvelle id, votes remis à 0). */

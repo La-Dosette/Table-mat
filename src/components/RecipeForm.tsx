@@ -164,9 +164,7 @@ export function RecipeForm({ onSubmit, onClose, initial }: Props) {
           <div style={{ flex: 1 }}>
             <h3>{initial ? '✎ Éditer la recette' : '➕ Nouvelle recette'}</h3>
             <p className="sub">
-              {initial
-                ? 'Modifie les réglages puis enregistre.'
-                : 'Partage un essai multi-matériaux avec la communauté.'}
+              {initial ? 'Modifie les réglages puis enregistre.' : 'Nouvelle entrée.'}
             </p>
           </div>
           <button className="close-btn" onClick={onClose} aria-label="Fermer">✕</button>

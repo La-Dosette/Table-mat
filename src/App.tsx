@@ -11,7 +11,6 @@ import { RecipeForm } from './components/RecipeForm';
 import { MaterialDigest, type DigestEntry } from './components/MaterialDigest';
 import { ExportDrawer } from './components/ExportDrawer';
 import { ImportDialog } from './components/ImportDialog';
-import { ProtocolPanel } from './components/ProtocolPanel';
 
 type View = 'matrix' | 'recettes' | 'digest';
 
@@ -213,8 +212,8 @@ export default function App() {
         <div className="brand">
           <span className="brand-mark" aria-hidden="true">TM</span>
           <div>
-            <h1>Table-Mat</h1>
-            <p className="tag">Matrice communautaire — impression multi-matériaux · réf. TM-09</p>
+            <h1>TM</h1>
+            <p className="tag">réf. TM-09 · espace privé</p>
           </div>
         </div>
         <div className="spacer" />
@@ -222,17 +221,6 @@ export default function App() {
         <span className="pill-stat"><b>{multiCount}</b> à 3+ matériaux</span>
         <span className="pill-stat"><b>{totalVotes}</b> votes</span>
       </header>
-
-      <div className="intro">
-        <p>
-          Chaque <b>recette</b> peut mêler de 2 à 16 matériaux. La matrice montre
-          le <b>score de chaque liaison</b> (contact entre deux matériaux) ;{' '}
-          <b>survolez</b> une case pour un aperçu, <b>cliquez</b> pour voir les
-          recettes et leurs réglages. La vue <b>Recettes</b> liste les
-          configurations complètes&nbsp;; le <b>Récap</b> donne le meilleur
-          partenaire de chaque filament. <b>Votez</b> pour faire vivre les notes&nbsp;!
-        </p>
-      </div>
 
       <div className="toolbar">
         <div className="view-toggle">
@@ -306,16 +294,7 @@ export default function App() {
         />
       )}
 
-      <ProtocolPanel />
-
-      <footer className="footer">
-        Table-Mat · prototype communautaire open-source.
-        <br />
-        Source de données&nbsp;:{' '}
-        <span className={dataSource.isRemote ? 'src-remote' : 'src-local'}>
-          {dataSource.label}
-        </span>
-      </footer>
+      <footer className="footer">réf. TM-09 · usage privé</footer>
 
       {selected && selectedMatA && selectedMatB && (
         <CellDetailDrawer

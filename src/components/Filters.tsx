@@ -51,7 +51,7 @@ export function Filters({ value, onChange, showHideEmpty, showSort }: Props) {
         🔍
         <input
           type="text"
-          placeholder="Rechercher une recette, un filament, une marque, un auteur…"
+          placeholder="Rechercher…"
           value={value.query}
           onChange={(e) => onChange({ ...value, query: e.target.value })}
         />

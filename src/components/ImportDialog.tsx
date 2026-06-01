@@ -29,7 +29,7 @@ export function ImportDialog({ onImport, onClose }: Props) {
         <div className="drawer-head">
           <div style={{ flex: 1 }}>
             <h3>⇪ Importer une recette</h3>
-            <p className="sub">Colle un JSON exporté depuis Table-Mat.</p>
+            <p className="sub">Colle un JSON exporté depuis TM.</p>
           </div>
           <button className="close-btn" onClick={onClose} aria-label="Fermer">✕</button>
         </div>
@@ -39,7 +39,7 @@ export function ImportDialog({ onImport, onClose }: Props) {
             className="import-area"
             value={text}
             onChange={(e) => { setText(e.target.value); setError(''); }}
-            placeholder='{ "_format": "table-mat/recipe@1", "title": "…", "slots": [...], "interfaces": [...] }'
+            placeholder='{ "_format": "tm/recipe@1", "title": "…", "slots": [...], "interfaces": [...] }'
             rows={14}
             spellCheck={false}
           />

@@ -34,7 +34,7 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect, 
       <div className="matrix-wrap">
         <div className="matrix-caption">
           <span className="fig">FIG. 01</span>
-          <span>Matrice de compatibilité — score de liaison (0–100)</span>
+          <span>réf. interne · barème 0–100</span>
           <span className="matrix-ref">TM·MAT</span>
         </div>
         <table className="matrix">
@@ -124,12 +124,12 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect, 
       </div>
 
       <div className="legend">
-        <span>Score de viabilité&nbsp;:</span>
+        <span>Barème&nbsp;:</span>
         <span>0</span>
         <div className="legend-bar" />
         <span>100</span>
         <span className="diag-key">
-          <i /> diagonale = même matériau (multicolore)
+          <i /> diagonale = même axe
         </span>
       </div>
 
@@ -137,8 +137,8 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect, 
         <span><i>réf.</i> TM·MAT-01</span>
         <span><i>date</i> {today}</span>
         <span><i>échelle</i> 1:1</span>
-        <span><i>matériaux</i> {materials.length}</span>
-        <span><i>recettes</i> {recipeCount ?? '—'}</span>
+        <span><i>axes</i> {materials.length}</span>
+        <span><i>entrées</i> {recipeCount ?? '—'}</span>
       </div>
 
       {hover && <MatrixTooltip hover={hover} />}

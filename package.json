@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Plateforme communautaire de partage et de notation d'essais d'impression 3D multi-matériaux.",
+  "description": "Outil interne.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

@@ -182,38 +182,8 @@ b {
   margin-right: 5px;
 }
 
-/* Intro : note de protocole, filet au-dessus. */
-.intro {
-  margin: 28px 0 8px;
-  padding: 0;
-  background: none;
-  border: none;
-  border-radius: 0;
-  position: relative;
-}
-.intro::before {
-  content: 'note · 01';
-  display: block;
-  font-size: 11px;
-  text-transform: lowercase;
-  letter-spacing: 0.06em;
-  color: var(--ink-faint);
-  margin-bottom: 8px;
-}
-.intro p {
-  margin: 0;
-  color: var(--ink-soft);
-  line-height: 1.6;
-  max-width: 760px;
-  font-size: 13px;
-}
-.intro b {
-  color: var(--ink);
-}
-
 /* Label / titre de section : mono, capitales espacées. */
-.section-title,
-.intro::before {
+.section-title {
   font-family: var(--font-mono);
 }
 
@@ -771,68 +741,6 @@ b {
   text-transform: lowercase;
 }
 
-/* ---------- Protocole ---------- */
-.protocol {
-  margin-top: 40px;
-  background: var(--paper);
-  border: 1px solid var(--hairline);
-  border-radius: 0;
-  padding: 24px;
-}
-.protocol h2 {
-  font-family: var(--font-display);
-  margin: 0 0 8px;
-  font-size: 20px;
-  text-transform: uppercase;
-}
-.protocol > p {
-  margin: 0 0 18px;
-  color: var(--ink-soft);
-  max-width: 760px;
-  line-height: 1.6;
-  font-size: 13px;
-}
-.crit-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0;
-  border: 1px solid var(--hairline);
-  border-right: 0;
-  border-bottom: 0;
-}
-.crit-card {
-  background: var(--paper);
-  border-right: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline);
-  border-radius: 0;
-  padding: 14px 16px;
-}
-.crit-card .crit-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 7px;
-}
-.crit-card .crit-head .name {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-}
-.crit-card .crit-head .w {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--ink);
-  font-weight: 700;
-}
-.crit-card p {
-  margin: 0;
-  font-size: 11px;
-  color: var(--ink-soft);
-  line-height: 1.5;
-}
-
 .footer {
   margin-top: 44px;
   padding-top: 16px;
@@ -865,15 +773,6 @@ b {
   padding: 32px;
   text-transform: lowercase;
   letter-spacing: 0.02em;
-}
-
-.src-remote {
-  color: var(--ink);
-  font-weight: 700;
-}
-.src-local {
-  color: var(--ink-soft);
-  font-weight: 700;
 }
 
 /* ---------- Bascule de vue ---------- */
@@ -1385,21 +1284,6 @@ b {
 .iface-link {
   color: var(--ink-faint);
   margin: 0 2px;
-}
-
-/* ---------- Tag « par interface » dans le protocole ---------- */
-.pi-tag {
-  display: inline-block;
-  margin-top: 10px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--paper);
-  background: var(--ink);
-  border-radius: 0;
-  padding: 2px 7px;
 }
 
 /* ---------- Plaque de matrice (caption type planche) ---------- */
