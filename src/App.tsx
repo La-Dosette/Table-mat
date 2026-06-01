@@ -2,15 +2,16 @@ import { useEffect, useMemo, useState } from 'react';
 import type { Recipe, UserVote } from './types';
 import { MATERIALS, getMachine, getMaterial } from './data/materials';
 import { dataSource } from './lib/dataSource';
-import { interfaceScore, recipeScore, type InterfacePoint } from './lib/scoring';
+import { aggregateCell, interfaceScore, recipeScore, type InterfacePoint } from './lib/scoring';
 import { Filters, type FilterState } from './components/Filters';
 import { CompatibilityMatrix } from './components/CompatibilityMatrix';
 import { CellDetailDrawer } from './components/CellDetailDrawer';
 import { RecipeGallery } from './components/RecipeGallery';
 import { RecipeForm } from './components/RecipeForm';
+import { MaterialDigest, type DigestEntry } from './components/MaterialDigest';
 import { ProtocolPanel } from './components/ProtocolPanel';
 
-type View = 'matrix' | 'recettes';
+type View = 'matrix' | 'recettes' | 'digest';
 
 /** Clé non ordonnée d'une paire de matériaux : pair(a,b) === pair(b,a). */
 function pairKey(a: string, b: string): string {
@@ -89,6 +90,24 @@ export default function App() {
   }, [filtered]);
 
   const pointsFor = (a: string, b: string) => byPair.get(pairKey(a, b)) ?? [];
+
+  // --- Récap par matériau : meilleur partenaire de chaque filament ---
+  const materialDigest = useMemo<DigestEntry[]>(() => {
+    return MATERIALS.map((material) => {
+      let best: DigestEntry['best'] = null;
+      for (const other of MATERIALS) {
+        // On cherche le meilleur partenaire DIFFÉRENT : un matériau adhère
+        // toujours à lui-même, ça n'a aucune valeur de recommandation.
+        if (other.id === material.id) continue;
+        const agg = aggregateCell(byPair.get(pairKey(material.id, other.id)) ?? []);
+        if (agg.score === null) continue;
+        if (!best || agg.score > best.score) {
+          best = { partner: other, score: agg.score, recipeCount: agg.recipeCount };
+        }
+      }
+      return { material, best };
+    });
+  }, [byPair]);
 
   // --- Matériaux visibles (option « masquer les combinaisons vides ») ---
   const visibleMaterials = useMemo(() => {
@@ -183,7 +202,8 @@ export default function App() {
           le <b>score de chaque liaison</b> (contact entre deux matériaux) ;{' '}
           <b>survolez</b> une case pour un aperçu, <b>cliquez</b> pour voir les
           recettes et leurs réglages. La vue <b>Recettes</b> liste les
-          configurations complètes. <b>Votez</b> pour faire vivre les notes&nbsp;!
+          configurations complètes&nbsp;; le <b>Récap</b> donne le meilleur
+          partenaire de chaque filament. <b>Votez</b> pour faire vivre les notes&nbsp;!
         </p>
       </div>
 
@@ -194,6 +214,9 @@ export default function App() {
           </button>
           <button className={view === 'recettes' ? 'active' : ''} onClick={() => setView('recettes')}>
             📋 Recettes
+          </button>
+          <button className={view === 'digest' ? 'active' : ''} onClick={() => setView('digest')}>
+            🏅 Récap
           </button>
         </div>
         <button className="btn-primary add-recipe" onClick={() => setShowForm(true)}>
@@ -233,8 +256,13 @@ export default function App() {
             onSelect={(a, b) => setSelected({ a, b })}
           />
         )
-      ) : (
+      ) : view === 'recettes' ? (
         <RecipeGallery recipes={galleryRecipes} userVotes={userVotes} onVote={vote} />
+      ) : (
+        <MaterialDigest
+          entries={materialDigest}
+          onSelect={(a, b) => setSelected({ a, b })}
+        />
       )}
 
       <ProtocolPanel />

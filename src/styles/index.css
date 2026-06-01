@@ -926,6 +926,89 @@ a {
   gap: 14px;
 }
 
+/* ---------- Récap par matériau ---------- */
+.digest {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.digest-card {
+  background: var(--panel);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.digest-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 15px;
+}
+.digest-head .digest-full {
+  flex: 1;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-faint);
+  text-align: right;
+}
+.digest-best {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.12s ease, transform 0.1s ease;
+}
+.digest-best:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.digest-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+}
+.digest-partner {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+.digest-meta {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.digest-pill {
+  font-size: 13px;
+  font-weight: 800;
+  color: #03121a;
+  border-radius: 7px;
+  padding: 2px 9px;
+}
+.digest-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.digest-empty {
+  font-size: 13px;
+  color: var(--text-faint);
+  font-style: italic;
+  padding: 10px 12px;
+}
+
 /* ---------- Badge nombre de matériaux ---------- */
 .n-badge {
   font-size: 11px;
@@ -1105,8 +1188,9 @@ a {
   .criteria {
     grid-template-columns: 1fr;
   }
-  /* La galerie passe en une colonne fluide. */
-  .gallery {
+  /* La galerie et le récap passent en une colonne fluide. */
+  .gallery,
+  .digest {
     grid-template-columns: 1fr;
   }
   /* Le slider d'édition reprend toute la largeur disponible. */
