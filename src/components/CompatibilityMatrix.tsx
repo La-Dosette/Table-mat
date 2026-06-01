@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import type { Material } from '../types';
 import { aggregateCell, scoreColor, scoreLabel, type InterfacePoint } from '../lib/scoring';
 
@@ -24,6 +24,11 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
   return (
     <>
       <div className="matrix-wrap">
+        <div className="matrix-caption">
+          <span className="fig">FIG. 01</span>
+          <span>Matrice de compatibilité — score de liaison (0–100)</span>
+          <span className="matrix-ref">TM·MAT</span>
+        </div>
         <table className="matrix">
           <thead>
             <tr>
@@ -39,7 +44,7 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
             </tr>
           </thead>
           <tbody>
-            {materials.map((rowMat) => (
+            {materials.map((rowMat, rowIndex) => (
               <tr key={rowMat.id}>
                 <th className="row-head">
                   <span className="mat-head">
@@ -47,7 +52,7 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
                     {rowMat.name}
                   </span>
                 </th>
-                {materials.map((colMat) => {
+                {materials.map((colMat, colIndex) => {
                   const points = pointsFor(rowMat.id, colMat.id);
                   const agg = aggregateCell(points);
                   const isDiag = rowMat.id === colMat.id;
@@ -71,7 +76,10 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
                           isDiag ? 'diag' : '',
                           isSelected ? 'selected' : '',
                         ].join(' ')}
-                        style={{ background: scoreColor(agg.score) }}
+                        style={{
+                          background: scoreColor(agg.score),
+                          ['--cell-i' as string]: rowIndex + colIndex,
+                        } as CSSProperties}
                         disabled={empty}
                         aria-label={label}
                         aria-pressed={isSelected}

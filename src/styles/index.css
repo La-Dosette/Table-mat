@@ -364,7 +364,19 @@ b {
   font-family: var(--font-mono);
   appearance: none;
   -webkit-appearance: none;
-  animation: fade-in 0.4s var(--ease) both;
+  /* Entrée en diagonale : le délai suit la coordonnée (row+col). */
+  animation: cell-in 0.42s var(--ease) both;
+  animation-delay: calc(var(--cell-i, 0) * 26ms);
+}
+@keyframes cell-in {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 .cell.empty,
 .cell:disabled {
@@ -1389,6 +1401,116 @@ b {
   border-radius: 0;
   padding: 2px 7px;
 }
+
+/* ---------- Plaque de matrice (caption type planche) ---------- */
+.matrix-caption {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: -4px 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+}
+.matrix-caption .fig {
+  font-family: var(--font-display);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+.matrix-caption .matrix-ref {
+  margin-left: auto;
+  color: var(--ink-faint);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ---------- Étiquette de labo : numéro d'inventaire sur recette ---------- */
+.card-meta-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -2px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--hairline);
+}
+.inv-no {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+.fiche-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+}
+
+/* Bouton d'export dans la barre de votes */
+.vote-btn.export {
+  border-style: dashed;
+}
+.vote-btn.export:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-style: solid;
+}
+
+/* ---------- Panneau d'export des réglages ---------- */
+.export-drawer {
+  width: min(600px, 100%);
+}
+.export-pre {
+  margin: 0;
+  background: var(--paper-2);
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--ink);
+  padding: 14px 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+}
+.export-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(transparent, var(--paper) 35%);
+  padding-top: 14px;
+}
+
+/* ---------- Entrée séquencée des cartes (galerie + récap) ---------- */
+.gallery .attempt,
+.digest-card {
+  animation: reveal-up 0.5s var(--ease) both;
+}
+.gallery .attempt:nth-child(1),
+.digest-card:nth-child(1) { animation-delay: 0.04s; }
+.gallery .attempt:nth-child(2),
+.digest-card:nth-child(2) { animation-delay: 0.1s; }
+.gallery .attempt:nth-child(3),
+.digest-card:nth-child(3) { animation-delay: 0.16s; }
+.gallery .attempt:nth-child(4),
+.digest-card:nth-child(4) { animation-delay: 0.22s; }
+.gallery .attempt:nth-child(5),
+.digest-card:nth-child(5) { animation-delay: 0.28s; }
+.gallery .attempt:nth-child(6),
+.digest-card:nth-child(6) { animation-delay: 0.34s; }
+.gallery .attempt:nth-child(n + 7),
+.digest-card:nth-child(n + 7) { animation-delay: 0.4s; }
 
 /* ---------- Accessibilité : focus clavier ---------- */
 :focus-visible {

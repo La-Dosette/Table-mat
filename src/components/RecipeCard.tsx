@@ -8,6 +8,7 @@ import {
   recipeScore,
   scoreColor,
 } from '../lib/scoring';
+import { inventoryCode } from '../lib/exportSettings';
 
 interface Props {
   recipe: Recipe;
@@ -15,6 +16,10 @@ interface Props {
   onVote: (id: string, dir: 'up' | 'down') => void;
   /** Met en évidence l'interface correspondant à cette paire (vue matrice). */
   highlightPair?: { a: MaterialId; b: MaterialId };
+  /** Numéro d'inventaire stable de la recette (logique de catalogue). */
+  inventoryNo?: number;
+  /** Ouvre l'export des réglages pour cette recette. */
+  onExport?: (recipe: Recipe) => void;
 }
 
 const GLOBAL_CRITERIA = CRITERIA.filter((c) => !c.perInterface);
@@ -33,7 +38,7 @@ function samePair(a1: string, b1: string, a2: string, b2: string) {
   return (a1 === a2 && b1 === b2) || (a1 === b2 && b1 === a2);
 }
 
-export function RecipeCard({ recipe, userVote, onVote, highlightPair }: Props) {
+export function RecipeCard({ recipe, userVote, onVote, highlightPair, inventoryNo, onExport }: Props) {
   const machine = getMachine(recipe.machineId);
   const score = recipeScore(recipe);
   const base = baseScore(recipeCriteria(recipe));
@@ -41,6 +46,12 @@ export function RecipeCard({ recipe, userVote, onVote, highlightPair }: Props) {
 
   return (
     <div className="attempt">
+      {inventoryNo != null && (
+        <div className="card-meta-top">
+          <span className="inv-no">{inventoryCode(inventoryNo)}</span>
+          <span className="fiche-label">fiche d’essai</span>
+        </div>
+      )}
       <div className="attempt-top">
         <div
           className="score-ring"
@@ -157,6 +168,15 @@ export function RecipeCard({ recipe, userVote, onVote, highlightPair }: Props) {
         >
           👎 Pas concluant · {recipe.votesDown}
         </button>
+        {onExport && (
+          <button
+            className="vote-btn export"
+            onClick={() => onExport(recipe)}
+            title="Exporter les réglages (résumé par slicer)"
+          >
+            ⤓ Réglages
+          </button>
+        )}
         <span className="vote-hint">votez si vous avez reproduit cette recette</span>
       </div>
     </div>

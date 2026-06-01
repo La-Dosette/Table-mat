@@ -9,6 +9,7 @@ import { CellDetailDrawer } from './components/CellDetailDrawer';
 import { RecipeGallery } from './components/RecipeGallery';
 import { RecipeForm } from './components/RecipeForm';
 import { MaterialDigest, type DigestEntry } from './components/MaterialDigest';
+import { ExportDrawer } from './components/ExportDrawer';
 import { ProtocolPanel } from './components/ProtocolPanel';
 
 type View = 'matrix' | 'recettes' | 'digest';
@@ -25,6 +26,7 @@ export default function App() {
   const [userVotes, setUserVotes] = useState<Record<string, UserVote>>({});
   const [view, setView] = useState<View>('matrix');
   const [showForm, setShowForm] = useState(false);
+  const [exportRecipe, setExportRecipe] = useState<Recipe | null>(null);
 
   // Chargement initial des recettes depuis la source de données.
   useEffect(() => {
@@ -174,6 +176,12 @@ export default function App() {
       .catch((e) => console.error('addRecipe', e));
   }
 
+  // Numéro d'inventaire stable par recette (ordre de la liste source).
+  const inventoryNos = useMemo(
+    () => new Map(recipes.map((r, i) => [r.id, i + 1])),
+    [recipes],
+  );
+
   const totalVotes = recipes.reduce((s, r) => s + r.votesUp + r.votesDown, 0);
   const multiCount = recipes.filter((r) => r.slots.length >= 3).length;
   const selectedMatA = selected ? getMaterial(selected.a) : null;
@@ -257,7 +265,13 @@ export default function App() {
           />
         )
       ) : view === 'recettes' ? (
-        <RecipeGallery recipes={galleryRecipes} userVotes={userVotes} onVote={vote} />
+        <RecipeGallery
+          recipes={galleryRecipes}
+          userVotes={userVotes}
+          onVote={vote}
+          inventoryNos={inventoryNos}
+          onExport={setExportRecipe}
+        />
       ) : (
         <MaterialDigest
           entries={materialDigest}
@@ -284,10 +298,20 @@ export default function App() {
           userVotes={userVotes}
           onVote={vote}
           onClose={() => setSelected(null)}
+          inventoryNos={inventoryNos}
+          onExport={setExportRecipe}
         />
       )}
 
       {showForm && <RecipeForm onSubmit={addRecipe} onClose={() => setShowForm(false)} />}
+
+      {exportRecipe && (
+        <ExportDrawer
+          recipe={exportRecipe}
+          inventoryNo={inventoryNos.get(exportRecipe.id)}
+          onClose={() => setExportRecipe(null)}
+        />
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import type { Material, UserVote } from '../types';
+import type { Material, Recipe, UserVote } from '../types';
 import { aggregateCell, scoreColor, scoreLabel, type InterfacePoint } from '../lib/scoring';
 import { useEscapeKey } from '../lib/useEscapeKey';
 import { RecipeCard } from './RecipeCard';
@@ -10,9 +10,11 @@ interface Props {
   userVotes: Record<string, UserVote>;
   onVote: (id: string, dir: 'up' | 'down') => void;
   onClose: () => void;
+  inventoryNos: Map<string, number>;
+  onExport: (recipe: Recipe) => void;
 }
 
-export function CellDetailDrawer({ matA, matB, points, userVotes, onVote, onClose }: Props) {
+export function CellDetailDrawer({ matA, matB, points, userVotes, onVote, onClose, inventoryNos, onExport }: Props) {
   useEscapeKey(onClose);
   const agg = aggregateCell(points);
   // Une recette peut apparaître une fois par interface ; on déduplique sur la
@@ -54,6 +56,8 @@ export function CellDetailDrawer({ matA, matB, points, userVotes, onVote, onClos
               userVote={userVotes[p.recipe.id] ?? null}
               onVote={onVote}
               highlightPair={{ a: matA.id, b: matB.id }}
+              inventoryNo={inventoryNos.get(p.recipe.id)}
+              onExport={onExport}
             />
           ))}
         </div>
