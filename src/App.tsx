@@ -10,6 +10,7 @@ import { RecipeGallery } from './components/RecipeGallery';
 import { RecipeForm } from './components/RecipeForm';
 import { MaterialDigest, type DigestEntry } from './components/MaterialDigest';
 import { ExportDrawer } from './components/ExportDrawer';
+import { ImportDialog } from './components/ImportDialog';
 import { ProtocolPanel } from './components/ProtocolPanel';
 
 type View = 'matrix' | 'recettes' | 'digest';
@@ -26,6 +27,8 @@ export default function App() {
   const [userVotes, setUserVotes] = useState<Record<string, UserVote>>({});
   const [view, setView] = useState<View>('matrix');
   const [showForm, setShowForm] = useState(false);
+  const [editRecipe, setEditRecipe] = useState<Recipe | null>(null);
+  const [showImport, setShowImport] = useState(false);
   const [exportRecipe, setExportRecipe] = useState<Recipe | null>(null);
 
   // Chargement initial des recettes depuis la source de données.
@@ -166,6 +169,7 @@ export default function App() {
   // --- Ajout d'une recette (persisté via la source de données) ---
   function addRecipe(recipe: Recipe) {
     setShowForm(false);
+    setShowImport(false);
     setView('recettes');
     setRecipes((list) => [recipe, ...list]); // optimiste
     dataSource
@@ -174,6 +178,21 @@ export default function App() {
         setRecipes((list) => [saved, ...list.filter((r) => r.id !== recipe.id)]),
       )
       .catch((e) => console.error('addRecipe', e));
+  }
+
+  // --- Édition d'une recette existante (optimiste + persistance) ---
+  function updateRecipe(recipe: Recipe) {
+    setEditRecipe(null);
+    setRecipes((list) => list.map((r) => (r.id === recipe.id ? recipe : r)));
+    dataSource.updateRecipe(recipe).catch((e) => console.error('updateRecipe', e));
+  }
+
+  // --- Suppression d'une recette (optimiste + persistance) ---
+  function deleteRecipe(recipe: Recipe) {
+    setRecipes((list) => list.filter((r) => r.id !== recipe.id));
+    if (exportRecipe?.id === recipe.id) setExportRecipe(null);
+    if (editRecipe?.id === recipe.id) setEditRecipe(null);
+    dataSource.deleteRecipe(recipe.id).catch((e) => console.error('deleteRecipe', e));
   }
 
   // Numéro d'inventaire stable par recette (ordre de la liste source).
@@ -227,9 +246,14 @@ export default function App() {
             🏅 Récap
           </button>
         </div>
-        <button className="btn-primary add-recipe" onClick={() => setShowForm(true)}>
-          ➕ Ajouter une recette
-        </button>
+        <div className="toolbar-actions">
+          <button className="btn-secondary" onClick={() => setShowImport(true)}>
+            ⇪ Importer
+          </button>
+          <button className="btn-primary add-recipe" onClick={() => setShowForm(true)}>
+            ➕ Ajouter une recette
+          </button>
+        </div>
       </div>
 
       <Filters
@@ -262,6 +286,7 @@ export default function App() {
             pointsFor={pointsFor}
             selected={selected}
             onSelect={(a, b) => setSelected({ a, b })}
+            recipeCount={filtered.length}
           />
         )
       ) : view === 'recettes' ? (
@@ -271,6 +296,8 @@ export default function App() {
           onVote={vote}
           inventoryNos={inventoryNos}
           onExport={setExportRecipe}
+          onEdit={setEditRecipe}
+          onDelete={deleteRecipe}
         />
       ) : (
         <MaterialDigest
@@ -300,10 +327,24 @@ export default function App() {
           onClose={() => setSelected(null)}
           inventoryNos={inventoryNos}
           onExport={setExportRecipe}
+          onEdit={setEditRecipe}
+          onDelete={deleteRecipe}
         />
       )}
 
       {showForm && <RecipeForm onSubmit={addRecipe} onClose={() => setShowForm(false)} />}
+
+      {editRecipe && (
+        <RecipeForm
+          initial={editRecipe}
+          onSubmit={updateRecipe}
+          onClose={() => setEditRecipe(null)}
+        />
+      )}
+
+      {showImport && (
+        <ImportDialog onImport={addRecipe} onClose={() => setShowImport(false)} />
+      )}
 
       {exportRecipe && (
         <ExportDrawer

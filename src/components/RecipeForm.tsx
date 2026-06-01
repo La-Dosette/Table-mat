@@ -12,6 +12,8 @@ import { useEscapeKey } from '../lib/useEscapeKey';
 interface Props {
   onSubmit: (recipe: Recipe) => void;
   onClose: () => void;
+  /** Recette à éditer ; absent = création d'une nouvelle recette. */
+  initial?: Recipe;
 }
 
 interface SlotDraft {
@@ -31,36 +33,74 @@ function pairKey(a: string, b: string) {
   return [a, b].sort().join('|');
 }
 
-export function RecipeForm({ onSubmit, onClose }: Props) {
+/** Paires de matériaux candidates (distinctes + auto-paires si doublon). */
+function computeCandidatePairs(mats: string[]): [string, string][] {
+  const present = mats.filter(Boolean);
+  const distinct = [...new Set(present)];
+  const pairs: [string, string][] = [];
+  for (let i = 0; i < distinct.length; i++)
+    for (let j = i + 1; j < distinct.length; j++) pairs.push([distinct[i], distinct[j]]);
+  const counts: Record<string, number> = {};
+  present.forEach((m) => (counts[m] = (counts[m] || 0) + 1));
+  distinct.forEach((m) => counts[m] >= 2 && pairs.push([m, m]));
+  return pairs;
+}
+
+export function RecipeForm({ onSubmit, onClose, initial }: Props) {
   useEscapeKey(onClose);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [machineId, setMachineId] = useState(MACHINES[0].id);
-  const [slots, setSlots] = useState<SlotDraft[]>([emptySlot('pla'), emptySlot('petg')]);
-  const [adhesion, setAdhesion] = useState<Record<string, number>>({});
-  const [excluded, setExcluded] = useState<Set<string>>(new Set());
-  const [global, setGlobal] = useState<GlobalRatings>({
-    printQuality: 3, reliability: 3, warpResistance: 3, interfaceCleanliness: 3, separability: 3,
+  const [title, setTitle] = useState(initial?.title ?? '');
+  const [author, setAuthor] = useState(initial?.author ?? '');
+  const [machineId, setMachineId] = useState(initial?.machineId ?? MACHINES[0].id);
+  const [slots, setSlots] = useState<SlotDraft[]>(() =>
+    initial
+      ? initial.slots.map((s) => ({
+          material: s.material, brand: s.brand, nozzleTemp: String(s.nozzleTemp), label: s.label ?? '',
+        }))
+      : [emptySlot('pla'), emptySlot('petg')],
+  );
+  const [adhesion, setAdhesion] = useState<Record<string, number>>(() => {
+    const m: Record<string, number> = {};
+    initial?.interfaces.forEach((i) => (m[pairKey(i.a, i.b)] = i.adhesion));
+    return m;
   });
-  const [params, setParams] = useState({
-    bedTemp: '60', chamberTemp: '', layerHeight: '0.2', printSpeed: '80',
-    nozzleDiameter: '0.4', purgeVolume: '', interfaceLayers: '',
+  const [excluded, setExcluded] = useState<Set<string>>(() => {
+    if (!initial) return new Set();
+    const present = new Set(initial.interfaces.map((i) => pairKey(i.a, i.b)));
+    return new Set(
+      computeCandidatePairs(initial.slots.map((s) => s.material))
+        .map(([a, b]) => pairKey(a, b))
+        .filter((k) => !present.has(k)),
+    );
   });
-  const [notes, setNotes] = useState('');
+  const [global, setGlobal] = useState<GlobalRatings>(
+    initial?.global ?? {
+      printQuality: 3, reliability: 3, warpResistance: 3, interfaceCleanliness: 3, separability: 3,
+    },
+  );
+  const [params, setParams] = useState(() =>
+    initial
+      ? {
+          bedTemp: String(initial.params.bedTemp),
+          chamberTemp: initial.params.chamberTemp ? String(initial.params.chamberTemp) : '',
+          layerHeight: String(initial.params.layerHeight),
+          printSpeed: String(initial.params.printSpeed),
+          nozzleDiameter: String(initial.params.nozzleDiameter),
+          purgeVolume: initial.params.purgeVolume ? String(initial.params.purgeVolume) : '',
+          interfaceLayers: initial.params.interfaceLayers ? String(initial.params.interfaceLayers) : '',
+        }
+      : {
+          bedTemp: '60', chamberTemp: '', layerHeight: '0.2', printSpeed: '80',
+          nozzleDiameter: '0.4', purgeVolume: '', interfaceLayers: '',
+        },
+  );
+  const [notes, setNotes] = useState(initial?.notes ?? '');
   const [error, setError] = useState('');
 
   // Paires candidates déduites des matériaux choisis.
-  const candidatePairs = useMemo<[string, string][]>(() => {
-    const mats = slots.map((s) => s.material).filter(Boolean);
-    const distinct = [...new Set(mats)];
-    const pairs: [string, string][] = [];
-    for (let i = 0; i < distinct.length; i++)
-      for (let j = i + 1; j < distinct.length; j++) pairs.push([distinct[i], distinct[j]]);
-    const counts: Record<string, number> = {};
-    mats.forEach((m) => (counts[m] = (counts[m] || 0) + 1));
-    distinct.forEach((m) => counts[m] >= 2 && pairs.push([m, m]));
-    return pairs;
-  }, [slots]);
+  const candidatePairs = useMemo<[string, string][]>(
+    () => computeCandidatePairs(slots.map((s) => s.material)),
+    [slots],
+  );
 
   const activePairs = candidatePairs.filter(([a, b]) => !excluded.has(pairKey(a, b)));
 
@@ -92,13 +132,13 @@ export function RecipeForm({ onSubmit, onClose }: Props) {
     }));
 
     const recipe: Recipe = {
-      id: `r${Date.now()}`,
+      id: initial?.id ?? `r${Date.now()}`,
       title: title.trim(),
       slots: finalSlots,
       interfaces,
       machineId,
       author: author.trim() || 'anonyme',
-      date: new Date().toISOString().slice(0, 10),
+      date: initial?.date ?? new Date().toISOString().slice(0, 10),
       global,
       params: {
         bedTemp: Number(params.bedTemp) || 0,
@@ -110,8 +150,8 @@ export function RecipeForm({ onSubmit, onClose }: Props) {
         interfaceLayers: params.interfaceLayers ? Number(params.interfaceLayers) : undefined,
       },
       notes: notes.trim(),
-      votesUp: 0,
-      votesDown: 0,
+      votesUp: initial?.votesUp ?? 0,
+      votesDown: initial?.votesDown ?? 0,
     };
     onSubmit(recipe);
   }
@@ -122,8 +162,12 @@ export function RecipeForm({ onSubmit, onClose }: Props) {
       <aside className="drawer form-drawer" role="dialog" aria-label="Ajouter une recette">
         <div className="drawer-head">
           <div style={{ flex: 1 }}>
-            <h3>➕ Nouvelle recette</h3>
-            <p className="sub">Partage un essai multi-matériaux avec la communauté.</p>
+            <h3>{initial ? '✎ Éditer la recette' : '➕ Nouvelle recette'}</h3>
+            <p className="sub">
+              {initial
+                ? 'Modifie les réglages puis enregistre.'
+                : 'Partage un essai multi-matériaux avec la communauté.'}
+            </p>
           </div>
           <button className="close-btn" onClick={onClose} aria-label="Fermer">✕</button>
         </div>
@@ -260,7 +304,9 @@ export function RecipeForm({ onSubmit, onClose }: Props) {
 
           <div className="form-actions">
             <button className="btn-secondary" onClick={onClose}>Annuler</button>
-            <button className="btn-primary" onClick={handleSubmit}>Publier la recette</button>
+            <button className="btn-primary" onClick={handleSubmit}>
+              {initial ? 'Enregistrer les modifications' : 'Publier la recette'}
+            </button>
           </div>
         </div>
       </aside>

@@ -20,6 +20,10 @@ interface Props {
   inventoryNo?: number;
   /** Ouvre l'export des réglages pour cette recette. */
   onExport?: (recipe: Recipe) => void;
+  /** Ouvre l'édition de la recette. */
+  onEdit?: (recipe: Recipe) => void;
+  /** Supprime la recette. */
+  onDelete?: (recipe: Recipe) => void;
 }
 
 const GLOBAL_CRITERIA = CRITERIA.filter((c) => !c.perInterface);
@@ -38,7 +42,9 @@ function samePair(a1: string, b1: string, a2: string, b2: string) {
   return (a1 === a2 && b1 === b2) || (a1 === b2 && b1 === a2);
 }
 
-export function RecipeCard({ recipe, userVote, onVote, highlightPair, inventoryNo, onExport }: Props) {
+export function RecipeCard({
+  recipe, userVote, onVote, highlightPair, inventoryNo, onExport, onEdit, onDelete,
+}: Props) {
   const machine = getMachine(recipe.machineId);
   const score = recipeScore(recipe);
   const base = baseScore(recipeCriteria(recipe));
@@ -46,10 +52,32 @@ export function RecipeCard({ recipe, userVote, onVote, highlightPair, inventoryN
 
   return (
     <div className="attempt">
-      {inventoryNo != null && (
+      {(inventoryNo != null || onEdit || onDelete) && (
         <div className="card-meta-top">
-          <span className="inv-no">{inventoryCode(inventoryNo)}</span>
-          <span className="fiche-label">fiche d’essai</span>
+          {inventoryNo != null ? (
+            <span className="inv-no">{inventoryCode(inventoryNo)}</span>
+          ) : (
+            <span className="fiche-label">fiche d’essai</span>
+          )}
+          <span className="card-actions">
+            {inventoryNo != null && <span className="fiche-label">fiche d’essai</span>}
+            {onEdit && (
+              <button className="icon-btn mini-action" title="Éditer" onClick={() => onEdit(recipe)}>
+                ✎
+              </button>
+            )}
+            {onDelete && (
+              <button
+                className="icon-btn mini-action danger"
+                title="Supprimer"
+                onClick={() => {
+                  if (window.confirm(`Supprimer définitivement « ${recipe.title} » ?`)) onDelete(recipe);
+                }}
+              >
+                🗑
+              </button>
+            )}
+          </span>
         </div>
       )}
       <div className="attempt-top">

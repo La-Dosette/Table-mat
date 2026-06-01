@@ -12,9 +12,13 @@ interface Props {
   onClose: () => void;
   inventoryNos: Map<string, number>;
   onExport: (recipe: Recipe) => void;
+  onEdit: (recipe: Recipe) => void;
+  onDelete: (recipe: Recipe) => void;
 }
 
-export function CellDetailDrawer({ matA, matB, points, userVotes, onVote, onClose, inventoryNos, onExport }: Props) {
+export function CellDetailDrawer({
+  matA, matB, points, userVotes, onVote, onClose, inventoryNos, onExport, onEdit, onDelete,
+}: Props) {
   useEscapeKey(onClose);
   const agg = aggregateCell(points);
   // Une recette peut apparaître une fois par interface ; on déduplique sur la
@@ -58,6 +62,8 @@ export function CellDetailDrawer({ matA, matB, points, userVotes, onVote, onClos
               highlightPair={{ a: matA.id, b: matB.id }}
               inventoryNo={inventoryNos.get(p.recipe.id)}
               onExport={onExport}
+              onEdit={onEdit}
+              onDelete={onDelete}
             />
           ))}
         </div>

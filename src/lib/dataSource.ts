@@ -17,6 +17,10 @@ export interface DataSource {
   readonly label: string;
   listRecipes(): Promise<Recipe[]>;
   addRecipe(recipe: Recipe): Promise<Recipe>;
+  /** Met à jour une recette existante (mêmes id et votes conservés). */
+  updateRecipe(recipe: Recipe): Promise<Recipe>;
+  /** Supprime une recette. */
+  deleteRecipe(recipeId: string): Promise<void>;
   /** Applique un delta de votes (ex. +1 up, -1 down) de façon atomique. */
   applyVote(recipeId: string, upDelta: number, downDelta: number): Promise<void>;
 }
@@ -34,6 +38,13 @@ class LocalDataSource implements DataSource {
   async addRecipe(recipe: Recipe): Promise<Recipe> {
     this.recipes = [recipe, ...this.recipes];
     return recipe;
+  }
+  async updateRecipe(recipe: Recipe): Promise<Recipe> {
+    this.recipes = this.recipes.map((r) => (r.id === recipe.id ? { ...recipe } : r));
+    return recipe;
+  }
+  async deleteRecipe(recipeId: string): Promise<void> {
+    this.recipes = this.recipes.filter((r) => r.id !== recipeId);
   }
   async applyVote(recipeId: string, upDelta: number, downDelta: number): Promise<void> {
     this.recipes = this.recipes.map((r) =>
@@ -132,6 +143,25 @@ class SupabaseDataSource implements DataSource {
     if (!res.ok) throw new Error(`Supabase addRecipe ${res.status}`);
     const [row]: RecipeRow[] = await res.json();
     return rowToRecipe(row);
+  }
+
+  async updateRecipe(recipe: Recipe): Promise<Recipe> {
+    const res = await fetch(`${this.url}/rest/v1/recipes?id=eq.${encodeURIComponent(recipe.id)}`, {
+      method: 'PATCH',
+      headers: this.headers({ Prefer: 'return=representation' }),
+      body: JSON.stringify(recipeToRow(recipe)),
+    });
+    if (!res.ok) throw new Error(`Supabase updateRecipe ${res.status}`);
+    const [row]: RecipeRow[] = await res.json();
+    return rowToRecipe(row);
+  }
+
+  async deleteRecipe(recipeId: string): Promise<void> {
+    const res = await fetch(`${this.url}/rest/v1/recipes?id=eq.${encodeURIComponent(recipeId)}`, {
+      method: 'DELETE',
+      headers: this.headers(),
+    });
+    if (!res.ok) throw new Error(`Supabase deleteRecipe ${res.status}`);
   }
 
   async applyVote(recipeId: string, upDelta: number, downDelta: number): Promise<void> {

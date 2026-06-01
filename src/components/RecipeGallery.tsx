@@ -8,9 +8,11 @@ interface Props {
   /** id de recette -> numéro d'inventaire stable. */
   inventoryNos: Map<string, number>;
   onExport: (recipe: Recipe) => void;
+  onEdit: (recipe: Recipe) => void;
+  onDelete: (recipe: Recipe) => void;
 }
 
-export function RecipeGallery({ recipes, userVotes, onVote, inventoryNos, onExport }: Props) {
+export function RecipeGallery({ recipes, userVotes, onVote, inventoryNos, onExport, onEdit, onDelete }: Props) {
   if (recipes.length === 0) {
     return (
       <div className="matrix-wrap">
@@ -28,6 +30,8 @@ export function RecipeGallery({ recipes, userVotes, onVote, inventoryNos, onExpo
           onVote={onVote}
           inventoryNo={inventoryNos.get(r.id)}
           onExport={onExport}
+          onEdit={onEdit}
+          onDelete={onDelete}
         />
       ))}
     </div>

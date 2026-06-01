@@ -8,6 +8,13 @@ interface Props {
   pointsFor: (a: string, b: string) => InterfacePoint[];
   selected: { a: string; b: string } | null;
   onSelect: (a: string, b: string) => void;
+  /** Nombre de recettes prises en compte (affiché dans le cartouche). */
+  recipeCount?: number;
+}
+
+/** Indice d'inventaire d'un axe, ex. 0 -> "01". */
+function axisIdx(i: number): string {
+  return String(i + 1).padStart(2, '0');
 }
 
 interface HoverState {
@@ -18,8 +25,9 @@ interface HoverState {
   points: InterfacePoint[];
 }
 
-export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }: Props) {
+export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect, recipeCount }: Props) {
   const [hover, setHover] = useState<HoverState | null>(null);
+  const today = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
   return (
     <>
@@ -33,8 +41,9 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
           <thead>
             <tr>
               <th className="corner">Mat. A ＼ Mat. B</th>
-              {materials.map((m) => (
+              {materials.map((m, i) => (
                 <th key={m.id}>
+                  <span className="axis-idx">{axisIdx(i)}</span>
                   <span className="mat-head">
                     <span className="mat-dot" style={{ background: m.accent }} />
                     {m.name}
@@ -50,6 +59,7 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
                   <span className="mat-head">
                     <span className="mat-dot" style={{ background: rowMat.accent }} />
                     {rowMat.name}
+                    <span className="axis-idx">{axisIdx(rowIndex)}</span>
                   </span>
                 </th>
                 {materials.map((colMat, colIndex) => {
@@ -121,6 +131,14 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
         <span className="diag-key">
           <i /> diagonale = même matériau (multicolore)
         </span>
+      </div>
+
+      <div className="matrix-cartouche">
+        <span><i>réf.</i> TM·MAT-01</span>
+        <span><i>date</i> {today}</span>
+        <span><i>échelle</i> 1:1</span>
+        <span><i>matériaux</i> {materials.length}</span>
+        <span><i>recettes</i> {recipeCount ?? '—'}</span>
       </div>
 
       {hover && <MatrixTooltip hover={hover} />}
