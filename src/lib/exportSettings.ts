@@ -150,20 +150,24 @@ export function recipeToJson(recipe: Recipe): string {
   return JSON.stringify({ _format: 'tm/recipe@1', ...rest }, null, 2);
 }
 
-/** Reconstruit une recette depuis un JSON exporté (nouvelle id, votes remis à 0). */
-export function parseRecipeJson(text: string): Recipe {
-  let obj: Record<string, unknown>;
-  try {
-    obj = JSON.parse(text);
-  } catch {
-    throw new Error('JSON illisible : vérifie le copier-coller.');
-  }
-  const r = ((obj as { recipe?: unknown }).recipe ?? obj) as Record<string, unknown>;
-  if (typeof r.title !== 'string' || !Array.isArray(r.slots) || !Array.isArray(r.interfaces)) {
+/** Sérialise toutes les recettes en un seul JSON (export global). */
+export function recipesToJson(recipes: Recipe[]): string {
+  const items = recipes.map((r) => {
+    const { id: _id, votesUp: _u, votesDown: _d, ...rest } = r;
+    return rest;
+  });
+  return JSON.stringify({ _format: 'tm/recipes@1', count: items.length, recipes: items }, null, 2);
+}
+
+let importSeq = 0;
+/** Reconstruit une recette depuis un objet brut (nouvelle id, votes à 0). */
+function normalizeRecipe(raw: unknown): Recipe {
+  const r = ((raw as { recipe?: unknown })?.recipe ?? raw) as Record<string, unknown>;
+  if (!r || typeof r.title !== 'string' || !Array.isArray(r.slots) || !Array.isArray(r.interfaces)) {
     throw new Error('JSON invalide : il manque « title », « slots » ou « interfaces ».');
   }
   return {
-    id: `r${Date.now()}`,
+    id: `r${Date.now()}_${(importSeq++).toString(36)}`,
     title: r.title as string,
     slots: r.slots as Recipe['slots'],
     interfaces: r.interfaces as Recipe['interfaces'],
@@ -180,6 +184,23 @@ export function parseRecipeJson(text: string): Recipe {
     votesUp: 0,
     votesDown: 0,
   };
+}
+
+/** Lit un JSON (recette unique OU collection) et renvoie la liste des recettes. */
+export function parseRecipesJson(text: string): Recipe[] {
+  let obj: unknown;
+  try {
+    obj = JSON.parse(text);
+  } catch {
+    throw new Error('JSON illisible : vérifie le copier-coller.');
+  }
+  const arr = Array.isArray(obj)
+    ? obj
+    : Array.isArray((obj as { recipes?: unknown[] })?.recipes)
+      ? (obj as { recipes: unknown[] }).recipes
+      : [obj];
+  if (!arr.length) throw new Error('Aucune recette trouvée dans le JSON.');
+  return arr.map(normalizeRecipe);
 }
 
 export type ExportFormat = 'fiche' | 'checklist' | 'json';

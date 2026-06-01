@@ -24,6 +24,14 @@ interface Props {
   onEdit?: (recipe: Recipe) => void;
   /** Supprime la recette. */
   onDelete?: (recipe: Recipe) => void;
+  /** Duplique la recette (pré-remplit une nouvelle entrée). */
+  onDuplicate?: (recipe: Recipe) => void;
+  /** Affiche la case « comparer ». */
+  selectable?: boolean;
+  /** État de sélection pour le comparateur. */
+  selected?: boolean;
+  /** Bascule la sélection dans le comparateur. */
+  onToggleCompare?: (recipe: Recipe) => void;
 }
 
 const GLOBAL_CRITERIA = CRITERIA.filter((c) => !c.perInterface);
@@ -44,6 +52,7 @@ function samePair(a1: string, b1: string, a2: string, b2: string) {
 
 export function RecipeCard({
   recipe, userVote, onVote, highlightPair, inventoryNo, onExport, onEdit, onDelete,
+  onDuplicate, selectable, selected, onToggleCompare,
 }: Props) {
   const machine = getMachine(recipe.machineId);
   const score = recipeScore(recipe);
@@ -52,15 +61,31 @@ export function RecipeCard({
 
   return (
     <div className="attempt">
-      {(inventoryNo != null || onEdit || onDelete) && (
+      {(inventoryNo != null || onEdit || onDelete || onDuplicate || selectable) && (
         <div className="card-meta-top">
-          {inventoryNo != null ? (
-            <span className="inv-no">{inventoryCode(inventoryNo)}</span>
-          ) : (
-            <span className="fiche-label">fiche d’essai</span>
-          )}
+          <span className="meta-left">
+            {selectable && (
+              <label className="compare-check" title="Comparer cette recette">
+                <input
+                  type="checkbox"
+                  checked={!!selected}
+                  onChange={() => onToggleCompare?.(recipe)}
+                />
+              </label>
+            )}
+            {inventoryNo != null ? (
+              <span className="inv-no">{inventoryCode(inventoryNo)}</span>
+            ) : (
+              <span className="fiche-label">fiche d’essai</span>
+            )}
+          </span>
           <span className="card-actions">
             {inventoryNo != null && <span className="fiche-label">fiche d’essai</span>}
+            {onDuplicate && (
+              <button className="icon-btn mini-action" title="Dupliquer" onClick={() => onDuplicate(recipe)}>
+                ⧉
+              </button>
+            )}
             {onEdit && (
               <button className="icon-btn mini-action" title="Éditer" onClick={() => onEdit(recipe)}>
                 ✎

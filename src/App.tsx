@@ -11,6 +11,8 @@ import { RecipeForm } from './components/RecipeForm';
 import { MaterialDigest, type DigestEntry } from './components/MaterialDigest';
 import { ExportDrawer } from './components/ExportDrawer';
 import { ImportDialog } from './components/ImportDialog';
+import { ComparatorPanel } from './components/ComparatorPanel';
+import { recipesToJson } from './lib/exportSettings';
 
 type View = 'matrix' | 'recettes' | 'digest';
 
@@ -27,8 +29,11 @@ export default function App() {
   const [view, setView] = useState<View>('matrix');
   const [showForm, setShowForm] = useState(false);
   const [editRecipe, setEditRecipe] = useState<Recipe | null>(null);
+  const [duplicateSource, setDuplicateSource] = useState<Recipe | null>(null);
   const [showImport, setShowImport] = useState(false);
   const [exportRecipe, setExportRecipe] = useState<Recipe | null>(null);
+  const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
+  const [showComparator, setShowComparator] = useState(false);
 
   // Chargement initial des recettes depuis la source de données.
   useEffect(() => {
@@ -191,8 +196,44 @@ export default function App() {
     setRecipes((list) => list.filter((r) => r.id !== recipe.id));
     if (exportRecipe?.id === recipe.id) setExportRecipe(null);
     if (editRecipe?.id === recipe.id) setEditRecipe(null);
+    setCompareIds((s) => {
+      if (!s.has(recipe.id)) return s;
+      const n = new Set(s);
+      n.delete(recipe.id);
+      return n;
+    });
     dataSource.deleteRecipe(recipe.id).catch((e) => console.error('deleteRecipe', e));
   }
+
+  // --- Import (une ou plusieurs recettes depuis un JSON) ---
+  function importRecipes(list: Recipe[]) {
+    setShowImport(false);
+    setView('recettes');
+    setRecipes((cur) => [...list, ...cur]);
+    list.forEach((r) => dataSource.addRecipe(r).catch((e) => console.error('import', e)));
+  }
+
+  // --- Export global de toutes les recettes en un JSON ---
+  function exportAll() {
+    const blob = new Blob([recipesToJson(recipes)], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `table-mat_export_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // --- Sélection pour le comparateur (max 4) ---
+  function toggleCompare(recipe: Recipe) {
+    setCompareIds((s) => {
+      const n = new Set(s);
+      if (n.has(recipe.id)) n.delete(recipe.id);
+      else if (n.size < 4) n.add(recipe.id);
+      return n;
+    });
+  }
+  const compareRecipes = recipes.filter((r) => compareIds.has(r.id));
 
   // Numéro d'inventaire stable par recette (ordre de la liste source).
   const inventoryNos = useMemo(
@@ -235,6 +276,9 @@ export default function App() {
           </button>
         </div>
         <div className="toolbar-actions">
+          <button className="btn-secondary" onClick={exportAll} disabled={recipes.length === 0}>
+            ⤓ Tout exporter
+          </button>
           <button className="btn-secondary" onClick={() => setShowImport(true)}>
             ⇪ Importer
           </button>
@@ -286,6 +330,9 @@ export default function App() {
           onExport={setExportRecipe}
           onEdit={setEditRecipe}
           onDelete={deleteRecipe}
+          onDuplicate={setDuplicateSource}
+          compareIds={compareIds}
+          onToggleCompare={toggleCompare}
         />
       ) : (
         <MaterialDigest
@@ -308,10 +355,44 @@ export default function App() {
           onExport={setExportRecipe}
           onEdit={setEditRecipe}
           onDelete={deleteRecipe}
+          onDuplicate={setDuplicateSource}
         />
       )}
 
+      {view === 'recettes' && compareIds.size > 0 && (
+        <div className="compare-bar">
+          <span><b>{compareIds.size}</b> sélectionnée{compareIds.size > 1 ? 's' : ''} (max 4)</span>
+          <button
+            className="btn-primary"
+            disabled={compareIds.size < 2}
+            onClick={() => setShowComparator(true)}
+          >
+            ⇋ Comparer
+          </button>
+          <button className="btn-secondary" onClick={() => setCompareIds(new Set())}>
+            Effacer
+          </button>
+        </div>
+      )}
+
       {showForm && <RecipeForm onSubmit={addRecipe} onClose={() => setShowForm(false)} />}
+
+      {duplicateSource && (
+        <RecipeForm
+          initial={duplicateSource}
+          duplicate
+          onSubmit={addRecipe}
+          onClose={() => setDuplicateSource(null)}
+        />
+      )}
+
+      {showComparator && compareRecipes.length >= 2 && (
+        <ComparatorPanel
+          recipes={compareRecipes}
+          inventoryNos={inventoryNos}
+          onClose={() => setShowComparator(false)}
+        />
+      )}
 
       {editRecipe && (
         <RecipeForm
@@ -322,7 +403,7 @@ export default function App() {
       )}
 
       {showImport && (
-        <ImportDialog onImport={addRecipe} onClose={() => setShowImport(false)} />
+        <ImportDialog onImport={importRecipes} onClose={() => setShowImport(false)} />
       )}
 
       {exportRecipe && (

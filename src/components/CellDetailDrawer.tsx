@@ -14,10 +14,11 @@ interface Props {
   onExport: (recipe: Recipe) => void;
   onEdit: (recipe: Recipe) => void;
   onDelete: (recipe: Recipe) => void;
+  onDuplicate: (recipe: Recipe) => void;
 }
 
 export function CellDetailDrawer({
-  matA, matB, points, userVotes, onVote, onClose, inventoryNos, onExport, onEdit, onDelete,
+  matA, matB, points, userVotes, onVote, onClose, inventoryNos, onExport, onEdit, onDelete, onDuplicate,
 }: Props) {
   useEscapeKey(onClose);
   const agg = aggregateCell(points);
@@ -64,6 +65,7 @@ export function CellDetailDrawer({
               onExport={onExport}
               onEdit={onEdit}
               onDelete={onDelete}
+              onDuplicate={onDuplicate}
             />
           ))}
         </div>

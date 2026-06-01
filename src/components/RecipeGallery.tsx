@@ -10,9 +10,16 @@ interface Props {
   onExport: (recipe: Recipe) => void;
   onEdit: (recipe: Recipe) => void;
   onDelete: (recipe: Recipe) => void;
+  onDuplicate: (recipe: Recipe) => void;
+  /** Ids sélectionnés pour le comparateur. */
+  compareIds: Set<string>;
+  onToggleCompare: (recipe: Recipe) => void;
 }
 
-export function RecipeGallery({ recipes, userVotes, onVote, inventoryNos, onExport, onEdit, onDelete }: Props) {
+export function RecipeGallery({
+  recipes, userVotes, onVote, inventoryNos, onExport, onEdit, onDelete, onDuplicate,
+  compareIds, onToggleCompare,
+}: Props) {
   if (recipes.length === 0) {
     return (
       <div className="matrix-wrap">
@@ -32,6 +39,10 @@ export function RecipeGallery({ recipes, userVotes, onVote, inventoryNos, onExpo
           onExport={onExport}
           onEdit={onEdit}
           onDelete={onDelete}
+          onDuplicate={onDuplicate}
+          selectable
+          selected={compareIds.has(r.id)}
+          onToggleCompare={onToggleCompare}
         />
       ))}
     </div>

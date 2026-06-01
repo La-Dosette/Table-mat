@@ -12,8 +12,10 @@ import { useEscapeKey } from '../lib/useEscapeKey';
 interface Props {
   onSubmit: (recipe: Recipe) => void;
   onClose: () => void;
-  /** Recette à éditer ; absent = création d'une nouvelle recette. */
+  /** Recette de départ : éditée (par défaut) ou dupliquée si `duplicate`. */
   initial?: Recipe;
+  /** true = on pré-remplit depuis `initial` mais on crée une NOUVELLE recette. */
+  duplicate?: boolean;
 }
 
 interface SlotDraft {
@@ -46,9 +48,13 @@ function computeCandidatePairs(mats: string[]): [string, string][] {
   return pairs;
 }
 
-export function RecipeForm({ onSubmit, onClose, initial }: Props) {
+export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Props) {
   useEscapeKey(onClose);
-  const [title, setTitle] = useState(initial?.title ?? '');
+  // En édition on garde l'id/votes/date ; en duplication on repart à neuf.
+  const isEdit = !!initial && !duplicate;
+  const [title, setTitle] = useState(
+    initial ? (duplicate ? `${initial.title} (copie)` : initial.title) : '',
+  );
   const [author, setAuthor] = useState(initial?.author ?? '');
   const [machineId, setMachineId] = useState(initial?.machineId ?? MACHINES[0].id);
   const [slots, setSlots] = useState<SlotDraft[]>(() =>
@@ -132,13 +138,13 @@ export function RecipeForm({ onSubmit, onClose, initial }: Props) {
     }));
 
     const recipe: Recipe = {
-      id: initial?.id ?? `r${Date.now()}`,
+      id: isEdit ? initial!.id : `r${Date.now()}`,
       title: title.trim(),
       slots: finalSlots,
       interfaces,
       machineId,
       author: author.trim() || 'anonyme',
-      date: initial?.date ?? new Date().toISOString().slice(0, 10),
+      date: isEdit ? initial!.date : new Date().toISOString().slice(0, 10),
       global,
       params: {
         bedTemp: Number(params.bedTemp) || 0,
@@ -150,8 +156,8 @@ export function RecipeForm({ onSubmit, onClose, initial }: Props) {
         interfaceLayers: params.interfaceLayers ? Number(params.interfaceLayers) : undefined,
       },
       notes: notes.trim(),
-      votesUp: initial?.votesUp ?? 0,
-      votesDown: initial?.votesDown ?? 0,
+      votesUp: isEdit ? initial!.votesUp : 0,
+      votesDown: isEdit ? initial!.votesDown : 0,
     };
     onSubmit(recipe);
   }
@@ -162,9 +168,13 @@ export function RecipeForm({ onSubmit, onClose, initial }: Props) {
       <aside className="drawer form-drawer" role="dialog" aria-label="Ajouter une recette">
         <div className="drawer-head">
           <div style={{ flex: 1 }}>
-            <h3>{initial ? '✎ Éditer la recette' : '➕ Nouvelle recette'}</h3>
+            <h3>{duplicate ? '⧉ Dupliquer' : isEdit ? '✎ Éditer la recette' : '➕ Nouvelle recette'}</h3>
             <p className="sub">
-              {initial ? 'Modifie les réglages puis enregistre.' : 'Nouvelle entrée.'}
+              {duplicate
+                ? 'Copie pré-remplie — ajuste puis crée la nouvelle entrée.'
+                : isEdit
+                  ? 'Modifie les réglages puis enregistre.'
+                  : 'Nouvelle entrée.'}
             </p>
           </div>
           <button className="close-btn" onClick={onClose} aria-label="Fermer">✕</button>
@@ -303,7 +313,7 @@ export function RecipeForm({ onSubmit, onClose, initial }: Props) {
           <div className="form-actions">
             <button className="btn-secondary" onClick={onClose}>Annuler</button>
             <button className="btn-primary" onClick={handleSubmit}>
-              {initial ? 'Enregistrer les modifications' : 'Publier la recette'}
+              {duplicate ? 'Créer la copie' : isEdit ? 'Enregistrer les modifications' : 'Publier la recette'}
             </button>
           </div>
         </div>

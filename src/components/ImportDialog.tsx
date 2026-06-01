@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import type { Recipe } from '../types';
-import { parseRecipeJson } from '../lib/exportSettings';
+import { parseRecipesJson } from '../lib/exportSettings';
 import { useEscapeKey } from '../lib/useEscapeKey';
 
 interface Props {
-  onImport: (recipe: Recipe) => void;
+  onImport: (recipes: Recipe[]) => void;
   onClose: () => void;
 }
 
@@ -15,8 +15,8 @@ export function ImportDialog({ onImport, onClose }: Props) {
 
   function handleImport() {
     try {
-      const recipe = parseRecipeJson(text);
-      onImport(recipe);
+      const recipes = parseRecipesJson(text);
+      onImport(recipes);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Import impossible.');
     }
@@ -29,7 +29,7 @@ export function ImportDialog({ onImport, onClose }: Props) {
         <div className="drawer-head">
           <div style={{ flex: 1 }}>
             <h3>⇪ Importer une recette</h3>
-            <p className="sub">Colle un JSON exporté depuis TM.</p>
+            <p className="sub">Colle un JSON exporté depuis TM (une recette ou une collection).</p>
           </div>
           <button className="close-btn" onClick={onClose} aria-label="Fermer">✕</button>
         </div>
