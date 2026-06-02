@@ -1362,6 +1362,10 @@ b {
 .slot-chip b {
   font-weight: 700;
 }
+.slot-brand {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
 .slot-label {
   color: var(--ink-soft);
   text-transform: lowercase;

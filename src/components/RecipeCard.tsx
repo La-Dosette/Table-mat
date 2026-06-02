@@ -139,10 +139,12 @@ export function RecipeCard({
       <div className="slots">
         {recipe.slots.map((s, i) => {
           const m = getMaterial(s.material);
+          const hasBrand = s.brand && s.brand !== 'Marque inconnue';
           return (
             <span className="slot-chip" key={i}>
               <span className="mat-dot" style={{ background: m?.accent }} />
               <b>{m?.name}</b>
+              {hasBrand ? <span className="slot-brand">{s.brand}</span> : null}
               {s.label ? <span className="slot-label">{s.label}</span> : null}
               <span className="slot-temp">{s.nozzleTemp}°C</span>
             </span>
