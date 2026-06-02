@@ -11,6 +11,7 @@ export type MaterialFamily =
   | 'flexible'
   | 'composite'
   | 'haute-température'
+  | 'spécial'
   | 'support';
 
 export interface Material {

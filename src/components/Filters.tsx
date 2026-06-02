@@ -20,7 +20,7 @@ const SORTS: { id: SortKey; label: string }[] = [
 
 const SYSTEMS: { id: MachineSystem | 'all'; label: string }[] = [
   { id: 'all', label: 'Tous systèmes' },
-  { id: 'AMS', label: 'AMS' },
+  { id: 'AMS', label: 'AMS / IFS / CFS' },
   { id: 'MMU', label: 'MMU' },
   { id: 'Toolchanger', label: 'Toolchanger' },
   { id: 'IDEX', label: 'IDEX' },
