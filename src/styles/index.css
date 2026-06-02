@@ -379,6 +379,28 @@ b {
   white-space: nowrap;
 }
 
+/* Volets figés : la 1re colonne et l'en-tête restent visibles au scroll. */
+.matrix thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--paper);
+}
+.matrix .row-head {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background: var(--paper);
+  box-shadow: 1px 0 0 var(--hairline-soft);
+}
+.matrix th.corner {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 4;
+  background: var(--paper);
+}
+
 .cell {
   width: 66px;
   height: 54px;
@@ -1750,6 +1772,48 @@ b {
   .iface-edit input[type='range'],
   .rating-edit input[type='range'] {
     max-width: none;
+  }
+
+  /* Matrice : volets figés + hauteur bornée pour scroller dans le cadre. */
+  .matrix-wrap {
+    padding: 0;
+    max-height: 72vh;
+  }
+  .matrix th {
+    padding: 6px 3px;
+  }
+  .row-head {
+    padding-right: 8px;
+  }
+
+  /* Drawer : un peu plus de place, en-tête resserré. */
+  .drawer-head {
+    padding: 16px 16px 12px;
+  }
+  .drawer-body {
+    padding: 14px 16px 40px;
+  }
+  .field-row {
+    flex-direction: column;
+  }
+
+  /* Ligne matériau : passe sur plusieurs lignes au lieu de déborder. */
+  .slot-edit {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .slot-edit select {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 128px;
+  }
+  .slot-edit .combo.grow {
+    flex-basis: 100%;
+  }
+  .slot-edit input.mini {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
   }
 }
 
