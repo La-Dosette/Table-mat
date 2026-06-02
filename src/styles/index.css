@@ -1037,11 +1037,13 @@ b {
   position: absolute;
   top: calc(100% + 2px);
   left: 0;
-  right: 0;
   z-index: 30;
   margin: 0;
   padding: 0;
   list-style: none;
+  min-width: 100%;
+  width: max-content;
+  max-width: 280px;
   max-height: 220px;
   overflow-y: auto;
   background: var(--paper);
@@ -1054,6 +1056,7 @@ b {
   font-family: var(--font-mono);
   color: var(--ink);
   cursor: pointer;
+  white-space: nowrap;
   border-bottom: 1px solid var(--hairline-soft);
 }
 .combo-opt:last-child {

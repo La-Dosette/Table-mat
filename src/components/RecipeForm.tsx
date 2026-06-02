@@ -31,6 +31,8 @@ interface Props {
   initial?: Recipe;
   /** true = on pré-remplit depuis `initial` mais on crée une NOUVELLE recette. */
   duplicate?: boolean;
+  /** Pseudos déjà utilisés, proposés en autocomplétion du champ auteur. */
+  authors?: string[];
 }
 
 interface SlotDraft {
@@ -63,7 +65,7 @@ function computeCandidatePairs(mats: string[]): [string, string][] {
   return pairs;
 }
 
-export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Props) {
+export function RecipeForm({ onSubmit, onClose, initial, duplicate = false, authors = [] }: Props) {
   useEscapeKey(onClose);
   const { t } = useI18n();
   // En édition on garde l'id/votes/date ; en duplication on repart à neuf.
@@ -202,7 +204,7 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Pr
             <div className="field-row">
               <label className="field">
                 <span>{t('form.author')}</span>
-                <input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder={t('form.authorPh')} />
+                <Combobox value={author} options={authors} onChange={setAuthor} placeholder={t('form.authorPh')} />
               </label>
               <label className="field">
                 <span>{t('form.machine')}</span>

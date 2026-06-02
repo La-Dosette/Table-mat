@@ -65,6 +65,15 @@ export default function App() {
     });
   }, []);
 
+  // Auteurs déjà présents (suggestions du champ pseudo, hors « anonyme »).
+  const authors = useMemo(
+    () =>
+      [...new Set(recipes.map((r) => r.author).filter((a) => a && a !== 'anonyme'))].sort(
+        (a, b) => a.localeCompare(b),
+      ),
+    [recipes],
+  );
+
   const [filters, setFilters] = useState<FilterState>({
     query: '', system: 'all', count: 'all', hideEmpty: false, sort: 'score', families: [],
   });
@@ -405,12 +414,13 @@ export default function App() {
         </div>
       )}
 
-      {showForm && <RecipeForm onSubmit={addRecipe} onClose={() => setShowForm(false)} />}
+      {showForm && <RecipeForm authors={authors} onSubmit={addRecipe} onClose={() => setShowForm(false)} />}
 
       {duplicateSource && (
         <RecipeForm
           initial={duplicateSource}
           duplicate
+          authors={authors}
           onSubmit={addRecipe}
           onClose={() => setDuplicateSource(null)}
         />
@@ -427,6 +437,7 @@ export default function App() {
       {editRecipe && (
         <RecipeForm
           initial={editRecipe}
+          authors={authors}
           onSubmit={updateRecipe}
           onClose={() => setEditRecipe(null)}
         />
