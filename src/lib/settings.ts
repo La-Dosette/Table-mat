@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
 
 /**
  * État synchronisé avec localStorage (persiste au rechargement).
+ * Le setter se comporte comme celui de useState (valeur ou updater).
  * Tolérant aux environnements sans localStorage (SSR, mode privé strict).
  */
-export function useLocalStorage<T>(key: string, initial: T): [T, (v: T) => void] {
+export function useLocalStorage<T>(key: string, initial: T): [T, Dispatch<SetStateAction<T>>] {
   const [value, setValue] = useState<T>(() => {
     try {
       const raw = localStorage.getItem(key);

@@ -28,7 +28,7 @@ export default function App() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [userVotes, setUserVotes] = useState<Record<string, UserVote>>({});
+  const [userVotes, setUserVotes] = useLocalStorage<Record<string, UserVote>>('tm.userVotes', {});
   const [view, setView] = useState<View>('matrix');
   const [showForm, setShowForm] = useState(false);
   const [editRecipe, setEditRecipe] = useState<Recipe | null>(null);
@@ -56,6 +56,15 @@ export default function App() {
       active = false;
     };
   }, []);
+
+  // Synchro temps réel : un autre onglet modifie/ajoute/supprime → on recharge.
+  useEffect(() => {
+    if (!dataSource.subscribe) return;
+    return dataSource.subscribe(() => {
+      dataSource.listRecipes().then(setRecipes).catch(() => {});
+    });
+  }, []);
+
   const [filters, setFilters] = useState<FilterState>({
     query: '', system: 'all', count: 'all', hideEmpty: false, sort: 'score', families: [],
   });

@@ -23,39 +23,109 @@ export interface DataSource {
   deleteRecipe(recipeId: string): Promise<void>;
   /** Applique un delta de votes (ex. +1 up, -1 down) de façon atomique. */
   applyVote(recipeId: string, upDelta: number, downDelta: number): Promise<void>;
+  /**
+   * S'abonne aux changements externes (autres onglets/fenêtres). Renvoie une
+   * fonction de désabonnement. Optionnel : absent pour les sources sans
+   * notification temps réel.
+   */
+  subscribe?(listener: () => void): () => void;
 }
 
-// --- Implémentation locale (mémoire) ---------------------------------------
+// --- Implémentation locale (localStorage + synchro temps réel) -------------
+// Persiste les recettes dans le navigateur et propage chaque changement aux
+// autres onglets via BroadcastChannel (repli sur l'évènement `storage`).
 
-class LocalDataSource implements DataSource {
+const STORE_KEY = 'tm.recipes';
+const CHANNEL = 'tm.recipes';
+
+class LocalStorageDataSource implements DataSource {
   readonly isRemote = false;
-  readonly label = 'local (mémoire) — branchez Supabase pour partager';
-  private recipes: Recipe[] = RECIPES.map((r) => ({ ...r }));
+  readonly label = 'local (navigateur) — persisté, synchro entre onglets';
+  private channel: BroadcastChannel | null =
+    typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel(CHANNEL) : null;
+  private listeners = new Set<() => void>();
+
+  constructor() {
+    // Amorce le stockage avec le jeu de recettes par défaut au premier lancement.
+    if (this.read() == null) this.write(RECIPES.map((r) => ({ ...r })));
+  }
+
+  private read(): Recipe[] | null {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      return raw ? (JSON.parse(raw) as Recipe[]) : null;
+    } catch {
+      return null;
+    }
+  }
+  private current(): Recipe[] {
+    return this.read() ?? RECIPES.map((r) => ({ ...r }));
+  }
+  private write(recipes: Recipe[]): void {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(recipes));
+    } catch {
+      /* quota dépassé ou stockage indisponible : on ignore */
+    }
+  }
+  /** Persiste puis notifie les autres onglets. */
+  private commit(recipes: Recipe[]): void {
+    this.write(recipes);
+    this.channel?.postMessage('changed');
+  }
 
   async listRecipes(): Promise<Recipe[]> {
-    return this.recipes.map((r) => ({ ...r }));
+    return this.current().map((r) => ({ ...r }));
   }
   async addRecipe(recipe: Recipe): Promise<Recipe> {
-    this.recipes = [recipe, ...this.recipes];
+    this.commit([recipe, ...this.current().filter((r) => r.id !== recipe.id)]);
     return recipe;
   }
   async updateRecipe(recipe: Recipe): Promise<Recipe> {
-    this.recipes = this.recipes.map((r) => (r.id === recipe.id ? { ...recipe } : r));
+    this.commit(this.current().map((r) => (r.id === recipe.id ? { ...recipe } : r)));
     return recipe;
   }
   async deleteRecipe(recipeId: string): Promise<void> {
-    this.recipes = this.recipes.filter((r) => r.id !== recipeId);
+    this.commit(this.current().filter((r) => r.id !== recipeId));
   }
   async applyVote(recipeId: string, upDelta: number, downDelta: number): Promise<void> {
-    this.recipes = this.recipes.map((r) =>
-      r.id === recipeId
-        ? {
-            ...r,
-            votesUp: Math.max(0, r.votesUp + upDelta),
-            votesDown: Math.max(0, r.votesDown + downDelta),
-          }
-        : r,
+    this.commit(
+      this.current().map((r) =>
+        r.id === recipeId
+          ? {
+              ...r,
+              votesUp: Math.max(0, r.votesUp + upDelta),
+              votesDown: Math.max(0, r.votesDown + downDelta),
+            }
+          : r,
+      ),
     );
+  }
+
+  subscribe(listener: () => void): () => void {
+    if (this.listeners.size === 0) this.attach();
+    this.listeners.add(listener);
+    return () => {
+      this.listeners.delete(listener);
+      if (this.listeners.size === 0) this.detach();
+    };
+  }
+
+  private onMessage = () => this.notify();
+  private onStorage = (e: StorageEvent) => {
+    if (e.key === STORE_KEY) this.notify();
+  };
+  private attach(): void {
+    // BroadcastChannel ne se notifie jamais lui-même : pas de boucle de retour.
+    if (this.channel) this.channel.addEventListener('message', this.onMessage);
+    else if (typeof window !== 'undefined') window.addEventListener('storage', this.onStorage);
+  }
+  private detach(): void {
+    if (this.channel) this.channel.removeEventListener('message', this.onMessage);
+    else if (typeof window !== 'undefined') window.removeEventListener('storage', this.onStorage);
+  }
+  private notify(): void {
+    this.listeners.forEach((l) => l());
   }
 }
 
@@ -180,7 +250,7 @@ function createDataSource(): DataSource {
   const url = import.meta.env.VITE_SUPABASE_URL;
   const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
   if (url && key) return new SupabaseDataSource(url, key);
-  return new LocalDataSource();
+  return new LocalStorageDataSource();
 }
 
 export const dataSource: DataSource = createDataSource();
