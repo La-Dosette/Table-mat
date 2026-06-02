@@ -1021,6 +1021,51 @@ b {
   width: 62px;
   flex: none;
 }
+
+/* Combobox marque : champ + liste de suggestions stylée. */
+.combo {
+  position: relative;
+}
+.slot-edit .combo.grow {
+  flex: 1;
+  min-width: 0;
+}
+.combo input {
+  width: 100%;
+}
+.combo-list {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+.combo-opt {
+  padding: 7px 10px;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--ink);
+  cursor: pointer;
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.combo-opt:last-child {
+  border-bottom: none;
+}
+.combo-opt.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+.combo-opt.chosen {
+  font-weight: 600;
+}
 .icon-btn {
   background: var(--paper);
   border: 1px solid var(--hairline);
