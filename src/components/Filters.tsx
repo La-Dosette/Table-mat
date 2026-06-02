@@ -1,4 +1,4 @@
-import type { MachineSystem } from '../types';
+import type { MachineSystem, MaterialFamily } from '../types';
 
 export type MaterialCount = 'all' | '2' | '3' | '4+';
 export type SortKey = 'score' | 'recent' | 'votes' | 'materials';
@@ -9,7 +9,19 @@ export interface FilterState {
   count: MaterialCount;
   hideEmpty: boolean;
   sort: SortKey;
+  /** Familles de matériaux affichées dans la matrice ; vide = toutes. */
+  families: MaterialFamily[];
 }
+
+const FAMILIES: { id: MaterialFamily; label: string }[] = [
+  { id: 'standard', label: 'standard' },
+  { id: 'technique', label: 'technique' },
+  { id: 'flexible', label: 'flexible' },
+  { id: 'composite', label: 'composite' },
+  { id: 'haute-température', label: 'haute temp.' },
+  { id: 'spécial', label: 'spécial' },
+  { id: 'support', label: 'support' },
+];
 
 const SORTS: { id: SortKey; label: string }[] = [
   { id: 'score', label: 'Meilleur score' },
@@ -43,9 +55,17 @@ interface Props {
   showHideEmpty: boolean;
   /** Affiche le sélecteur de tri (vue recettes). */
   showSort: boolean;
+  /** Affiche les chips de famille de matériaux (vues matrice & récap). */
+  showFamilies: boolean;
 }
 
-export function Filters({ value, onChange, showHideEmpty, showSort }: Props) {
+export function Filters({ value, onChange, showHideEmpty, showSort, showFamilies }: Props) {
+  function toggleFamily(id: MaterialFamily) {
+    const next = value.families.includes(id)
+      ? value.families.filter((f) => f !== id)
+      : [...value.families, id];
+    onChange({ ...value, families: next });
+  }
   return (
     <div className="filters">
       <label className="search">
@@ -81,6 +101,26 @@ export function Filters({ value, onChange, showHideEmpty, showSort }: Props) {
           </button>
         ))}
       </div>
+
+      {showFamilies && (
+        <div className="chips family-chips">
+          <button
+            className={`chip ${value.families.length === 0 ? 'active' : ''}`}
+            onClick={() => onChange({ ...value, families: [] })}
+          >
+            Toutes familles
+          </button>
+          {FAMILIES.map((f) => (
+            <button
+              key={f.id}
+              className={`chip ${value.families.includes(f.id) ? 'active' : ''}`}
+              onClick={() => toggleFamily(f.id)}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       {showHideEmpty && (
         <label className="toggle">

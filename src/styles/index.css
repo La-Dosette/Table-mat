@@ -261,7 +261,8 @@ b {
   accent-color: var(--ink);
 }
 
-.count-chips {
+.count-chips,
+.family-chips {
   border-left: 1px solid var(--hairline-soft);
   padding-left: 10px;
 }

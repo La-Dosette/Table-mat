@@ -48,7 +48,7 @@ export default function App() {
     };
   }, []);
   const [filters, setFilters] = useState<FilterState>({
-    query: '', system: 'all', count: 'all', hideEmpty: false, sort: 'score',
+    query: '', system: 'all', count: 'all', hideEmpty: false, sort: 'score', families: [],
   });
   const [selected, setSelected] = useState<{ a: string; b: string } | null>(null);
 
@@ -100,9 +100,18 @@ export default function App() {
 
   const pointsFor = (a: string, b: string) => byPair.get(pairKey(a, b)) ?? [];
 
+  // --- Matériaux restreints aux familles sélectionnées (vide = toutes) ---
+  const familyMaterials = useMemo(
+    () =>
+      filters.families.length
+        ? MATERIALS.filter((m) => filters.families.includes(m.family))
+        : MATERIALS,
+    [filters.families],
+  );
+
   // --- Récap par matériau : meilleur partenaire de chaque filament ---
   const materialDigest = useMemo<DigestEntry[]>(() => {
-    return MATERIALS.map((material) => {
+    return familyMaterials.map((material) => {
       let best: DigestEntry['best'] = null;
       for (const other of MATERIALS) {
         // On cherche le meilleur partenaire DIFFÉRENT : un matériau adhère
@@ -116,15 +125,15 @@ export default function App() {
       }
       return { material, best };
     });
-  }, [byPair]);
+  }, [byPair, familyMaterials]);
 
-  // --- Matériaux visibles (option « masquer les combinaisons vides ») ---
+  // --- Matériaux visibles (familles sélectionnées + option « masquer les vides ») ---
   const visibleMaterials = useMemo(() => {
-    if (!filters.hideEmpty) return MATERIALS;
+    if (!filters.hideEmpty) return familyMaterials;
     const used = new Set<string>();
     for (const r of filtered) for (const s of r.slots) used.add(s.material);
-    return MATERIALS.filter((m) => used.has(m.id));
-  }, [filters.hideEmpty, filtered]);
+    return familyMaterials.filter((m) => used.has(m.id));
+  }, [filters.hideEmpty, filtered, familyMaterials]);
 
   // --- Recettes triées pour la galerie (selon le critère choisi) ---
   const galleryRecipes = useMemo(() => {
@@ -293,6 +302,7 @@ export default function App() {
         onChange={setFilters}
         showHideEmpty={view === 'matrix'}
         showSort={view === 'recettes'}
+        showFamilies={view === 'matrix' || view === 'digest'}
       />
 
       {loading ? (
