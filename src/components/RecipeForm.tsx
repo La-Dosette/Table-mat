@@ -10,6 +10,18 @@ import { FILAMENT_BRANDS } from '../data/brands';
 import { CRITERIA, scoreColor } from '../lib/scoring';
 import { useEscapeKey } from '../lib/useEscapeKey';
 import { useI18n } from '../lib/i18n';
+import type { MachineSystem, MaterialFamily } from '../types';
+
+// Regroupements pour des menus déroulants lisibles (optgroup).
+const SYSTEM_ORDER: MachineSystem[] = ['AMS', 'MMU', 'Toolchanger', 'ERCF', 'IDEX', 'Dual', 'Palette'];
+const MACHINE_GROUPS = SYSTEM_ORDER
+  .map((sys) => ({ sys, items: MACHINES.filter((m) => m.system === sys) }))
+  .filter((g) => g.items.length > 0);
+
+const FAMILY_ORDER: MaterialFamily[] = ['standard', 'flexible', 'technique', 'composite', 'haute-température', 'spécial', 'support'];
+const MATERIAL_GROUPS = FAMILY_ORDER
+  .map((fam) => ({ fam, items: MATERIALS.filter((m) => m.family === fam) }))
+  .filter((g) => g.items.length > 0);
 
 interface Props {
   onSubmit: (recipe: Recipe) => void;
@@ -193,9 +205,13 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Pr
               </label>
               <label className="field">
                 <span>{t('form.machine')}</span>
-                <select value={machineId} onChange={(e) => setMachineId(e.target.value)}>
-                  {MACHINES.map((m) => (
-                    <option key={m.id} value={m.id}>{m.name} (max {m.maxMaterials})</option>
+                <select className="select" value={machineId} onChange={(e) => setMachineId(e.target.value)}>
+                  {MACHINE_GROUPS.map((g) => (
+                    <optgroup key={g.sys} label={t(`sys.${g.sys}`)}>
+                      {g.items.map((m) => (
+                        <option key={m.id} value={m.id}>{m.name} (max {m.maxMaterials})</option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
               </label>
@@ -213,9 +229,13 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Pr
             return (
               <div className="slot-edit" key={i}>
                 <span className="mat-dot" style={{ background: m?.accent ?? '#334' }} />
-                <select value={s.material} onChange={(e) => updateSlot(i, { material: e.target.value })}>
+                <select className="select" value={s.material} onChange={(e) => updateSlot(i, { material: e.target.value })}>
                   <option value="">{t('form.matNone')}</option>
-                  {MATERIALS.map((mm) => <option key={mm.id} value={mm.id}>{mm.name}</option>)}
+                  {MATERIAL_GROUPS.map((g) => (
+                    <optgroup key={g.fam} label={t(`fam.${g.fam}`)}>
+                      {g.items.map((mm) => <option key={mm.id} value={mm.id}>{mm.name}</option>)}
+                    </optgroup>
+                  ))}
                 </select>
                 <input className="grow" list="filament-brands" value={s.brand} onChange={(e) => updateSlot(i, { brand: e.target.value })} placeholder={t('form.brandPh')} />
                 <input className="mini" value={s.label} onChange={(e) => updateSlot(i, { label: e.target.value })} placeholder={t('form.rolePh')} />

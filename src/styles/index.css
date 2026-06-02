@@ -970,6 +970,39 @@ b {
   resize: vertical;
 }
 
+/* Menus déroulants : flèche personnalisée pour un rendu net et cohérent. */
+.field select,
+.slot-edit select,
+.sort-select select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%235a5853' stroke-width='1.4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+:root[data-theme='dark'] .field select,
+:root[data-theme='dark'] .slot-edit select,
+:root[data-theme='dark'] .sort-select select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23b6b1a4' stroke-width='1.4'/%3E%3C/svg%3E");
+}
+/* Les libellés de groupe (optgroup) restent lisibles dans les deux thèmes. */
+.field select optgroup,
+.slot-edit select optgroup {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper);
+}
+.field select option,
+.slot-edit select option {
+  color: var(--ink);
+  background: var(--paper);
+}
+
 .slot-edit {
   display: flex;
   align-items: center;
@@ -977,7 +1010,7 @@ b {
   margin-bottom: 7px;
 }
 .slot-edit select {
-  width: 92px;
+  width: 108px;
   flex: none;
 }
 .slot-edit input.grow {
