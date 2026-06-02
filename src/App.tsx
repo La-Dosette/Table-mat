@@ -13,6 +13,7 @@ import { ExportDrawer } from './components/ExportDrawer';
 import { ImportDialog } from './components/ImportDialog';
 import { ComparatorPanel } from './components/ComparatorPanel';
 import { recipesToJson } from './lib/exportSettings';
+import { useLocalStorage } from './lib/settings';
 
 type View = 'matrix' | 'recettes' | 'digest';
 
@@ -34,6 +35,12 @@ export default function App() {
   const [exportRecipe, setExportRecipe] = useState<Recipe | null>(null);
   const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
   const [showComparator, setShowComparator] = useState(false);
+
+  // Thème clair / sombre, mémorisé dans le navigateur.
+  const [theme, setTheme] = useLocalStorage<'light' | 'dark'>('tm.theme', 'light');
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
   // Chargement initial des recettes depuis la source de données.
   useEffect(() => {
@@ -267,6 +274,14 @@ export default function App() {
         <span className="pill-stat"><b>{recipes.length}</b> recettes</span>
         <span className="pill-stat"><b>{multiCount}</b> à 3+ matériaux</span>
         <span className="pill-stat"><b>{totalVotes}</b> votes</span>
+        <button
+          className="theme-toggle"
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          aria-label={theme === 'dark' ? 'Passer en thème clair' : 'Passer en thème sombre'}
+          title={theme === 'dark' ? 'Thème clair' : 'Thème sombre'}
+        >
+          {theme === 'dark' ? '☀' : '☾'}
+        </button>
       </header>
 
       <div className="toolbar">

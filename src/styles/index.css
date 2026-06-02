@@ -34,6 +34,22 @@
   font-family: var(--font-mono);
 }
 
+/* ---------- Thème sombre (mode nuit) ---------- */
+:root[data-theme='dark'] {
+  --paper: #15130f;
+  --paper-2: #1d1a15;
+  --paper-3: #26221b;
+  --ink: #ece8df;
+  --ink-soft: #b6b1a4;
+  --ink-faint: #7b766a;
+  --hairline: #ece8df;
+  --hairline-soft: #3a352c;
+  /* Heatmap légèrement éclairci pour rester lisible sur fond sombre */
+  --good: #34d36a;
+  --warn: #e6c34a;
+  --bad: #ef6b6b;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -55,6 +71,10 @@ body {
   /* Trame d'archive très discrète : fines lignes de fond. */
   background-image:
     repeating-linear-gradient(90deg, transparent 0 119px, rgba(26, 26, 26, 0.025) 119px 120px);
+}
+:root[data-theme='dark'] body {
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 119px, rgba(236, 232, 223, 0.03) 119px 120px);
 }
 
 a {
@@ -180,6 +200,24 @@ b {
   color: var(--ink);
   font-size: 15px;
   margin-right: 5px;
+}
+
+/* Bascule thème clair / sombre */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--hairline);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: background 0.16s var(--ease), color 0.16s var(--ease);
+}
+.theme-toggle:hover {
+  background: var(--ink);
+  color: var(--paper);
 }
 
 /* Label / titre de section : mono, capitales espacées. */

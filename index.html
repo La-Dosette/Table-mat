@@ -12,6 +12,13 @@
       rel="stylesheet"
     />
     <title>TM</title>
+    <script>
+      // Applique le thème mémorisé avant le rendu (anti-flash).
+      try {
+        var t = JSON.parse(localStorage.getItem('tm.theme'));
+        if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
