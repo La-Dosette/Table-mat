@@ -742,32 +742,6 @@ b {
   text-transform: lowercase;
 }
 
-.footer {
-  margin-top: 44px;
-  padding-top: 16px;
-  border-top: 1px solid var(--hairline);
-  text-align: left;
-  color: var(--ink-faint);
-  font-size: 11px;
-  line-height: 1.7;
-  text-transform: lowercase;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-/* Code de référence géant en pied de page (logique de spécimen). */
-.footer::after {
-  content: 'TM-09';
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 9vw, 6rem);
-  line-height: 0.8;
-  color: var(--ink);
-  letter-spacing: -0.02em;
-  text-transform: none;
-}
-
 .empty-state {
   text-align: center;
   color: var(--ink-faint);
@@ -1287,35 +1261,7 @@ b {
   margin: 0 2px;
 }
 
-/* ---------- Plaque de matrice (caption type planche) ---------- */
-.matrix-caption {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  margin: -4px 0 14px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--hairline);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  text-transform: lowercase;
-  letter-spacing: 0.02em;
-  color: var(--ink-soft);
-}
-.matrix-caption .fig {
-  font-family: var(--font-display);
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0;
-  color: var(--ink);
-}
-.matrix-caption .matrix-ref {
-  margin-left: auto;
-  color: var(--ink-faint);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-/* ---------- Étiquette de labo : numéro d'inventaire sur recette ---------- */
+/* ---------- Numéro d'inventaire sur recette ---------- */
 .card-meta-top {
   display: flex;
   align-items: center;
@@ -1410,37 +1356,6 @@ b {
 .row-head .axis-idx {
   display: inline;
   margin: 0 0 0 6px;
-}
-
-/* ---------- Cartouche (bloc-titre type plan technique) ---------- */
-.matrix-cartouche {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  margin: 14px 0 2px;
-  border: 1px solid var(--hairline);
-  font-family: var(--font-mono);
-  font-size: 11px;
-}
-.matrix-cartouche > span {
-  flex: 1;
-  min-width: 92px;
-  padding: 7px 12px;
-  border-left: 1px solid var(--hairline);
-  color: var(--ink);
-  white-space: nowrap;
-}
-.matrix-cartouche > span:first-child {
-  border-left: 0;
-}
-.matrix-cartouche i {
-  display: block;
-  font-style: normal;
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink-faint);
-  margin-bottom: 2px;
 }
 
 /* ---------- Actions de carte (éditer / supprimer) ---------- */
@@ -1691,9 +1606,6 @@ b {
   .iface-edit input[type='range'],
   .rating-edit input[type='range'] {
     max-width: none;
-  }
-  .footer::after {
-    font-size: 3.4rem;
   }
 }
 

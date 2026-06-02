@@ -8,8 +8,6 @@ interface Props {
   pointsFor: (a: string, b: string) => InterfacePoint[];
   selected: { a: string; b: string } | null;
   onSelect: (a: string, b: string) => void;
-  /** Nombre de recettes prises en compte (affiché dans le cartouche). */
-  recipeCount?: number;
 }
 
 /** Indice d'inventaire d'un axe, ex. 0 -> "01". */
@@ -25,18 +23,12 @@ interface HoverState {
   points: InterfacePoint[];
 }
 
-export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect, recipeCount }: Props) {
+export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }: Props) {
   const [hover, setHover] = useState<HoverState | null>(null);
-  const today = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
   return (
     <>
       <div className="matrix-wrap">
-        <div className="matrix-caption">
-          <span className="fig">FIG. 01</span>
-          <span>réf. interne · barème 0–100</span>
-          <span className="matrix-ref">TM·MAT</span>
-        </div>
         <table className="matrix">
           <thead>
             <tr>
@@ -129,16 +121,8 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect, 
         <div className="legend-bar" />
         <span>100</span>
         <span className="diag-key">
-          <i /> diagonale = même axe
+          <i /> diagonale = même matériau
         </span>
-      </div>
-
-      <div className="matrix-cartouche">
-        <span><i>réf.</i> TM·MAT-01</span>
-        <span><i>date</i> {today}</span>
-        <span><i>échelle</i> 1:1</span>
-        <span><i>axes</i> {materials.length}</span>
-        <span><i>entrées</i> {recipeCount ?? '—'}</span>
       </div>
 
       {hover && <MatrixTooltip hover={hover} />}

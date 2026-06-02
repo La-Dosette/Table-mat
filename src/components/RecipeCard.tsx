@@ -73,14 +73,11 @@ export function RecipeCard({
                 />
               </label>
             )}
-            {inventoryNo != null ? (
+            {inventoryNo != null && (
               <span className="inv-no">{inventoryCode(inventoryNo)}</span>
-            ) : (
-              <span className="fiche-label">fiche d’essai</span>
             )}
           </span>
           <span className="card-actions">
-            {inventoryNo != null && <span className="fiche-label">fiche d’essai</span>}
             {onDuplicate && (
               <button className="icon-btn mini-action" title="Dupliquer" onClick={() => onDuplicate(recipe)}>
                 ⧉

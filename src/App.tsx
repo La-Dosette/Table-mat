@@ -261,10 +261,7 @@ export default function App() {
       <header className="topbar">
         <div className="brand">
           <span className="brand-mark" aria-hidden="true">TM</span>
-          <div>
-            <h1>TM</h1>
-            <p className="tag">réf. TM-09 · espace privé</p>
-          </div>
+          <h1>TM</h1>
         </div>
         <div className="spacer" />
         <span className="pill-stat"><b>{recipes.length}</b> recettes</span>
@@ -328,7 +325,6 @@ export default function App() {
             pointsFor={pointsFor}
             selected={selected}
             onSelect={(a, b) => setSelected({ a, b })}
-            recipeCount={filtered.length}
           />
         )
       ) : view === 'recettes' ? (
@@ -350,8 +346,6 @@ export default function App() {
           onSelect={(a, b) => setSelected({ a, b })}
         />
       )}
-
-      <footer className="footer">réf. TM-09 · usage privé</footer>
 
       {selected && selectedMatA && selectedMatB && (
         <CellDetailDrawer
