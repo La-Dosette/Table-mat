@@ -14,6 +14,7 @@ import { ImportDialog } from './components/ImportDialog';
 import { ComparatorPanel } from './components/ComparatorPanel';
 import { recipesToJson } from './lib/exportSettings';
 import { useLocalStorage } from './lib/settings';
+import { useI18n } from './lib/i18n';
 
 type View = 'matrix' | 'recettes' | 'digest';
 
@@ -23,6 +24,7 @@ function pairKey(a: string, b: string): string {
 }
 
 export default function App() {
+  const { t, lang, setLang } = useI18n();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -271,14 +273,18 @@ export default function App() {
           <h1>TM</h1>
         </div>
         <div className="spacer" />
-        <span className="pill-stat"><b>{recipes.length}</b> recettes</span>
-        <span className="pill-stat"><b>{multiCount}</b> à 3+ matériaux</span>
-        <span className="pill-stat"><b>{totalVotes}</b> votes</span>
+        <span className="pill-stat"><b>{recipes.length}</b> {t('stat.recipes')}</span>
+        <span className="pill-stat"><b>{multiCount}</b> {t('stat.multi')}</span>
+        <span className="pill-stat"><b>{totalVotes}</b> {t('stat.votes')}</span>
+        <div className="lang-toggle" role="group" aria-label={t('lang.label')}>
+          <button className={lang === 'fr' ? 'active' : ''} onClick={() => setLang('fr')}>FR</button>
+          <button className={lang === 'en' ? 'active' : ''} onClick={() => setLang('en')}>EN</button>
+        </div>
         <button
           className="theme-toggle"
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          aria-label={theme === 'dark' ? 'Passer en thème clair' : 'Passer en thème sombre'}
-          title={theme === 'dark' ? 'Thème clair' : 'Thème sombre'}
+          aria-label={theme === 'dark' ? t('theme.toLight') : t('theme.toDark')}
+          title={theme === 'dark' ? t('theme.toLight') : t('theme.toDark')}
         >
           {theme === 'dark' ? '☀' : '☾'}
         </button>
@@ -287,24 +293,24 @@ export default function App() {
       <div className="toolbar">
         <div className="view-toggle">
           <button className={view === 'matrix' ? 'active' : ''} onClick={() => setView('matrix')}>
-            🧩 Matrice
+            {t('view.matrix')}
           </button>
           <button className={view === 'recettes' ? 'active' : ''} onClick={() => setView('recettes')}>
-            📋 Recettes
+            {t('view.recettes')}
           </button>
           <button className={view === 'digest' ? 'active' : ''} onClick={() => setView('digest')}>
-            🏅 Récap
+            {t('view.digest')}
           </button>
         </div>
         <div className="toolbar-actions">
           <button className="btn-secondary" onClick={exportAll} disabled={recipes.length === 0}>
-            ⤓ Tout exporter
+            {t('action.exportAll')}
           </button>
           <button className="btn-secondary" onClick={() => setShowImport(true)}>
-            ⇪ Importer
+            {t('action.import')}
           </button>
           <button className="btn-primary add-recipe" onClick={() => setShowForm(true)}>
-            ➕ Ajouter une recette
+            {t('action.add')}
           </button>
         </div>
       </div>
@@ -319,20 +325,16 @@ export default function App() {
 
       {loading ? (
         <div className="matrix-wrap">
-          <div className="empty-state">Chargement des recettes…</div>
+          <div className="empty-state">{t('state.loading')}</div>
         </div>
       ) : loadError ? (
         <div className="matrix-wrap">
-          <div className="empty-state">
-            Impossible de charger les recettes&nbsp;: {loadError}
-          </div>
+          <div className="empty-state">{t('state.loadError', { e: loadError })}</div>
         </div>
       ) : view === 'matrix' ? (
         visibleMaterials.length === 0 ? (
           <div className="matrix-wrap">
-            <div className="empty-state">
-              Aucune recette ne correspond à ces filtres. Essayez d’élargir la recherche.
-            </div>
+            <div className="empty-state">{t('state.emptyMatrix')}</div>
           </div>
         ) : (
           <CompatibilityMatrix
@@ -380,16 +382,16 @@ export default function App() {
 
       {view === 'recettes' && compareIds.size > 0 && (
         <div className="compare-bar">
-          <span><b>{compareIds.size}</b> sélectionnée{compareIds.size > 1 ? 's' : ''} (max 4)</span>
+          <span>{t('cmp.bar', { n: compareIds.size })}</span>
           <button
             className="btn-primary"
             disabled={compareIds.size < 2}
             onClick={() => setShowComparator(true)}
           >
-            ⇋ Comparer
+            {t('cmp.compare')}
           </button>
           <button className="btn-secondary" onClick={() => setCompareIds(new Set())}>
-            Effacer
+            {t('cmp.clear')}
           </button>
         </div>
       )}

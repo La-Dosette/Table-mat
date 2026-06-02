@@ -1,5 +1,6 @@
 import type { Material } from '../types';
-import { scoreColor, scoreLabel } from '../lib/scoring';
+import { scoreColor, scoreLabelKey } from '../lib/scoring';
+import { useI18n } from '../lib/i18n';
 
 /** Meilleur partenaire (matériau différent) trouvé pour un matériau donné. */
 export interface BestPartner {
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export function MaterialDigest({ entries, onSelect }: Props) {
+  const { t } = useI18n();
   return (
     <div className="digest">
       {entries.map(({ material, best }) => (
@@ -35,9 +37,9 @@ export function MaterialDigest({ entries, onSelect }: Props) {
               type="button"
               className="digest-best"
               onClick={() => onSelect(material.id, best.partner.id)}
-              aria-label={`Meilleur partenaire de ${material.name} : ${best.partner.name}, score ${best.score}. Voir le détail.`}
+              aria-label={t('digest.bestAria', { m: material.name, p: best.partner.name, s: best.score })}
             >
-              <span className="digest-label">Meilleur partenaire</span>
+              <span className="digest-label">{t('digest.bestPartner')}</span>
               <span className="digest-partner">
                 <span className="mat-dot" style={{ background: best.partner.accent }} />
                 {best.partner.name}
@@ -47,13 +49,12 @@ export function MaterialDigest({ entries, onSelect }: Props) {
                   {best.score}
                 </span>
                 <span className="digest-sub">
-                  {scoreLabel(best.score)} · {best.recipeCount} recette
-                  {best.recipeCount > 1 ? 's' : ''}
+                  {t('digest.sub', { label: t(scoreLabelKey(best.score)), n: best.recipeCount })}
                 </span>
               </span>
             </button>
           ) : (
-            <div className="digest-empty">Aucun essai référencé</div>
+            <div className="digest-empty">{t('digest.none')}</div>
           )}
         </div>
       ))}

@@ -1,6 +1,7 @@
 import type { Material, Recipe, UserVote } from '../types';
-import { aggregateCell, scoreColor, scoreLabel, type InterfacePoint } from '../lib/scoring';
+import { aggregateCell, scoreColor, scoreLabelKey, type InterfacePoint } from '../lib/scoring';
 import { useEscapeKey } from '../lib/useEscapeKey';
+import { useI18n } from '../lib/i18n';
 import { RecipeCard } from './RecipeCard';
 
 interface Props {
@@ -21,6 +22,7 @@ export function CellDetailDrawer({
   matA, matB, points, userVotes, onVote, onClose, inventoryNos, onExport, onEdit, onDelete, onDuplicate,
 }: Props) {
   useEscapeKey(onClose);
+  const { t } = useI18n();
   const agg = aggregateCell(points);
   // Une recette peut apparaître une fois par interface ; on déduplique sur la
   // recette tout en gardant le score de liaison de CETTE paire pour le tri.
@@ -29,7 +31,7 @@ export function CellDetailDrawer({
   return (
     <>
       <div className="drawer-backdrop" onClick={onClose} />
-      <aside className="drawer" role="dialog" aria-label={`Interface ${matA.name} ↔ ${matB.name}`}>
+      <aside className="drawer" role="dialog" aria-label={t('drawer.ifaceAria', { a: matA.name, b: matB.name })}>
         <div className="drawer-head">
           <div className="score-ring" style={{ background: scoreColor(agg.score), width: 56, height: 56 }}>
             {agg.score}
@@ -43,17 +45,15 @@ export function CellDetailDrawer({
               {matB.name}
             </h3>
             <p className="sub">
-              {scoreLabel(agg.score)} · {agg.recipeCount} recette
-              {agg.recipeCount > 1 ? 's' : ''} · {agg.confidence} corroborations
+              {t('drawer.sub', {
+                label: t(scoreLabelKey(agg.score)), n: agg.recipeCount, conf: agg.confidence,
+              })}
             </p>
           </div>
-          <button className="close-btn" onClick={onClose} aria-label="Fermer">✕</button>
+          <button className="close-btn" onClick={onClose} aria-label={t('common.close')}>✕</button>
         </div>
         <div className="drawer-body">
-          <p className="drawer-intro">
-            Recettes où cette interface apparaît. L’interface concernée est{' '}
-            <b>surlignée</b> dans chaque recette.
-          </p>
+          <p className="drawer-intro">{t('drawer.intro')}</p>
           {sorted.map((p) => (
             <RecipeCard
               key={p.recipe.id + p.iface.a + p.iface.b}

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Recipe } from '../types';
 import { parseRecipesJson } from '../lib/exportSettings';
 import { useEscapeKey } from '../lib/useEscapeKey';
+import { useI18n } from '../lib/i18n';
 
 interface Props {
   onImport: (recipes: Recipe[]) => void;
@@ -10,6 +11,7 @@ interface Props {
 
 export function ImportDialog({ onImport, onClose }: Props) {
   useEscapeKey(onClose);
+  const { t } = useI18n();
   const [text, setText] = useState('');
   const [error, setError] = useState('');
 
@@ -25,16 +27,16 @@ export function ImportDialog({ onImport, onClose }: Props) {
   return (
     <>
       <div className="drawer-backdrop" onClick={onClose} />
-      <aside className="drawer export-drawer" role="dialog" aria-label="Importer une recette">
+      <aside className="drawer export-drawer" role="dialog" aria-label={t('import.title')}>
         <div className="drawer-head">
           <div style={{ flex: 1 }}>
-            <h3>⇪ Importer une recette</h3>
-            <p className="sub">Colle un JSON exporté depuis TM (une recette ou une collection).</p>
+            <h3>{t('import.title')}</h3>
+            <p className="sub">{t('import.sub')}</p>
           </div>
-          <button className="close-btn" onClick={onClose} aria-label="Fermer">✕</button>
+          <button className="close-btn" onClick={onClose} aria-label={t('common.close')}>✕</button>
         </div>
         <div className="drawer-body">
-          <div className="section-title">JSON de la recette</div>
+          <div className="section-title">{t('import.field')}</div>
           <textarea
             className="import-area"
             value={text}
@@ -45,9 +47,9 @@ export function ImportDialog({ onImport, onClose }: Props) {
           />
           {error && <p className="form-error">{error}</p>}
           <div className="export-actions">
-            <button className="btn-secondary" onClick={onClose}>Annuler</button>
+            <button className="btn-secondary" onClick={onClose}>{t('common.cancel')}</button>
             <button className="btn-primary" onClick={handleImport} disabled={!text.trim()}>
-              ⇪ Importer
+              {t('import.do')}
             </button>
           </div>
         </div>

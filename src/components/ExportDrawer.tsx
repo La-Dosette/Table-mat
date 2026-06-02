@@ -9,6 +9,7 @@ import {
   type ExportFormat,
 } from '../lib/exportSettings';
 import { useEscapeKey } from '../lib/useEscapeKey';
+import { useI18n } from '../lib/i18n';
 
 interface Props {
   recipe: Recipe;
@@ -16,14 +17,11 @@ interface Props {
   onClose: () => void;
 }
 
-const FORMATS: { id: ExportFormat; label: string }[] = [
-  { id: 'fiche', label: 'Fiche' },
-  { id: 'checklist', label: 'Checklist' },
-  { id: 'json', label: 'JSON' },
-];
+const FORMATS: ExportFormat[] = ['fiche', 'checklist', 'json'];
 
 export function ExportDrawer({ recipe, inventoryNo, onClose }: Props) {
   useEscapeKey(onClose);
+  const { t } = useI18n();
   const [slicerId, setSlicerId] = useState(SLICERS[0].id);
   const [format, setFormat] = useState<ExportFormat>('fiche');
   const [copied, setCopied] = useState(false);
@@ -63,34 +61,34 @@ export function ExportDrawer({ recipe, inventoryNo, onClose }: Props) {
   return (
     <>
       <div className="drawer-backdrop" onClick={onClose} />
-      <aside className="drawer export-drawer" role="dialog" aria-label="Export des réglages">
+      <aside className="drawer export-drawer" role="dialog" aria-label={t('export.title')}>
         <div className="drawer-head">
           <div style={{ flex: 1 }}>
-            <h3>⤓ Export des réglages</h3>
+            <h3>{t('export.title')}</h3>
             <p className="sub">
               {inventoryNo ? `${inventoryCode(inventoryNo)} · ` : ''}
               {recipe.title}
             </p>
           </div>
-          <button className="close-btn" onClick={onClose} aria-label="Fermer">✕</button>
+          <button className="close-btn" onClick={onClose} aria-label={t('common.close')}>✕</button>
         </div>
 
         <div className="drawer-body">
-          <div className="section-title">Format</div>
+          <div className="section-title">{t('export.format')}</div>
           <div className="chips">
             {FORMATS.map((f) => (
               <button
-                key={f.id}
-                className={`chip ${f.id === format ? 'active' : ''}`}
-                onClick={() => setFormat(f.id)}
+                key={f}
+                className={`chip ${f === format ? 'active' : ''}`}
+                onClick={() => setFormat(f)}
               >
-                {f.label}
+                {t(`fmt.${f}`)}
               </button>
             ))}
           </div>
 
           <div className="section-title" style={{ marginTop: 16 }}>
-            Slicer cible {slicerDisabled && <span className="hint-inline">— non requis pour le JSON</span>}
+            {t('export.slicer')} {slicerDisabled && <span className="hint-inline">{t('export.slicerNa')}</span>}
           </div>
           <div className="chips" style={{ opacity: slicerDisabled ? 0.4 : 1 }}>
             {SLICERS.map((s) => (
@@ -106,15 +104,15 @@ export function ExportDrawer({ recipe, inventoryNo, onClose }: Props) {
           </div>
 
           <div className="section-title" style={{ marginTop: 18 }}>
-            {format === 'json' ? 'Données JSON (ré-importable)' : 'Résumé des paramètres à appliquer'}
+            {format === 'json' ? t('export.json') : t('export.summary')}
           </div>
           <pre className="export-pre">{text}</pre>
 
           <div className="export-actions">
             <button className="btn-secondary" onClick={download}>
-              ⤓ Télécharger .{format === 'json' ? 'json' : 'txt'}
+              {t('export.download')} .{format === 'json' ? 'json' : 'txt'}
             </button>
-            <button className="btn-primary" onClick={copy}>{copied ? '✓ Copié' : '⧉ Copier'}</button>
+            <button className="btn-primary" onClick={copy}>{copied ? t('export.copied') : t('export.copy')}</button>
           </div>
         </div>
       </aside>

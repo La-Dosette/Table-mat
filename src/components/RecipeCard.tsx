@@ -9,6 +9,7 @@ import {
   scoreColor,
 } from '../lib/scoring';
 import { inventoryCode } from '../lib/exportSettings';
+import { useI18n } from '../lib/i18n';
 
 interface Props {
   recipe: Recipe;
@@ -36,14 +37,14 @@ interface Props {
 
 const GLOBAL_CRITERIA = CRITERIA.filter((c) => !c.perInterface);
 
-const PARAM_FIELDS: { label: string; get: (r: Recipe) => string | null }[] = [
-  { label: 'Plateau', get: (r) => `${r.params.bedTemp}°C` },
-  { label: 'Caisson', get: (r) => (r.params.chamberTemp ? `${r.params.chamberTemp}°C` : null) },
-  { label: 'Couche', get: (r) => `${r.params.layerHeight} mm` },
-  { label: 'Vitesse', get: (r) => `${r.params.printSpeed} mm/s` },
-  { label: 'Buse Ø', get: (r) => `${r.params.nozzleDiameter} mm` },
-  { label: 'Purge', get: (r) => (r.params.purgeVolume ? `${r.params.purgeVolume} mm³` : null) },
-  { label: 'Interface', get: (r) => (r.params.interfaceLayers ? `${r.params.interfaceLayers} c.` : null) },
+const PARAM_FIELDS: { key: string; get: (r: Recipe) => string | null }[] = [
+  { key: 'p.bed', get: (r) => `${r.params.bedTemp}°C` },
+  { key: 'p.chamber', get: (r) => (r.params.chamberTemp ? `${r.params.chamberTemp}°C` : null) },
+  { key: 'p.layer', get: (r) => `${r.params.layerHeight} mm` },
+  { key: 'p.speed', get: (r) => `${r.params.printSpeed} mm/s` },
+  { key: 'p.nozzle', get: (r) => `${r.params.nozzleDiameter} mm` },
+  { key: 'p.purge', get: (r) => (r.params.purgeVolume ? `${r.params.purgeVolume} mm³` : null) },
+  { key: 'p.iface', get: (r) => (r.params.interfaceLayers ? `${r.params.interfaceLayers} c.` : null) },
 ];
 
 function samePair(a1: string, b1: string, a2: string, b2: string) {
@@ -54,6 +55,7 @@ export function RecipeCard({
   recipe, userVote, onVote, highlightPair, inventoryNo, onExport, onEdit, onDelete,
   onDuplicate, selectable, selected, onToggleCompare,
 }: Props) {
+  const { t } = useI18n();
   const machine = getMachine(recipe.machineId);
   const score = recipeScore(recipe);
   const base = baseScore(recipeCriteria(recipe));
@@ -65,7 +67,7 @@ export function RecipeCard({
         <div className="card-meta-top">
           <span className="meta-left">
             {selectable && (
-              <label className="compare-check" title="Comparer cette recette">
+              <label className="compare-check" title={t('card.compareThis')}>
                 <input
                   type="checkbox"
                   checked={!!selected}
@@ -79,21 +81,21 @@ export function RecipeCard({
           </span>
           <span className="card-actions">
             {onDuplicate && (
-              <button className="icon-btn mini-action" title="Dupliquer" onClick={() => onDuplicate(recipe)}>
+              <button className="icon-btn mini-action" title={t('card.duplicate')} onClick={() => onDuplicate(recipe)}>
                 ⧉
               </button>
             )}
             {onEdit && (
-              <button className="icon-btn mini-action" title="Éditer" onClick={() => onEdit(recipe)}>
+              <button className="icon-btn mini-action" title={t('card.edit')} onClick={() => onEdit(recipe)}>
                 ✎
               </button>
             )}
             {onDelete && (
               <button
                 className="icon-btn mini-action danger"
-                title="Supprimer"
+                title={t('card.delete')}
                 onClick={() => {
-                  if (window.confirm(`Supprimer définitivement « ${recipe.title} » ?`)) onDelete(recipe);
+                  if (window.confirm(t('card.confirmDelete', { title: recipe.title }))) onDelete(recipe);
                 }}
               >
                 🗑
@@ -128,7 +130,7 @@ export function RecipeCard({
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-end' }}>
-          <span className="n-badge">{recipe.slots.length} matériaux</span>
+          <span className="n-badge">{t('card.materials', { n: recipe.slots.length })}</span>
           <span className="machine-tag">{machine?.name ?? recipe.machineId}</span>
         </div>
       </div>
@@ -150,7 +152,7 @@ export function RecipeCard({
 
       {/* Interfaces (contacts entre matériaux) */}
       <div className="ifaces">
-        <div className="section-title">Interfaces</div>
+        <div className="section-title">{t('card.interfaces')}</div>
         {recipe.interfaces.map((iface, i) => {
           const ma = getMaterial(iface.a);
           const mb = getMaterial(iface.b);
@@ -179,8 +181,8 @@ export function RecipeCard({
         {GLOBAL_CRITERIA.map((c) => {
           const v = recipe.global[c.key as keyof typeof recipe.global];
           return (
-            <div className="crit" key={c.key} title={c.help}>
-              <span className="crit-label">{c.short}</span>
+            <div className="crit" key={c.key} title={t(`crit.${c.key}.help`)}>
+              <span className="crit-label">{t(`crit.${c.key}.short`)}</span>
               <span className="bar">
                 <i style={{ width: `${(v / 5) * 100}%`, background: scoreColor((v / 5) * 100) }} />
               </span>
@@ -196,7 +198,7 @@ export function RecipeCard({
           if (!val) return null;
           return (
             <div className="param" key={i}>
-              <div className="k">{f.label}</div>
+              <div className="k">{t(f.key)}</div>
               <div className="v">{val}</div>
             </div>
           );
@@ -210,24 +212,24 @@ export function RecipeCard({
           className={`vote-btn up ${userVote === 'up' ? 'active' : ''}`}
           onClick={() => onVote(recipe.id, 'up')}
         >
-          👍 Ça marche · {recipe.votesUp}
+          {t('card.voteUp', { n: recipe.votesUp })}
         </button>
         <button
           className={`vote-btn down ${userVote === 'down' ? 'active' : ''}`}
           onClick={() => onVote(recipe.id, 'down')}
         >
-          👎 Pas concluant · {recipe.votesDown}
+          {t('card.voteDown', { n: recipe.votesDown })}
         </button>
         {onExport && (
           <button
             className="vote-btn export"
             onClick={() => onExport(recipe)}
-            title="Exporter les réglages (résumé par slicer)"
+            title={t('card.export')}
           >
-            ⤓ Réglages
+            {t('card.export')}
           </button>
         )}
-        <span className="vote-hint">votez si vous avez reproduit cette recette</span>
+        <span className="vote-hint">{t('card.voteHint')}</span>
       </div>
     </div>
   );

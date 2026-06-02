@@ -1,6 +1,7 @@
 import { useState, type CSSProperties } from 'react';
 import type { Material } from '../types';
-import { aggregateCell, scoreColor, scoreLabel, type InterfacePoint } from '../lib/scoring';
+import { aggregateCell, scoreColor, scoreLabelKey, type InterfacePoint } from '../lib/scoring';
+import { useI18n } from '../lib/i18n';
 
 interface Props {
   materials: Material[];
@@ -24,6 +25,7 @@ interface HoverState {
 }
 
 export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }: Props) {
+  const { t } = useI18n();
   const [hover, setHover] = useState<HoverState | null>(null);
 
   return (
@@ -32,7 +34,7 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
         <table className="matrix">
           <thead>
             <tr>
-              <th className="corner">Mat. A ＼ Mat. B</th>
+              <th className="corner">{t('matrix.corner')}</th>
               {materials.map((m, i) => (
                 <th key={m.id}>
                   <span className="axis-idx">{axisIdx(i)}</span>
@@ -64,10 +66,10 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
                       (selected.a === colMat.id && selected.b === rowMat.id));
                   const empty = points.length === 0;
                   const label = empty
-                    ? `${rowMat.name} ↔ ${colMat.name} : aucun essai`
-                    : `${rowMat.name} ↔ ${colMat.name} : indice ${agg.score}, ${agg.recipeCount} recette${
-                        agg.recipeCount > 1 ? 's' : ''
-                      }`;
+                    ? t('matrix.cellNone', { a: rowMat.name, b: colMat.name })
+                    : t('matrix.cellScore', {
+                        a: rowMat.name, b: colMat.name, s: agg.score ?? 0, n: agg.recipeCount,
+                      });
                   return (
                     <td key={colMat.id}>
                       <button
@@ -100,9 +102,7 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
                         ) : (
                           <>
                             <span className="score">{agg.score}</span>
-                            <span className="count">
-                              {agg.recipeCount} recette{agg.recipeCount > 1 ? 's' : ''}
-                            </span>
+                            <span className="count">{t('cell.recipes', { n: agg.recipeCount })}</span>
                           </>
                         )}
                       </button>
@@ -116,12 +116,12 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
       </div>
 
       <div className="legend">
-        <span>Barème&nbsp;:</span>
+        <span>{t('matrix.scale')}</span>
         <span>0</span>
         <div className="legend-bar" />
         <span>100</span>
         <span className="diag-key">
-          <i /> diagonale = même matériau
+          <i /> {t('matrix.diag')}
         </span>
       </div>
 
@@ -131,6 +131,7 @@ export function CompatibilityMatrix({ materials, pointsFor, selected, onSelect }
 }
 
 function MatrixTooltip({ hover }: { hover: HoverState }) {
+  const { t } = useI18n();
   const agg = aggregateCell(hover.points);
   const left = Math.min(hover.x + 16, window.innerWidth - 266);
   const tTop = Math.min(hover.y + 16, window.innerHeight - 190);
@@ -144,20 +145,20 @@ function MatrixTooltip({ hover }: { hover: HoverState }) {
         {hover.b.name}
       </h4>
       <div className="tt-row">
-        <span>Indice de compatibilité</span>
+        <span>{t('tt.index')}</span>
         <span className="tt-score" style={{ color: scoreColor(agg.score) }}>
-          {agg.score} · {scoreLabel(agg.score)}
+          {agg.score} · {t(scoreLabelKey(agg.score))}
         </span>
       </div>
       <div className="tt-row">
-        <span>Recettes concernées</span>
+        <span>{t('tt.recipes')}</span>
         <span>{agg.recipeCount}</span>
       </div>
       <div className="tt-row">
-        <span>Interfaces notées</span>
+        <span>{t('tt.interfaces')}</span>
         <span>{hover.points.length}</span>
       </div>
-      <div className="tt-hint">Cliquez pour voir les recettes et leurs réglages →</div>
+      <div className="tt-hint">{t('tt.hint')}</div>
     </div>
   );
 }

@@ -198,12 +198,12 @@ export function scoreColor(score: number | null): string {
   return `hsl(${hue} 62% 42%)`;
 }
 
-/** Libellé qualitatif d'un score. */
-export function scoreLabel(score: number | null): string {
-  if (score === null) return 'Aucun essai';
-  if (score >= 80) return 'Excellent';
-  if (score >= 65) return 'Bon';
-  if (score >= 50) return 'Correct';
-  if (score >= 35) return 'Difficile';
-  return 'Déconseillé';
+/** Clé i18n du libellé qualitatif d'un score (à passer à t()). */
+export function scoreLabelKey(score: number | null): string {
+  if (score === null) return 'label.none';
+  if (score >= 80) return 'label.excellent';
+  if (score >= 65) return 'label.good';
+  if (score >= 50) return 'label.ok';
+  if (score >= 35) return 'label.hard';
+  return 'label.bad';
 }

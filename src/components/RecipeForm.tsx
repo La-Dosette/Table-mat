@@ -8,6 +8,7 @@ import type {
 import { MATERIALS, MACHINES, getMaterial } from '../data/materials';
 import { CRITERIA, scoreColor } from '../lib/scoring';
 import { useEscapeKey } from '../lib/useEscapeKey';
+import { useI18n } from '../lib/i18n';
 
 interface Props {
   onSubmit: (recipe: Recipe) => void;
@@ -50,6 +51,7 @@ function computeCandidatePairs(mats: string[]): [string, string][] {
 
 export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Props) {
   useEscapeKey(onClose);
+  const { t } = useI18n();
   // En édition on garde l'id/votes/date ; en duplication on repart à neuf.
   const isEdit = !!initial && !duplicate;
   const [title, setTitle] = useState(
@@ -121,10 +123,10 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Pr
   }
 
   function handleSubmit() {
-    if (!title.trim()) return setError('Donne un titre à ta recette.');
+    if (!title.trim()) return setError(t('form.errTitle'));
     const cleanSlots = slots.filter((s) => s.material);
-    if (cleanSlots.length < 2) return setError('Il faut au moins 2 matériaux.');
-    if (activePairs.length === 0) return setError('Il faut au moins une interface en contact.');
+    if (cleanSlots.length < 2) return setError(t('form.errMats'));
+    if (activePairs.length === 0) return setError(t('form.errIface'));
 
     const finalSlots: MaterialSlot[] = cleanSlots.map((s) => ({
       material: s.material,
@@ -165,35 +167,31 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Pr
   return (
     <>
       <div className="drawer-backdrop" onClick={onClose} />
-      <aside className="drawer form-drawer" role="dialog" aria-label="Ajouter une recette">
+      <aside className="drawer form-drawer" role="dialog" aria-label={t('action.add')}>
         <div className="drawer-head">
           <div style={{ flex: 1 }}>
-            <h3>{duplicate ? '⧉ Dupliquer' : isEdit ? '✎ Éditer la recette' : '➕ Nouvelle recette'}</h3>
+            <h3>{duplicate ? t('form.dupTitle') : isEdit ? t('form.editTitle') : t('form.newTitle')}</h3>
             <p className="sub">
-              {duplicate
-                ? 'Copie pré-remplie — ajuste puis crée la nouvelle entrée.'
-                : isEdit
-                  ? 'Modifie les réglages puis enregistre.'
-                  : 'Nouvelle entrée.'}
+              {duplicate ? t('form.dupSub') : isEdit ? t('form.editSub') : t('form.newSub')}
             </p>
           </div>
-          <button className="close-btn" onClick={onClose} aria-label="Fermer">✕</button>
+          <button className="close-btn" onClick={onClose} aria-label={t('common.close')}>✕</button>
         </div>
 
         <div className="drawer-body">
           {/* Infos générales */}
           <div className="form-group">
             <label className="field">
-              <span>Titre de la recette *</span>
-              <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="ex. Figurine multicolore + support" />
+              <span>{t('form.title')}</span>
+              <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t('form.titlePh')} />
             </label>
             <div className="field-row">
               <label className="field">
-                <span>Pseudo</span>
-                <input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="anonyme" />
+                <span>{t('form.author')}</span>
+                <input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder={t('form.authorPh')} />
               </label>
               <label className="field">
-                <span>Machine</span>
+                <span>{t('form.machine')}</span>
                 <select value={machineId} onChange={(e) => setMachineId(e.target.value)}>
                   {MACHINES.map((m) => (
                     <option key={m.id} value={m.id}>{m.name} (max {m.maxMaterials})</option>
@@ -204,31 +202,31 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Pr
           </div>
 
           {/* Matériaux (slots) */}
-          <div className="section-title">Matériaux ({slots.length})</div>
+          <div className="section-title">{t('form.materials', { n: slots.length })}</div>
           {slots.map((s, i) => {
             const m = getMaterial(s.material);
             return (
               <div className="slot-edit" key={i}>
                 <span className="mat-dot" style={{ background: m?.accent ?? '#334' }} />
                 <select value={s.material} onChange={(e) => updateSlot(i, { material: e.target.value })}>
-                  <option value="">— matière —</option>
+                  <option value="">{t('form.matNone')}</option>
                   {MATERIALS.map((mm) => <option key={mm.id} value={mm.id}>{mm.name}</option>)}
                 </select>
-                <input className="grow" value={s.brand} onChange={(e) => updateSlot(i, { brand: e.target.value })} placeholder="Marque / filament" />
-                <input className="mini" value={s.label} onChange={(e) => updateSlot(i, { label: e.target.value })} placeholder="rôle" />
+                <input className="grow" value={s.brand} onChange={(e) => updateSlot(i, { brand: e.target.value })} placeholder={t('form.brandPh')} />
+                <input className="mini" value={s.label} onChange={(e) => updateSlot(i, { label: e.target.value })} placeholder={t('form.rolePh')} />
                 <input className="mini" type="number" value={s.nozzleTemp} onChange={(e) => updateSlot(i, { nozzleTemp: e.target.value })} placeholder="°C" />
-                <button className="icon-btn" onClick={() => removeSlot(i)} disabled={slots.length <= 2} title="Retirer">✕</button>
+                <button className="icon-btn" onClick={() => removeSlot(i)} disabled={slots.length <= 2} title={t('card.delete')}>✕</button>
               </div>
             );
           })}
-          <button className="add-btn" onClick={addSlot}>+ Ajouter un matériau</button>
+          <button className="add-btn" onClick={addSlot}>{t('form.addMat')}</button>
 
           {/* Interfaces (contacts entre matériaux) */}
           <div className="section-title" style={{ marginTop: 18 }}>
-            Interfaces — note l’adhérence de chaque contact
+            {t('form.ifaces')}
           </div>
           {activePairs.length === 0 && (
-            <p className="hint">Choisis au moins deux matériaux pour générer les interfaces.</p>
+            <p className="hint">{t('form.ifacesHint')}</p>
           )}
           {candidatePairs.map(([a, b]) => {
             const key = pairKey(a, b);
@@ -246,7 +244,7 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Pr
                   {mb?.name}
                 </span>
                 {isExcluded ? (
-                  <span className="off-tag">ne se touchent pas</span>
+                  <span className="off-tag">{t('form.notTouching')}</span>
                 ) : (
                   <>
                     <input
@@ -275,15 +273,16 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Pr
           })}
 
           {/* Critères globaux */}
-          <div className="section-title" style={{ marginTop: 18 }}>Critères globaux</div>
+          <div className="section-title" style={{ marginTop: 18 }}>{t('form.global')}</div>
           {GLOBAL_CRITERIA.map((c) => {
             const val = global[c.key as keyof GlobalRatings];
+            const label = t(`crit.${c.key}.label`);
             return (
-              <div className="rating-edit" key={c.key} title={c.help}>
-                <span className="crit-label">{c.label}</span>
+              <div className="rating-edit" key={c.key} title={t(`crit.${c.key}.help`)}>
+                <span className="crit-label">{label}</span>
                 <input
                   type="range" min={0} max={5} step={1} value={val}
-                  aria-label={c.label}
+                  aria-label={label}
                   onChange={(e) => setGlobal((g) => ({ ...g, [c.key]: Number(e.target.value) }))}
                 />
                 <span className="val" style={{ color: scoreColor((val / 5) * 100) }}>{val}/5</span>
@@ -292,28 +291,28 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Pr
           })}
 
           {/* Réglages */}
-          <div className="section-title" style={{ marginTop: 18 }}>Réglages d’impression</div>
+          <div className="section-title" style={{ marginTop: 18 }}>{t('form.print')}</div>
           <div className="params-edit">
-            <ParamInput label="Plateau °C" v={params.bedTemp} on={(x) => setParams((p) => ({ ...p, bedTemp: x }))} />
-            <ParamInput label="Caisson °C" v={params.chamberTemp} on={(x) => setParams((p) => ({ ...p, chamberTemp: x }))} ph="—" />
-            <ParamInput label="Couche mm" v={params.layerHeight} on={(x) => setParams((p) => ({ ...p, layerHeight: x }))} />
-            <ParamInput label="Vitesse mm/s" v={params.printSpeed} on={(x) => setParams((p) => ({ ...p, printSpeed: x }))} />
-            <ParamInput label="Buse Ø mm" v={params.nozzleDiameter} on={(x) => setParams((p) => ({ ...p, nozzleDiameter: x }))} />
-            <ParamInput label="Purge mm³" v={params.purgeVolume} on={(x) => setParams((p) => ({ ...p, purgeVolume: x }))} ph="—" />
-            <ParamInput label="Interface (c.)" v={params.interfaceLayers} on={(x) => setParams((p) => ({ ...p, interfaceLayers: x }))} ph="—" />
+            <ParamInput label={t('form.pBed')} v={params.bedTemp} on={(x) => setParams((p) => ({ ...p, bedTemp: x }))} />
+            <ParamInput label={t('form.pChamber')} v={params.chamberTemp} on={(x) => setParams((p) => ({ ...p, chamberTemp: x }))} ph="—" />
+            <ParamInput label={t('form.pLayer')} v={params.layerHeight} on={(x) => setParams((p) => ({ ...p, layerHeight: x }))} />
+            <ParamInput label={t('form.pSpeed')} v={params.printSpeed} on={(x) => setParams((p) => ({ ...p, printSpeed: x }))} />
+            <ParamInput label={t('form.pNozzle')} v={params.nozzleDiameter} on={(x) => setParams((p) => ({ ...p, nozzleDiameter: x }))} />
+            <ParamInput label={t('form.pPurge')} v={params.purgeVolume} on={(x) => setParams((p) => ({ ...p, purgeVolume: x }))} ph="—" />
+            <ParamInput label={t('form.pIface')} v={params.interfaceLayers} on={(x) => setParams((p) => ({ ...p, interfaceLayers: x }))} ph="—" />
           </div>
 
           <label className="field" style={{ marginTop: 14 }}>
-            <span>Notes / retour d’expérience</span>
-            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} placeholder="Astuces, pièges, séchage, purge…" />
+            <span>{t('form.notes')}</span>
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} placeholder={t('form.notesPh')} />
           </label>
 
           {error && <p className="form-error">{error}</p>}
 
           <div className="form-actions">
-            <button className="btn-secondary" onClick={onClose}>Annuler</button>
+            <button className="btn-secondary" onClick={onClose}>{t('common.cancel')}</button>
             <button className="btn-primary" onClick={handleSubmit}>
-              {duplicate ? 'Créer la copie' : isEdit ? 'Enregistrer les modifications' : 'Publier la recette'}
+              {duplicate ? t('form.createCopy') : isEdit ? t('form.save') : t('form.publish')}
             </button>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import type { Recipe, UserVote } from '../types';
 import { RecipeCard } from './RecipeCard';
+import { useI18n } from '../lib/i18n';
 
 interface Props {
   recipes: Recipe[];
@@ -20,10 +21,11 @@ export function RecipeGallery({
   recipes, userVotes, onVote, inventoryNos, onExport, onEdit, onDelete, onDuplicate,
   compareIds, onToggleCompare,
 }: Props) {
+  const { t } = useI18n();
   if (recipes.length === 0) {
     return (
       <div className="matrix-wrap">
-        <div className="empty-state">Aucune recette ne correspond à ces filtres.</div>
+        <div className="empty-state">{t('state.emptyGallery')}</div>
       </div>
     );
   }

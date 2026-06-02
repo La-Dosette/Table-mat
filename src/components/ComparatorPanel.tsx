@@ -3,6 +3,7 @@ import { getMachine, getMaterial } from '../data/materials';
 import { recipeScore, avgAdhesion, scoreColor } from '../lib/scoring';
 import { inventoryCode } from '../lib/exportSettings';
 import { useEscapeKey } from '../lib/useEscapeKey';
+import { useI18n } from '../lib/i18n';
 
 interface Props {
   recipes: Recipe[];
@@ -11,7 +12,8 @@ interface Props {
 }
 
 interface Row {
-  label: string;
+  /** Clé i18n du libellé de ligne. */
+  labelKey: string;
   /** Valeur numérique pour comparer (ou null si non comparable). */
   num?: (r: Recipe) => number | null;
   /** Texte affiché. */
@@ -23,38 +25,39 @@ interface Row {
 }
 
 const ROWS: Row[] = [
-  { label: 'Indice de compatibilité', num: (r) => recipeScore(r), text: (r) => String(recipeScore(r)), best: true, scored: (r) => recipeScore(r) },
-  { label: 'Adhérence moy.', num: (r) => avgAdhesion(r), text: (r) => `${avgAdhesion(r).toFixed(1)}/5`, best: true },
-  { label: 'Qualité', num: (r) => r.global.printQuality, text: (r) => `${r.global.printQuality}/5`, best: true },
-  { label: 'Fiabilité', num: (r) => r.global.reliability, text: (r) => `${r.global.reliability}/5`, best: true },
-  { label: 'Tenue', num: (r) => r.global.warpResistance, text: (r) => `${r.global.warpResistance}/5`, best: true },
-  { label: 'Propreté', num: (r) => r.global.interfaceCleanliness, text: (r) => `${r.global.interfaceCleanliness}/5`, best: true },
-  { label: 'Séparabilité', num: (r) => r.global.separability, text: (r) => `${r.global.separability}/5`, best: true },
-  { label: 'Votes (net)', num: (r) => r.votesUp - r.votesDown, text: (r) => `${r.votesUp - r.votesDown >= 0 ? '+' : ''}${r.votesUp - r.votesDown}`, best: true },
-  { label: 'Matériaux', num: (r) => r.slots.length, text: (r) => String(r.slots.length) },
-  { label: 'Machine', text: (r) => getMachine(r.machineId)?.name ?? r.machineId },
-  { label: 'Plateau', text: (r) => `${r.params.bedTemp} °C` },
-  { label: 'Caisson', text: (r) => (r.params.chamberTemp ? `${r.params.chamberTemp} °C` : '—') },
-  { label: 'Couche', text: (r) => `${r.params.layerHeight} mm` },
-  { label: 'Vitesse', text: (r) => `${r.params.printSpeed} mm/s` },
-  { label: 'Buse', text: (r) => `${r.params.nozzleDiameter} mm` },
-  { label: 'Purge', text: (r) => (r.params.purgeVolume ? `${r.params.purgeVolume} mm³` : '—') },
-  { label: 'Interface', text: (r) => (r.params.interfaceLayers ? `${r.params.interfaceLayers} c.` : '—') },
+  { labelKey: 'cmp.index', num: (r) => recipeScore(r), text: (r) => String(recipeScore(r)), best: true, scored: (r) => recipeScore(r) },
+  { labelKey: 'cmp.adhesion', num: (r) => avgAdhesion(r), text: (r) => `${avgAdhesion(r).toFixed(1)}/5`, best: true },
+  { labelKey: 'crit.printQuality.short', num: (r) => r.global.printQuality, text: (r) => `${r.global.printQuality}/5`, best: true },
+  { labelKey: 'crit.reliability.short', num: (r) => r.global.reliability, text: (r) => `${r.global.reliability}/5`, best: true },
+  { labelKey: 'crit.warpResistance.short', num: (r) => r.global.warpResistance, text: (r) => `${r.global.warpResistance}/5`, best: true },
+  { labelKey: 'crit.interfaceCleanliness.short', num: (r) => r.global.interfaceCleanliness, text: (r) => `${r.global.interfaceCleanliness}/5`, best: true },
+  { labelKey: 'crit.separability.short', num: (r) => r.global.separability, text: (r) => `${r.global.separability}/5`, best: true },
+  { labelKey: 'cmp.votesNet', num: (r) => r.votesUp - r.votesDown, text: (r) => `${r.votesUp - r.votesDown >= 0 ? '+' : ''}${r.votesUp - r.votesDown}`, best: true },
+  { labelKey: 'cmp.materials', num: (r) => r.slots.length, text: (r) => String(r.slots.length) },
+  { labelKey: 'cmp.machine', text: (r) => getMachine(r.machineId)?.name ?? r.machineId },
+  { labelKey: 'p.bed', text: (r) => `${r.params.bedTemp} °C` },
+  { labelKey: 'p.chamber', text: (r) => (r.params.chamberTemp ? `${r.params.chamberTemp} °C` : '—') },
+  { labelKey: 'p.layer', text: (r) => `${r.params.layerHeight} mm` },
+  { labelKey: 'p.speed', text: (r) => `${r.params.printSpeed} mm/s` },
+  { labelKey: 'p.nozzle', text: (r) => `${r.params.nozzleDiameter} mm` },
+  { labelKey: 'p.purge', text: (r) => (r.params.purgeVolume ? `${r.params.purgeVolume} mm³` : '—') },
+  { labelKey: 'p.iface', text: (r) => (r.params.interfaceLayers ? `${r.params.interfaceLayers} c.` : '—') },
 ];
 
 export function ComparatorPanel({ recipes, inventoryNos, onClose }: Props) {
   useEscapeKey(onClose);
+  const { t } = useI18n();
 
   return (
     <>
       <div className="drawer-backdrop" onClick={onClose} />
-      <div className="comparator" role="dialog" aria-label="Comparateur de recettes">
+      <div className="comparator" role="dialog" aria-label={t('cmp.title')}>
         <div className="comparator-head">
           <div style={{ flex: 1 }}>
-            <h3>⇋ Comparateur</h3>
-            <p className="sub">{recipes.length} entrées · meilleure valeur surlignée</p>
+            <h3>{t('cmp.title')}</h3>
+            <p className="sub">{t('cmp.sub', { n: recipes.length })}</p>
           </div>
-          <button className="close-btn" onClick={onClose} aria-label="Fermer">✕</button>
+          <button className="close-btn" onClick={onClose} aria-label={t('common.close')}>✕</button>
         </div>
         <div className="comparator-body">
           <table className="compare-table">
@@ -80,8 +83,8 @@ export function ComparatorPanel({ recipes, inventoryNos, onClose }: Props) {
                   }
                 }
                 return (
-                  <tr key={row.label}>
-                    <th className="row-label">{row.label}</th>
+                  <tr key={row.labelKey}>
+                    <th className="row-label">{t(row.labelKey)}</th>
                     {recipes.map((r) => {
                       const isBest =
                         row.best && row.num && recipes.length > 1 && row.num(r) === bestVal && bestVal !== -Infinity;

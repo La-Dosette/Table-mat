@@ -1,4 +1,5 @@
 import type { MachineSystem, MaterialFamily } from '../types';
+import { useI18n } from '../lib/i18n';
 
 export type MaterialCount = 'all' | '2' | '3' | '4+';
 export type SortKey = 'score' | 'recent' | 'votes' | 'materials';
@@ -60,6 +61,9 @@ interface Props {
 }
 
 export function Filters({ value, onChange, showHideEmpty, showSort, showFamilies }: Props) {
+  const { t } = useI18n();
+  const sysLabel = (s: { id: MachineSystem | 'all'; label: string }) =>
+    s.id === 'all' ? t('sys.all') : s.id === 'Dual' ? t('sys.Dual') : s.label;
   function toggleFamily(id: MaterialFamily) {
     const next = value.families.includes(id)
       ? value.families.filter((f) => f !== id)
@@ -72,7 +76,7 @@ export function Filters({ value, onChange, showHideEmpty, showSort, showFamilies
         🔍
         <input
           type="text"
-          placeholder="Rechercher…"
+          placeholder={t('filters.search')}
           value={value.query}
           onChange={(e) => onChange({ ...value, query: e.target.value })}
         />
@@ -85,7 +89,7 @@ export function Filters({ value, onChange, showHideEmpty, showSort, showFamilies
             className={`chip ${value.system === s.id ? 'active' : ''}`}
             onClick={() => onChange({ ...value, system: s.id })}
           >
-            {s.label}
+            {sysLabel(s)}
           </button>
         ))}
       </div>
@@ -97,7 +101,7 @@ export function Filters({ value, onChange, showHideEmpty, showSort, showFamilies
             className={`chip ${value.count === c.id ? 'active' : ''}`}
             onClick={() => onChange({ ...value, count: c.id })}
           >
-            {c.label}
+            {t(`count.${c.id}`)}
           </button>
         ))}
       </div>
@@ -108,7 +112,7 @@ export function Filters({ value, onChange, showHideEmpty, showSort, showFamilies
             className={`chip ${value.families.length === 0 ? 'active' : ''}`}
             onClick={() => onChange({ ...value, families: [] })}
           >
-            Toutes familles
+            {t('fam.all')}
           </button>
           {FAMILIES.map((f) => (
             <button
@@ -116,7 +120,7 @@ export function Filters({ value, onChange, showHideEmpty, showSort, showFamilies
               className={`chip ${value.families.includes(f.id) ? 'active' : ''}`}
               onClick={() => toggleFamily(f.id)}
             >
-              {f.label}
+              {t(`fam.${f.id}`)}
             </button>
           ))}
         </div>
@@ -129,20 +133,20 @@ export function Filters({ value, onChange, showHideEmpty, showSort, showFamilies
             checked={value.hideEmpty}
             onChange={(e) => onChange({ ...value, hideEmpty: e.target.checked })}
           />
-          Masquer les combinaisons vides
+          {t('filters.hideEmpty')}
         </label>
       )}
 
       {showSort && (
         <label className="sort-select">
-          <span>Trier&nbsp;:</span>
+          <span>{t('sort.label')}</span>
           <select
             value={value.sort}
             onChange={(e) => onChange({ ...value, sort: e.target.value as SortKey })}
-            aria-label="Trier les recettes"
+            aria-label={t('sort.label')}
           >
             {SORTS.map((s) => (
-              <option key={s.id} value={s.id}>{s.label}</option>
+              <option key={s.id} value={s.id}>{t(`sort.${s.id}`)}</option>
             ))}
           </select>
         </label>
