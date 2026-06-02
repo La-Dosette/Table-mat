@@ -6,6 +6,7 @@ import type {
   Recipe,
 } from '../types';
 import { MATERIALS, MACHINES, getMaterial } from '../data/materials';
+import { FILAMENT_BRANDS } from '../data/brands';
 import { CRITERIA, scoreColor } from '../lib/scoring';
 import { useEscapeKey } from '../lib/useEscapeKey';
 import { useI18n } from '../lib/i18n';
@@ -203,6 +204,10 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Pr
 
           {/* Matériaux (slots) */}
           <div className="section-title">{t('form.materials', { n: slots.length })}</div>
+          {/* Suggestions de marques (saisie libre conservée). */}
+          <datalist id="filament-brands">
+            {FILAMENT_BRANDS.map((b) => <option key={b} value={b} />)}
+          </datalist>
           {slots.map((s, i) => {
             const m = getMaterial(s.material);
             return (
@@ -212,7 +217,7 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false }: Pr
                   <option value="">{t('form.matNone')}</option>
                   {MATERIALS.map((mm) => <option key={mm.id} value={mm.id}>{mm.name}</option>)}
                 </select>
-                <input className="grow" value={s.brand} onChange={(e) => updateSlot(i, { brand: e.target.value })} placeholder={t('form.brandPh')} />
+                <input className="grow" list="filament-brands" value={s.brand} onChange={(e) => updateSlot(i, { brand: e.target.value })} placeholder={t('form.brandPh')} />
                 <input className="mini" value={s.label} onChange={(e) => updateSlot(i, { label: e.target.value })} placeholder={t('form.rolePh')} />
                 <input className="mini" type="number" value={s.nozzleTemp} onChange={(e) => updateSlot(i, { nozzleTemp: e.target.value })} placeholder="°C" />
                 <button className="icon-btn" onClick={() => removeSlot(i)} disabled={slots.length <= 2} title={t('card.delete')}>✕</button>

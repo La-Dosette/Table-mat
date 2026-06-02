@@ -82,55 +82,82 @@ export const MATERIALS: Material[] = [
 // ---------------------------------------------------------------------------
 
 export const MACHINES: Machine[] = [
-  // --- Bambu Lab (AMS) ---
+  // --- Bambu Lab (AMS / AMS 2 Pro / AMS lite) ---
   { id: 'x1c', name: 'Bambu Lab X1 Carbon + AMS', system: 'AMS', maxMaterials: 16 },
   { id: 'x1e', name: 'Bambu Lab X1E + AMS', system: 'AMS', maxMaterials: 16 },
-  { id: 'p1s', name: 'Bambu Lab P1S + AMS', system: 'AMS', maxMaterials: 4 },
-  { id: 'p1p', name: 'Bambu Lab P1P + AMS', system: 'AMS', maxMaterials: 4 },
+  { id: 'x2d', name: 'Bambu Lab X2D + AMS 2 Pro (double buse)', system: 'AMS', maxMaterials: 16 },
+  { id: 'p2s', name: 'Bambu Lab P2S + AMS 2 Pro', system: 'AMS', maxMaterials: 16 },
+  { id: 'p1s', name: 'Bambu Lab P1S + AMS', system: 'AMS', maxMaterials: 16 },
+  { id: 'p1p', name: 'Bambu Lab P1P + AMS', system: 'AMS', maxMaterials: 16 },
   { id: 'a1', name: 'Bambu Lab A1 + AMS lite', system: 'AMS', maxMaterials: 4 },
   { id: 'a1mini', name: 'Bambu Lab A1 mini + AMS lite', system: 'AMS', maxMaterials: 4 },
+  { id: 'a2l', name: 'Bambu Lab A2L + AMS lite', system: 'AMS', maxMaterials: 4 },
   { id: 'h2d', name: 'Bambu Lab H2D (double buse + AMS)', system: 'AMS', maxMaterials: 16 },
+  { id: 'h2s', name: 'Bambu Lab H2S + AMS', system: 'AMS', maxMaterials: 16 },
+  { id: 'h2dpro', name: 'Bambu Lab H2D Pro + AMS', system: 'AMS', maxMaterials: 16 },
 
-  // --- Systèmes d'alimentation type AMS (IFS / CFS / ACE) ---
-  { id: 'ffad5x', name: 'FlashForge AD5X (IFS)', system: 'AMS', maxMaterials: 4 },
+  // --- Creality (CFS — Creality Filament System) ---
   { id: 'k2plus', name: 'Creality K2 Plus + CFS', system: 'AMS', maxMaterials: 16 },
+  { id: 'k2pro', name: 'Creality K2 Pro + CFS', system: 'AMS', maxMaterials: 16 },
   { id: 'k2se', name: 'Creality K2 SE + CFS', system: 'AMS', maxMaterials: 4 },
-  { id: 'kobras1', name: 'Anycubic Kobra S1 + ACE Pro', system: 'AMS', maxMaterials: 4 },
-  { id: 'kobra3', name: 'Anycubic Kobra 3 + ACE Pro', system: 'AMS', maxMaterials: 4 },
+  { id: 'k1cfs', name: 'Creality K1C + CFS', system: 'AMS', maxMaterials: 16 },
+  { id: 'k1maxcfs', name: 'Creality K1 Max + CFS', system: 'AMS', maxMaterials: 16 },
+  { id: 'k1secfs', name: 'Creality K1 SE + CFS', system: 'AMS', maxMaterials: 16 },
+  { id: 'hicfs', name: 'Creality Hi + CFS', system: 'AMS', maxMaterials: 16 },
+
+  // --- Anycubic (ACE Pro / ACE 2 Pro) ---
+  { id: 'kobras1', name: 'Anycubic Kobra S1 + ACE 2 Pro', system: 'AMS', maxMaterials: 8 },
+  { id: 'kobras1max', name: 'Anycubic Kobra S1 Max + ACE 2 Pro', system: 'AMS', maxMaterials: 8 },
+  { id: 'kobra3', name: 'Anycubic Kobra 3 + ACE Pro', system: 'AMS', maxMaterials: 8 },
+  { id: 'kobra3max', name: 'Anycubic Kobra 3 Max + ACE Pro', system: 'AMS', maxMaterials: 8 },
+
+  // --- Elegoo (système couleur Centauri) ---
+  { id: 'centauri', name: 'Elegoo Centauri Carbon (multicouleur)', system: 'AMS', maxMaterials: 4 },
   { id: 'centauri2', name: 'Elegoo Centauri Carbon 2 Combo', system: 'AMS', maxMaterials: 4 },
 
-  // --- Prusa (MMU) ---
+  // --- FlashForge (IFS — Intelligent Filament System) ---
+  { id: 'ffad5x', name: 'FlashForge AD5X (IFS)', system: 'AMS', maxMaterials: 4 },
+  { id: 'ff5mpro', name: 'FlashForge Adventurer 5M Pro + IFS', system: 'AMS', maxMaterials: 4 },
+
+  // --- Prusa (MMU3 / MMU2S) ---
   { id: 'mk4', name: 'Prusa MK4 + MMU3', system: 'MMU', maxMaterials: 5 },
   { id: 'mk4s', name: 'Prusa MK4S + MMU3', system: 'MMU', maxMaterials: 5 },
   { id: 'mk3s', name: 'Prusa MK3S+ + MMU2S', system: 'MMU', maxMaterials: 5 },
   { id: 'coreone', name: 'Prusa Core One + MMU3', system: 'MMU', maxMaterials: 5 },
 
   // --- Toolchangers (têtes indépendantes) ---
-  { id: 'xl', name: 'Prusa XL (toolchanger 5T)', system: 'Toolchanger', maxMaterials: 5 },
+  { id: 'xl', name: 'Prusa XL (toolchanger 5 têtes)', system: 'Toolchanger', maxMaterials: 5 },
   { id: 'xl2', name: 'Prusa XL (2 têtes)', system: 'Toolchanger', maxMaterials: 2 },
   { id: 'snapu1', name: 'Snapmaker U1 (4 têtes SnapSwap)', system: 'Toolchanger', maxMaterials: 4 },
   { id: 'ffcreator5', name: 'FlashForge Creator 5 (4 têtes)', system: 'Toolchanger', maxMaterials: 4 },
+  { id: 'h2c', name: 'Bambu Lab H2C (6 buses Vortek)', system: 'Toolchanger', maxMaterials: 6 },
   { id: 'e3dtc', name: 'E3D Toolchanger', system: 'Toolchanger', maxMaterials: 4 },
 
-  // --- Voron / changeurs de filament (ERCF, BoxTurtle) ---
+  // --- Voron / changeurs de filament (ERCF, BoxTurtle, type AMS DIY) ---
   { id: 'voron', name: 'Voron 2.4 + ERCF', system: 'ERCF', maxMaterials: 12 },
   { id: 'trident', name: 'Voron Trident + ERCF', system: 'ERCF', maxMaterials: 12 },
   { id: 'boxturtle', name: 'Voron + BoxTurtle (AFC)', system: 'ERCF', maxMaterials: 8 },
+  { id: 'sv08ercf', name: 'Sovol SV08 + ERCF / BoxTurtle', system: 'ERCF', maxMaterials: 8 },
+  { id: 'ratrig', name: 'RatRig V-Core / VCore + ERCF', system: 'ERCF', maxMaterials: 12 },
 
   // --- IDEX (double extrudeur indépendant) ---
   { id: 'sovol', name: 'Sovol SV04 (IDEX)', system: 'IDEX', maxMaterials: 2 },
   { id: 'snapmakerj1', name: 'Snapmaker J1 (IDEX)', system: 'IDEX', maxMaterials: 2 },
   { id: 'bcn3d', name: 'BCN3D Epsilon (IDEX)', system: 'IDEX', maxMaterials: 2 },
+  { id: 'bcn3dsigma', name: 'BCN3D Sigma D25 (IDEX)', system: 'IDEX', maxMaterials: 2 },
   { id: 'flashforge2', name: 'FlashForge Creator Pro 2 (IDEX)', system: 'IDEX', maxMaterials: 2 },
   { id: 'ffcreator4', name: 'FlashForge Creator 4 (IDEX industriel)', system: 'IDEX', maxMaterials: 2 },
   { id: 'raise3de2', name: 'Raise3D E2 (IDEX)', system: 'IDEX', maxMaterials: 2 },
+  { id: 'tenlogtl', name: 'Tenlog TL-D3 Pro (IDEX)', system: 'IDEX', maxMaterials: 2 },
 
   // --- Double extrudeur classique ---
   { id: 'ums5', name: 'Ultimaker S5', system: 'Dual', maxMaterials: 2 },
   { id: 'ums7', name: 'Ultimaker S7', system: 'Dual', maxMaterials: 2 },
+  { id: 'ums8', name: 'UltiMaker S8', system: 'Dual', maxMaterials: 2 },
   { id: 'raise3dpro3', name: 'Raise3D Pro3', system: 'Dual', maxMaterials: 2 },
+  { id: 'qidiplus4', name: 'QIDI Plus4 (double buse)', system: 'Dual', maxMaterials: 2 },
 
-  // --- Splicers (Mosaic Palette / Element) ---
+  // --- Splicers (Mosaic Palette / Element — branchables sur quasi toute imprimante) ---
   { id: 'palette3', name: 'Mosaic Palette 3', system: 'Palette', maxMaterials: 8 },
   { id: 'palette3pro', name: 'Mosaic Palette 3 Pro', system: 'Palette', maxMaterials: 8 },
   { id: 'element', name: 'Mosaic Element HT', system: 'Palette', maxMaterials: 8 },
