@@ -237,7 +237,7 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false, auth
                   ))}
                 </select>
                 <Combobox className="grow" value={s.brand} options={FILAMENT_BRANDS} onChange={(v) => updateSlot(i, { brand: v })} placeholder={t('form.brandPh')} />
-                <input className="mini" value={s.label} onChange={(e) => updateSlot(i, { label: e.target.value })} placeholder={t('form.rolePh')} />
+                <input className="ref" value={s.label} onChange={(e) => updateSlot(i, { label: e.target.value })} placeholder={t('form.rolePh')} />
                 <input className="mini" type="number" value={s.nozzleTemp} onChange={(e) => updateSlot(i, { nozzleTemp: e.target.value })} placeholder="°C" />
                 <button className="icon-btn" onClick={() => removeSlot(i)} disabled={slots.length <= 2} title={t('card.delete')}>✕</button>
               </div>

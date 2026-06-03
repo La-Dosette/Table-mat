@@ -68,7 +68,7 @@ export interface MaterialSlot {
   brand: string;
   /** Température buse pour CE matériau (°C). */
   nozzleTemp: number;
-  /** Étiquette libre, ex. "Rouge", "Coque", "Support". */
+  /** Référence / couleur du filament, ex. "Silk rouge", "Galaxy black". */
   label?: string;
 }
 
