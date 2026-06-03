@@ -235,6 +235,15 @@ export const FILAMENT_CATALOG: FilamentBrand[] = [
 /** Noms de fabricants pour l'autocomplétion du champ « marque ». */
 export const FILAMENT_BRANDS: string[] = FILAMENT_CATALOG.map((b) => b.name);
 
+/** Suggestions génériques (finitions + couleurs) toujours proposées en réf. */
+export const COMMON_FILAMENT_REFS: string[] = [
+  // Finitions / familles
+  'Basic', 'Matte', 'Silk', 'Standard', 'Tough', 'High Speed', 'Transparent',
+  // Couleurs
+  'Blanc', 'Noir', 'Gris', 'Argent', 'Rouge', 'Orange', 'Jaune',
+  'Vert', 'Bleu', 'Violet', 'Rose', 'Marron', 'Or', 'Naturel',
+];
+
 const byName = new Map(FILAMENT_CATALOG.map((b) => [b.name.toLowerCase(), b]));
 
 /**

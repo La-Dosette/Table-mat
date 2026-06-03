@@ -6,7 +6,7 @@ import type {
   Recipe,
 } from '../types';
 import { MATERIALS, MACHINES, getMaterial } from '../data/materials';
-import { FILAMENT_BRANDS, refsForBrand } from '../data/brands';
+import { FILAMENT_BRANDS, refsForBrand, COMMON_FILAMENT_REFS } from '../data/brands';
 import { defaultNozzle } from '../data/materialDefaults';
 import { Combobox } from './Combobox';
 import { CRITERIA, scoreColor } from '../lib/scoring';
@@ -44,6 +44,11 @@ interface SlotDraft {
 }
 
 const GLOBAL_CRITERIA = CRITERIA.filter((c) => !c.perInterface);
+
+/** Réfs proposées : gammes de la marque (en tête) + finitions/couleurs communes. */
+function refOptions(brand: string): string[] {
+  return [...new Set([...refsForBrand(brand), ...COMMON_FILAMENT_REFS])];
+}
 
 function emptySlot(material = ''): SlotDraft {
   return { material, brand: '', nozzleTemp: '', label: '' };
@@ -254,7 +259,7 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false, auth
                   ))}
                 </select>
                 <Combobox className="grow" value={s.brand} options={FILAMENT_BRANDS} onChange={(v) => updateSlot(i, { brand: v })} placeholder={t('form.brandPh')} />
-                <Combobox className="ref" value={s.label} options={refsForBrand(s.brand)} onChange={(v) => updateSlot(i, { label: v })} placeholder={t('form.rolePh')} />
+                <Combobox className="ref" value={s.label} options={refOptions(s.brand)} onChange={(v) => updateSlot(i, { label: v })} placeholder={t('form.rolePh')} />
                 <input className="mini" type="number" value={s.nozzleTemp} onChange={(e) => updateSlot(i, { nozzleTemp: e.target.value })} placeholder="°C" />
                 <button className="icon-btn" onClick={() => removeSlot(i)} disabled={slots.length <= 2} title={t('card.delete')}>✕</button>
               </div>
