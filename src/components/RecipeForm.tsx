@@ -6,7 +6,7 @@ import type {
   Recipe,
 } from '../types';
 import { MATERIALS, MACHINES, getMaterial } from '../data/materials';
-import { FILAMENT_BRANDS, refsForBrand, COMMON_FILAMENT_REFS } from '../data/brands';
+import { FILAMENT_BRANDS, refsForBrand, COMMON_FINISHES, COMMON_COLORS } from '../data/brands';
 import { defaultNozzle } from '../data/materialDefaults';
 import { Combobox } from './Combobox';
 import { CRITERIA, scoreColor } from '../lib/scoring';
@@ -41,17 +41,18 @@ interface SlotDraft {
   brand: string;
   nozzleTemp: string;
   label: string;
+  color: string;
 }
 
 const GLOBAL_CRITERIA = CRITERIA.filter((c) => !c.perInterface);
 
-/** Réfs proposées : gammes de la marque (en tête) + finitions/couleurs communes. */
+/** Réfs proposées : gammes de la marque (en tête) + finitions communes. */
 function refOptions(brand: string): string[] {
-  return [...new Set([...refsForBrand(brand), ...COMMON_FILAMENT_REFS])];
+  return [...new Set([...refsForBrand(brand), ...COMMON_FINISHES])];
 }
 
 function emptySlot(material = ''): SlotDraft {
-  return { material, brand: '', nozzleTemp: '', label: '' };
+  return { material, brand: '', nozzleTemp: '', label: '', color: '' };
 }
 
 function pairKey(a: string, b: string) {
@@ -84,7 +85,8 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false, auth
   const [slots, setSlots] = useState<SlotDraft[]>(() =>
     initial
       ? initial.slots.map((s) => ({
-          material: s.material, brand: s.brand, nozzleTemp: String(s.nozzleTemp), label: s.label ?? '',
+          material: s.material, brand: s.brand, nozzleTemp: String(s.nozzleTemp),
+          label: s.label ?? '', color: s.color ?? '',
         }))
       : [emptySlot('pla'), emptySlot('petg')],
   );
@@ -171,6 +173,7 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false, auth
       brand: s.brand.trim() || 'Marque inconnue',
       nozzleTemp: Number(s.nozzleTemp) || 0,
       label: s.label.trim() || undefined,
+      color: s.color.trim() || undefined,
     }));
 
     const interfaces: MaterialInterface[] = activePairs.map(([a, b]) => ({
@@ -260,6 +263,7 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false, auth
                 </select>
                 <Combobox className="grow" value={s.brand} options={FILAMENT_BRANDS} onChange={(v) => updateSlot(i, { brand: v })} placeholder={t('form.brandPh')} />
                 <Combobox className="ref" value={s.label} options={refOptions(s.brand)} onChange={(v) => updateSlot(i, { label: v })} placeholder={t('form.rolePh')} />
+                <Combobox className="color" value={s.color} options={COMMON_COLORS} onChange={(v) => updateSlot(i, { color: v })} placeholder={t('form.colorPh')} />
                 <input className="mini" type="number" value={s.nozzleTemp} onChange={(e) => updateSlot(i, { nozzleTemp: e.target.value })} placeholder="°C" />
                 <button className="icon-btn" onClick={() => removeSlot(i)} disabled={slots.length <= 2} title={t('card.delete')}>✕</button>
               </div>

@@ -315,17 +315,72 @@ export const FILAMENT_CATALOG: FilamentBrand[] = [
   { name: 'Siraya Tech', refs: ['Apex PLA', 'Blu PETG', 'Ultra PETG'] },
 ];
 
+// --- Fabricants supplémentaires (sans gammes détaillées) -------------------
+// Longue traîne mondiale : régionaux, niches, historiques.
+const EXTRA_BRANDS: string[] = [
+  // Amérique du Nord
+  '3D Printlife', 'Terrafilum', 'Village Plastics', 'ALGA (Algix)', 'Filabot',
+  'Priline', 'Octave', 'Materio3D', 'Re-pet3D', 'Filaments.ca', 'Spool3D',
+  'MG Chemicals', 'Hatchbox PRO', 'Sienci Labs', 'Fillamatrix', '3D Printz',
+  // Royaume-Uni
+  'Faberdashery', 'Rigid Ink', '3D FilaPrint', 'TechnologyOutlet', 'Filaprint',
+  'Filastruder', 'Filamentive UK',
+  // Allemagne / Autriche / Suisse
+  'Innofil3D', 'Owl-Filament', 'Filamentworld', 'Janbex', 'Dasfilament',
+  'Creamelt', 'XYZprinting Pro',
+  // Espagne
+  'Sakata 3D', 'BQ (Witbox)', 'Leon3D', 'Colido', 'Eolas Prints', 'FFFworld', 'Proto3000',
+  // Italie
+  'Sharebot', '3DiTALY', 'Kilonewton', 'NylAll', 'Lryp',
+  // Pays-Bas / Belgique
+  'Tractus3D', 'ReDeTec', 'Add North NL', 'Innofila',
+  // Pologne / Europe de l’Est
+  'Z3D', 'F3D Filament', 'Made3D', 'Nebula', 'Plast-Spaw', '3D Lab', 'Filamentory',
+  // Scandinavie
+  'Nordic Filament', 'Plast Print',
+  // France
+  'Volumic', 'ABEILLE', '3D Fil France', 'Tridiprint',
+  // Chine / Asie
+  'Lerdge', 'Topzeal', '3DMARS', 'Mokai', 'Aurora', 'YOYI 3D', 'Sunhokey',
+  'Createbot', 'JGAURORA', 'Aibecy', 'Anet', 'Easythreed', 'Labists',
+  // Corée / Japon
+  'Cubicon', 'Sindoh', 'Mutoh', 'eMaterials',
+  // Inde
+  'WOL3D', 'Fracktal Works', 'Avya Tech', 'Filx', '3Dimika', 'Numakers India',
+  // Brésil / Amérique du Sud
+  'GTMax3D', 'Cliever', '3DFila', 'National3D', 'Voolt',
+  // Australie
+  'Aurarum', 'Bilby3D', 'Aurarum CF',
+  // Spécial / fonctionnel / divers
+  'Polar 3D', 'PrintBed', 'Tianse 3D', 'YOOPAI', 'GEEETECH PLA',
+  'Materia3D', 'Snolabs', 'Atomic Pro', '3D Solex', 'Fenner Drives',
+];
+
+for (const name of EXTRA_BRANDS) {
+  if (!FILAMENT_CATALOG.some((b) => b.name.toLowerCase() === name.toLowerCase())) {
+    FILAMENT_CATALOG.push({ name });
+  }
+}
+
 /** Noms de fabricants pour l'autocomplétion du champ « marque ». */
 export const FILAMENT_BRANDS: string[] = FILAMENT_CATALOG.map((b) => b.name);
 
-/** Suggestions génériques (finitions + couleurs) toujours proposées en réf. */
-export const COMMON_FILAMENT_REFS: string[] = [
-  // Finitions / familles
-  'Basic', 'Matte', 'Silk', 'Standard', 'Tough', 'High Speed', 'Transparent',
-  // Couleurs
-  'Blanc', 'Noir', 'Gris', 'Argent', 'Rouge', 'Orange', 'Jaune',
-  'Vert', 'Bleu', 'Violet', 'Rose', 'Marron', 'Or', 'Naturel',
+/** Finitions / familles communes proposées dans le champ « réf. ». */
+export const COMMON_FINISHES: string[] = [
+  'Basic', 'Standard', 'Matte', 'Silk', 'Tough', 'High Speed', 'PLA+',
+  'Translucent', 'Glow', 'Marble', 'Wood', 'Gradient', 'Dual Color', 'Recyclé',
 ];
+
+/** Couleurs communes proposées dans le champ « couleur ». */
+export const COMMON_COLORS: string[] = [
+  'Blanc', 'Noir', 'Gris', 'Gris foncé', 'Argent', 'Beige', 'Naturel', 'Transparent',
+  'Rouge', 'Bordeaux', 'Orange', 'Jaune', 'Or', 'Vert', 'Vert pomme', 'Kaki',
+  'Cyan', 'Turquoise', 'Bleu', 'Bleu ciel', 'Bleu nuit', 'Violet', 'Rose',
+  'Magenta', 'Marron', 'Bronze', 'Cuivre',
+];
+
+/** Conservé pour compatibilité : réfs génériques (finitions + couleurs). */
+export const COMMON_FILAMENT_REFS: string[] = [...COMMON_FINISHES, ...COMMON_COLORS];
 
 const byName = new Map(FILAMENT_CATALOG.map((b) => [b.name.toLowerCase(), b]));
 

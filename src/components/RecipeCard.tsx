@@ -146,6 +146,7 @@ export function RecipeCard({
               <b>{m?.name}</b>
               {hasBrand ? <span className="slot-brand">{s.brand}</span> : null}
               {s.label ? <span className="slot-label">{s.label}</span> : null}
+              {s.color ? <span className="slot-color">{s.color}</span> : null}
               <span className="slot-temp">{s.nozzleTemp}°C</span>
             </span>
           );

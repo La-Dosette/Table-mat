@@ -68,8 +68,10 @@ export interface MaterialSlot {
   brand: string;
   /** Température buse pour CE matériau (°C). */
   nozzleTemp: number;
-  /** Référence / couleur du filament, ex. "Silk rouge", "Galaxy black". */
+  /** Référence / gamme du filament, ex. "PLA Basic", "Silk", "PolyTerra". */
   label?: string;
+  /** Couleur du filament, ex. "rouge", "galaxy black". */
+  color?: string;
 }
 
 /** Contact entre deux matériaux au sein d'une recette + sa note d'adhérence. */

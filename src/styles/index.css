@@ -1028,37 +1028,42 @@ b {
 .slot-edit {
   display: flex;
   align-items: center;
-  gap: 7px;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-bottom: 7px;
 }
 .slot-edit select {
-  width: 108px;
-  flex: none;
+  flex: 0 0 96px;
+  width: 96px;
 }
 .slot-edit input.grow {
   flex: 1;
   min-width: 0;
 }
 .slot-edit input.mini {
-  width: 62px;
-  flex: none;
+  flex: 0 0 56px;
+  width: 56px;
 }
-.slot-edit input.ref {
-  width: 132px;
-  flex: none;
+/* Comboboxes marque / réf / couleur : largeurs souples, wrap si besoin. */
+.slot-edit .combo.grow {
+  flex: 2 1 120px;
+  min-width: 0;
+  width: auto;
 }
 .slot-edit .combo.ref {
-  width: 132px;
-  flex: none;
+  flex: 1 1 100px;
+  min-width: 0;
+  width: auto;
+}
+.slot-edit .combo.color {
+  flex: 1 1 86px;
+  min-width: 0;
+  width: auto;
 }
 
 /* Combobox marque : champ + liste de suggestions stylée. */
 .combo {
   position: relative;
-}
-.slot-edit .combo.grow {
-  flex: 1;
-  min-width: 0;
 }
 .combo input {
   width: 100%;
@@ -1373,6 +1378,10 @@ b {
 .slot-brand {
   color: var(--ink-soft);
   font-weight: 500;
+}
+.slot-color {
+  color: var(--ink-soft);
+  font-style: italic;
 }
 .slot-label {
   color: var(--ink-soft);
@@ -1837,20 +1846,22 @@ b {
   .slot-edit select {
     flex: 1 1 auto;
     width: auto;
-    min-width: 128px;
+    min-width: 120px;
   }
+  /* Marque pleine largeur ; réf + couleur se partagent la ligne suivante. */
   .slot-edit .combo.grow {
     flex-basis: 100%;
   }
-  .slot-edit input.mini {
+  .slot-edit .combo.ref,
+  .slot-edit .combo.color {
     flex: 1 1 0;
+    flex-basis: 40%;
     width: auto;
     min-width: 0;
   }
-  /* La réf passe sur sa propre ligne pleine largeur pour rester lisible. */
-  .slot-edit .combo.ref {
-    flex-basis: 100%;
-    width: auto;
+  .slot-edit input.mini {
+    flex: 0 0 54px;
+    width: 54px;
   }
 }
 
