@@ -6,7 +6,8 @@ import type {
   Recipe,
 } from '../types';
 import { MATERIALS, MACHINES, getMaterial } from '../data/materials';
-import { FILAMENT_BRANDS } from '../data/brands';
+import { FILAMENT_BRANDS, refsForBrand } from '../data/brands';
+import { defaultNozzle } from '../data/materialDefaults';
 import { Combobox } from './Combobox';
 import { CRITERIA, scoreColor } from '../lib/scoring';
 import { useEscapeKey } from '../lib/useEscapeKey';
@@ -119,6 +120,10 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false, auth
   );
   const [notes, setNotes] = useState(initial?.notes ?? '');
   const [error, setError] = useState('');
+  // Réglages pointus masqués par défaut pour alléger le formulaire.
+  const [advanced, setAdvanced] = useState(
+    !!initial && !!(initial.params.chamberTemp || initial.params.purgeVolume || initial.params.interfaceLayers),
+  );
 
   // Paires candidates déduites des matériaux choisis.
   const candidatePairs = useMemo<[string, string][]>(
@@ -130,6 +135,18 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false, auth
 
   function updateSlot(i: number, patch: Partial<SlotDraft>) {
     setSlots((s) => s.map((slot, idx) => (idx === i ? { ...slot, ...patch } : slot)));
+  }
+  /** Change la matière d'un slot et pré-remplit la température si vide. */
+  function changeMaterial(i: number, material: string) {
+    setSlots((s) =>
+      s.map((slot, idx) => {
+        if (idx !== i) return slot;
+        const suggested = defaultNozzle(material);
+        const nozzleTemp =
+          slot.nozzleTemp.trim() === '' && suggested != null ? String(suggested) : slot.nozzleTemp;
+        return { ...slot, material, nozzleTemp };
+      }),
+    );
   }
   function addSlot() {
     setSlots((s) => [...s, emptySlot()]);
@@ -228,7 +245,7 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false, auth
             return (
               <div className="slot-edit" key={i}>
                 <span className="mat-dot" style={{ background: m?.accent ?? '#334' }} />
-                <select className="select" value={s.material} onChange={(e) => updateSlot(i, { material: e.target.value })}>
+                <select className="select" value={s.material} onChange={(e) => changeMaterial(i, e.target.value)}>
                   <option value="">{t('form.matNone')}</option>
                   {MATERIAL_GROUPS.map((g) => (
                     <optgroup key={g.fam} label={t(`fam.${g.fam}`)}>
@@ -237,7 +254,7 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false, auth
                   ))}
                 </select>
                 <Combobox className="grow" value={s.brand} options={FILAMENT_BRANDS} onChange={(v) => updateSlot(i, { brand: v })} placeholder={t('form.brandPh')} />
-                <input className="ref" value={s.label} onChange={(e) => updateSlot(i, { label: e.target.value })} placeholder={t('form.rolePh')} />
+                <Combobox className="ref" value={s.label} options={refsForBrand(s.brand)} onChange={(v) => updateSlot(i, { label: v })} placeholder={t('form.rolePh')} />
                 <input className="mini" type="number" value={s.nozzleTemp} onChange={(e) => updateSlot(i, { nozzleTemp: e.target.value })} placeholder="°C" />
                 <button className="icon-btn" onClick={() => removeSlot(i)} disabled={slots.length <= 2} title={t('card.delete')}>✕</button>
               </div>
@@ -315,15 +332,25 @@ export function RecipeForm({ onSubmit, onClose, initial, duplicate = false, auth
           })}
 
           {/* Réglages */}
-          <div className="section-title" style={{ marginTop: 18 }}>{t('form.print')}</div>
+          <div className="section-title section-title-row" style={{ marginTop: 18 }}>
+            <span>{t('form.print')}</span>
+            <label className="adv-toggle">
+              <input type="checkbox" checked={advanced} onChange={(e) => setAdvanced(e.target.checked)} />
+              {t('form.advanced')}
+            </label>
+          </div>
           <div className="params-edit">
             <ParamInput label={t('form.pBed')} v={params.bedTemp} on={(x) => setParams((p) => ({ ...p, bedTemp: x }))} />
-            <ParamInput label={t('form.pChamber')} v={params.chamberTemp} on={(x) => setParams((p) => ({ ...p, chamberTemp: x }))} ph="—" />
             <ParamInput label={t('form.pLayer')} v={params.layerHeight} on={(x) => setParams((p) => ({ ...p, layerHeight: x }))} />
             <ParamInput label={t('form.pSpeed')} v={params.printSpeed} on={(x) => setParams((p) => ({ ...p, printSpeed: x }))} />
-            <ParamInput label={t('form.pNozzle')} v={params.nozzleDiameter} on={(x) => setParams((p) => ({ ...p, nozzleDiameter: x }))} />
-            <ParamInput label={t('form.pPurge')} v={params.purgeVolume} on={(x) => setParams((p) => ({ ...p, purgeVolume: x }))} ph="—" />
-            <ParamInput label={t('form.pIface')} v={params.interfaceLayers} on={(x) => setParams((p) => ({ ...p, interfaceLayers: x }))} ph="—" />
+            {advanced && (
+              <>
+                <ParamInput label={t('form.pChamber')} v={params.chamberTemp} on={(x) => setParams((p) => ({ ...p, chamberTemp: x }))} ph="—" />
+                <ParamInput label={t('form.pNozzle')} v={params.nozzleDiameter} on={(x) => setParams((p) => ({ ...p, nozzleDiameter: x }))} />
+                <ParamInput label={t('form.pPurge')} v={params.purgeVolume} on={(x) => setParams((p) => ({ ...p, purgeVolume: x }))} ph="—" />
+                <ParamInput label={t('form.pIface')} v={params.interfaceLayers} on={(x) => setParams((p) => ({ ...p, interfaceLayers: x }))} ph="—" />
+              </>
+            )}
           </div>
 
           <label className="field" style={{ marginTop: 14 }}>

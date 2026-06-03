@@ -1047,6 +1047,10 @@ b {
   width: 132px;
   flex: none;
 }
+.slot-edit .combo.ref {
+  width: 132px;
+  flex: none;
+}
 
 /* Combobox marque : champ + liste de suggestions stylée. */
 .combo {
@@ -1390,6 +1394,27 @@ b {
   margin-bottom: 7px;
   padding-bottom: 4px;
   border-bottom: 1px solid var(--hairline-soft);
+}
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.adv-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.adv-toggle input {
+  accent-color: var(--ink);
+  cursor: pointer;
 }
 .ifaces {
   margin: 14px 0;
@@ -1817,15 +1842,15 @@ b {
   .slot-edit .combo.grow {
     flex-basis: 100%;
   }
-  .slot-edit input.mini,
-  .slot-edit input.ref {
+  .slot-edit input.mini {
     flex: 1 1 0;
     width: auto;
     min-width: 0;
   }
   /* La réf passe sur sa propre ligne pleine largeur pour rester lisible. */
-  .slot-edit input.ref {
+  .slot-edit .combo.ref {
     flex-basis: 100%;
+    width: auto;
   }
 }
 
