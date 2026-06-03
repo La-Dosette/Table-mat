@@ -1,13 +1,12 @@
 // ---------------------------------------------------------------------------
-// Catalogue de marques de filament FDM (grand public → spécialistes).
-// Sert à alimenter l'autocomplétion du champ « marque » dans le formulaire :
-// la saisie reste libre (on peut taper une marque absente de la liste).
-// Objectif : couvrir le maximum de marques mainstream et au-delà.
-// L'ordre va globalement des plus répandues vers la longue traîne.
+// Catalogue de marques de filament FDM, le plus exhaustif possible.
+// Du grand public aux spécialistes industriels, marques mondiales et régionales.
+// Sert à l'autocomplétion du champ « marque » (saisie libre conservée).
+// Ordre indicatif : des plus répandues vers la longue traîne / le spécialisé.
 // ---------------------------------------------------------------------------
 
 export const FILAMENT_BRANDS: string[] = [
-  // --- Marques d'imprimantes (filaments maison, très répandus) ---
+  // --- Marques d'imprimantes (filaments maison) ---
   'Bambu Lab',
   'Creality',
   'Creality Hyper',
@@ -22,11 +21,25 @@ export const FILAMENT_BRANDS: string[] = [
   'Ultimaker',
   'Raise3D',
   'Zortrax',
-  'Tiertime',
+  'Tiertime / UP',
   'BCN3D',
   'Snapmaker',
+  'Flsun',
+  'Two Trees',
+  'Artillery',
+  'Kingroon',
+  'Tronxy',
+  'Wanhao',
+  'Monoprice',
+  'Mingda',
+  'Kywoo',
+  'BIQU',
+  'Longer',
+  'Dremel',
+  'MakerBot',
+  'XYZprinting',
 
-  // --- Grandes marques généralistes / best-sellers ---
+  // --- Généralistes / best-sellers ---
   'Polymaker',
   'eSUN',
   'SUNLU',
@@ -41,6 +54,10 @@ export const FILAMENT_BRANDS: string[] = [
   '3D Fuel',
   'Coex',
   'Gizmo Dorks',
+  'IC3D',
+  'Toner Plastics',
+  'MakerGeeks',
+  'Filament PM',
 
   // --- Premium / spécialistes qualité ---
   'ColorFabb',
@@ -64,35 +81,50 @@ export const FILAMENT_BRANDS: string[] = [
   'KVP (Keene Village Plastics)',
   'Atomic Filament',
   'Proto-Pasta',
+  '3D Prima',
+  'Filamentive',
 
-  // --- Flexibles / techniques spécialisés ---
-  'NinjaTek',
-  'Recreus (Filaflex)',
-  'Taulman3D',
-  'SainSmart',
+  // --- Européennes ---
+  'AzureFilm',
+  'Filamentree',
+  'GST3D',
+  '3D4Makers',
+  'Ockert',
+  'Jama3D',
+  'Octofiber',
+  'Herz',
+  'Nobufil',
+  'Treed Filaments',
+  'FiloAlfa',
+  'Eumakers',
+  'Winkle',
+  'ROSA3D',
+  'Noctuo',
+  'Print-Me',
+  '3DGence',
+  'Plasty Mladeč',
+  'Refil',
+  'Reflow',
+  'Nefila',
+  'FilRight',
+  'Fil-A-Gehr',
+  'Spoolworks',
+  '123-3D',
 
-  // --- Composites / haute performance / ingénierie ---
-  '3DXTech',
-  'BASF Ultrafuse',
-  'Forward AM',
-  'Kimya',
-  'Nanovia',
-  'IEMAI',
-  'Essentium',
-  'Intamsys',
-  'Roboze',
-  'PolyMide', // gamme nylon Polymaker (haute perf)
-
-  // --- Marques européennes / françaises ---
+  // --- Françaises ---
   'Francofil',
   'Arianeplast',
   'Dailyfil',
   'Filimprimante3D',
-  'Octofiber',
   'Filo3D',
   'FilamentOne',
+  'Kimya (Armor)',
+  'Nanovia',
+  'Polyfab3D',
+  'Neofil3D',
+  'eMotion Tech',
 
-  // --- Budget / e-commerce grand public ---
+  // --- Chinoises / e-commerce grand public ---
   'Eryone',
   'AMOLEN',
   'JAYO',
@@ -103,20 +135,62 @@ export const FILAMENT_BRANDS: string[] = [
   'TTYT3D',
   'DURAMIC 3D',
   'TECBEARS',
-  'Kingroon',
-  'Tronxy',
   'Comgrow',
   'YOUSU',
   'HELLO3D',
   'R3D',
   'ZYLtech',
+  'Tinmorry',
+  'Kexcelled',
+  'iSANMATE',
+  'CCTREE',
+  'Stronghero3D',
+  'Pxmalion',
+  'Enotepad',
+  'Yoopai',
+  'Justmaker',
+  'Reprapper',
+  'Tianse',
+  'JAMGHE',
   'Paramount 3D',
   'IIID Max',
-  'GST3D',
+  'SainSmart',
 
-  // --- Divers / historiques ---
-  'MakerBot',
-  'XYZprinting',
-  'Dremel',
+  // --- Flexibles / techniques spécialisés ---
+  'NinjaTek',
+  'Recreus (Filaflex)',
+  'Taulman3D',
+  'Lay Filaments',
+  'Multi3D (Electrifi)',
+
+  // --- Composites / haute performance / industriel ---
+  '3DXTech',
+  'BASF Ultrafuse',
+  'Forward AM',
+  'Essentium',
+  'Roboze',
+  'Intamsys',
+  'Apium',
+  'Markforged',
+  'Stratasys',
+  'Nexa3D',
+  'Mitsubishi Chemical (KyronMAX)',
+  'Arkema',
+  'Solvay',
+  'Victrex',
+  'DSM / Novamid',
+  'Lehvoss (Luvocom 3F)',
+  'Owens Corning (XSTRAND)',
+  'Jabil',
+  'Covestro',
+  'SABIC',
+  'Evonik',
+  'Ensinger',
+
+  // --- Recyclé / durable ---
+  'B-PET',
+  'Formfutura ReForm',
+
+  // --- Divers ---
   'Siraya Tech',
 ];
