@@ -9,6 +9,7 @@ import { CellDetailDrawer } from './components/CellDetailDrawer';
 import { RecipeGallery } from './components/RecipeGallery';
 import { RecipeForm } from './components/RecipeForm';
 import { ProtocolPanel } from './components/ProtocolPanel';
+import { CommunityOverview } from './components/CommunityOverview';
 
 type View = 'matrix' | 'recettes';
 
@@ -186,6 +187,21 @@ export default function App() {
       </div>
 
       <Filters value={filters} onChange={setFilters} showHideEmpty={view === 'matrix'} />
+
+      {!loading && !loadError && (
+        <CommunityOverview
+          recipes={recipes}
+          filteredRecipes={filtered}
+          materials={visibleMaterials}
+          pointsFor={pointsFor}
+          onSelectPair={(a, b) => {
+            setView('matrix');
+            setSelected({ a, b });
+          }}
+          onOpenRecipes={() => setView('recettes')}
+          onAddRecipe={() => setShowForm(true)}
+        />
+      )}
 
       {loading ? (
         <div className="matrix-wrap">

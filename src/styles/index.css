@@ -114,6 +114,136 @@ a {
   color: var(--text);
 }
 
+/* ---------- Apercu communautaire ---------- */
+.community-overview {
+  display: grid;
+  grid-template-columns: minmax(280px, 1.1fr) minmax(320px, 1.5fr);
+  gap: 14px;
+  margin: 18px 0;
+}
+.overview-main,
+.overview-card {
+  background: linear-gradient(180deg, var(--bg-elev), var(--panel));
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+}
+.overview-main {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding: 18px;
+}
+.coverage-ring {
+  --coverage: 0%;
+  width: 94px;
+  height: 94px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex: none;
+  background:
+    radial-gradient(circle at center, var(--bg-elev) 0 58%, transparent 59%),
+    conic-gradient(var(--good) var(--coverage), var(--bg-elev-2) 0);
+  border: 1px solid var(--border);
+}
+.coverage-ring b {
+  display: block;
+  font-size: 22px;
+  line-height: 1;
+}
+.coverage-ring span {
+  display: block;
+  color: var(--text-faint);
+  font-size: 11px;
+}
+.eyebrow,
+.card-label {
+  margin: 0 0 5px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.overview-main h2 {
+  margin: 0;
+  font-size: 19px;
+}
+.overview-main p:not(.eyebrow) {
+  margin: 7px 0 0;
+  color: var(--text-dim);
+  line-height: 1.5;
+  font-size: 13px;
+}
+.overview-actions {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.overview-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.overview-card {
+  appearance: none;
+  text-align: left;
+  color: var(--text);
+  padding: 14px;
+  min-height: 112px;
+}
+button.overview-card {
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+button.overview-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.55);
+}
+.overview-card.warning {
+  border-color: rgba(234, 179, 8, 0.34);
+}
+.overview-card.missing {
+  border-style: dashed;
+}
+.overview-card.passive {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.overview-card strong {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  margin: 6px 0;
+}
+.score-line {
+  display: block;
+  color: var(--text-dim);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.pair-dots {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+.pair-dots span {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.pair-dots span + span {
+  margin-left: -3px;
+}
+
 /* ---------- Filtres ---------- */
 .filters {
   display: flex;
@@ -1013,4 +1143,79 @@ a {
   border: 1px solid rgba(56, 189, 248, 0.3);
   border-radius: 5px;
   padding: 2px 7px;
+}
+
+@media (max-width: 860px) {
+  .app {
+    padding: 20px 14px 64px;
+  }
+  .community-overview,
+  .overview-cards {
+    grid-template-columns: 1fr;
+  }
+  .overview-main {
+    align-items: flex-start;
+  }
+  .coverage-ring {
+    width: 78px;
+    height: 78px;
+  }
+  .coverage-ring b {
+    font-size: 19px;
+  }
+  .coverage-ring span {
+    font-size: 10px;
+  }
+  .field-row,
+  .slot-edit {
+    flex-wrap: wrap;
+  }
+  .slot-edit input.grow {
+    flex-basis: 100%;
+  }
+  .vote-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .vote-hint {
+    text-align: left;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    align-items: flex-start;
+  }
+  .brand {
+    width: 100%;
+  }
+  .pill-stat {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+  .overview-main {
+    flex-direction: column;
+  }
+  .toolbar {
+    align-items: stretch;
+  }
+  .view-toggle,
+  .add-recipe {
+    width: 100%;
+  }
+  .view-toggle button {
+    flex: 1;
+  }
+  .criteria {
+    grid-template-columns: 1fr;
+  }
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+  .drawer-head {
+    padding: 14px;
+  }
+  .drawer-body {
+    padding: 14px 14px 32px;
+  }
 }
